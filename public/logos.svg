@@ -1,0 +1,21 @@
+<svg
+  viewBox="0 0 24 24"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Outer circle -->
+  <circle cx="12" cy="12" r="10" fill="#0B4FDB" />
+
+  <!-- Q shape -->
+  <path
+    d="
+      M12 6
+      a5 5 0 1 0 0 10
+      a5 5 0 1 0 0 -10
+      M14.8 14.8
+      l2.2 2.2
+      a1 1 0 0 1 -1.4 1.4
+      l-2.2 -2.2
+    "
+    fill="#FFFFFF"
+  />
+</svg>
