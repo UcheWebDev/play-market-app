@@ -59,15 +59,75 @@ const fmtVol = (n) =>
     ? `$${(n / 1_000_000).toFixed(1)}M`
     : `$${(n / 1000).toFixed(0)}K`;
 
+// ── Category block computation ─────────────────────────────────────────────────
+//
+// After loading players + portfolio, annotate each player with:
+//   category_blocked            — true if the user holds a DIFFERENT player in the same category
+//   category_blocked_player_id  — id of the blocking player
+//   category_blocked_player_name
+//   category_blocked_player_symbol
+//
+// Logic mirrors callbacks.ts: a player is blocked for BUY only when:
+//   1. The user holds 0 of this player
+//   2. The user holds > 0 of a different player in the same category_id
+//
+// Sell is never blocked — the user owns those tokens and must be able to exit.
+
+function computeCategoryBlocking(players, portfolio) {
+  // Build a map: category_id -> { playerId, playerName, playerSymbol }
+  // using the portfolio (positions with token_amount > 0).
+  // We need the full player list to look up name/symbol from player_id.
+  const playerMap = Object.fromEntries(players.map((p) => [p.id, p]));
+
+  // category -> which player the user holds in that category
+  const categoryHoldingMap = {}; // category_id -> { id, name, symbol }
+  for (const pos of portfolio) {
+    if (pos.token_amount <= 0) continue;
+    const p = playerMap[pos.player_id];
+    if (!p || p.category_id == null || p.category_id === 0) continue;
+    // First holding wins (there should only ever be one per category)
+    if (!(p.category_id in categoryHoldingMap)) {
+      categoryHoldingMap[p.category_id] = {
+        id:     p.id,
+        name:   p.name,
+        symbol: p.symbol,
+      };
+    }
+  }
+
+  return players.map((p) => {
+    // Skip players with no category (category_id 0 or null = uncategorised)
+    if (!p.category_id || p.category_id === 0) {
+      return { ...p, category_blocked: false };
+    }
+
+    const held = categoryHoldingMap[p.category_id];
+
+    // Not blocked if nothing held in this category, or if this IS the held player
+    if (!held || held.id === p.id) {
+      return { ...p, category_blocked: false };
+    }
+
+    // A different player is held in the same category — block buying this one
+    return {
+      ...p,
+      category_blocked:              true,
+      category_blocked_player_id:    held.id,
+      category_blocked_player_name:  held.name,
+      category_blocked_player_symbol: held.symbol,
+    };
+  });
+}
+
 const MOCK_PLAYERS = [
-  { id: 1, name: "Alexander Isak", symbol: "ISAK", team: "Liverpool", league: "PL", price_apt: 9.49, price_change_24h: 8.0, volume_apt: 3259744, tradeable: true, image_url: null, rps: 82, category_id: 0, category_blocked: false },
-  { id: 2, name: "Erling Haaland", symbol: "HAALAND", team: "Man City", league: "PL", price_apt: 24.2, price_change_24h: -2.3, volume_apt: 8100000, tradeable: true, image_url: null, rps: 91, category_id: 0, category_blocked: false },
-  { id: 3, name: "Cole Palmer", symbol: "PALMER", team: "Chelsea", league: "PL", price_apt: 15.75, price_change_24h: 5.1, volume_apt: 5400000, tradeable: true, image_url: null, rps: 88, category_id: 0, category_blocked: false },
-  { id: 4, name: "Bukayo Saka", symbol: "SAKA", team: "Arsenal", league: "PL", price_apt: 18.3, price_change_24h: 1.2, volume_apt: 4200000, tradeable: true, image_url: null, rps: 86, category_id: 0, category_blocked: false },
-  { id: 5, name: "Mohamed Salah", symbol: "SALAH", team: "Liverpool", league: "PL", price_apt: 31.0, price_change_24h: -0.8, volume_apt: 9800000, tradeable: true, image_url: null, rps: 93, category_id: 0, category_blocked: false },
-  { id: 6, name: "Kylian Mbappé", symbol: "MBAPPE", team: "Real Madrid", league: "LaLiga", price_apt: 42.5, price_change_24h: 3.7, volume_apt: 12400000, tradeable: true, image_url: null, rps: 95, category_id: 1, category_blocked: false },
-  { id: 7, name: "Jude Bellingham", symbol: "BELLINGHAM", team: "Real Madrid", league: "LaLiga", price_apt: 28.8, price_change_24h: -1.5, volume_apt: 7600000, tradeable: true, image_url: null, rps: 89, category_id: 1, category_blocked: false },
-  { id: 8, name: "Vinicius Jr", symbol: "VINI", team: "Real Madrid", league: "LaLiga", price_apt: 35.1, price_change_24h: 6.4, volume_apt: 11200000, tradeable: true, image_url: null, rps: 92, category_id: 1, category_blocked: false },
+  { id: 1, name: "Alexander Isak", symbol: "ISAK", team: "Liverpool", league: "PL", price_apt: 9.49, price_change_24h: 8.0, volume_apt: 3259744, tradeable: true, image_url: null, rps: 82, category_id: 1, category_blocked: false },
+  { id: 2, name: "Erling Haaland", symbol: "HAALAND", team: "Man City", league: "PL", price_apt: 24.2, price_change_24h: -2.3, volume_apt: 8100000, tradeable: true, image_url: null, rps: 91, category_id: 1, category_blocked: false },
+  { id: 3, name: "Cole Palmer", symbol: "PALMER", team: "Chelsea", league: "PL", price_apt: 15.75, price_change_24h: 5.1, volume_apt: 5400000, tradeable: true, image_url: null, rps: 88, category_id: 2, category_blocked: false },
+  { id: 4, name: "Bukayo Saka", symbol: "SAKA", team: "Arsenal", league: "PL", price_apt: 18.3, price_change_24h: 1.2, volume_apt: 4200000, tradeable: true, image_url: null, rps: 86, category_id: 2, category_blocked: false },
+  { id: 5, name: "Mohamed Salah", symbol: "SALAH", team: "Liverpool", league: "PL", price_apt: 31.0, price_change_24h: -0.8, volume_apt: 9800000, tradeable: true, image_url: null, rps: 93, category_id: 3, category_blocked: false },
+  { id: 6, name: "Kylian Mbappé", symbol: "MBAPPE", team: "Real Madrid", league: "LaLiga", price_apt: 42.5, price_change_24h: 3.7, volume_apt: 12400000, tradeable: true, image_url: null, rps: 95, category_id: 4, category_blocked: false },
+  { id: 7, name: "Jude Bellingham", symbol: "BELLINGHAM", team: "Real Madrid", league: "LaLiga", price_apt: 28.8, price_change_24h: -1.5, volume_apt: 7600000, tradeable: true, image_url: null, rps: 89, category_id: 4, category_blocked: false },
+  { id: 8, name: "Vinicius Jr", symbol: "VINI", team: "Real Madrid", league: "LaLiga", price_apt: 35.1, price_change_24h: 6.4, volume_apt: 11200000, tradeable: true, image_url: null, rps: 92, category_id: 4, category_blocked: false },
 ];
 const MOCK_PORTFOLIO = [
   { player_id: 1, player_name: "Alexander Isak", player_symbol: "ISAK", token_amount: 373000000, avg_buy_apt: 9.49, current_price: 9.49 },
@@ -151,7 +211,6 @@ function MarketTabSkeleton() {
             <Skel key={i} w={w} h={28} r={99} />
           ))}
         </div>
-        {/* Top gainers skeleton */}
         <div style={{ marginBottom: 18 }}>
           <Skel w={100} h={12} r={4} style={{ marginBottom: 9 }} />
           <div style={{ display: "flex", gap: 9 }}>
@@ -430,7 +489,11 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
   const fee = amountNum * 0.01;
   const holdingHuman = holding ? holding.token_amount / PRECISION : 0;
   const presets = mode === "buy" ? [10, 25, 50, 100] : [25, 50, 75, 100];
-  const buyBlocked = mode === "buy" && player.category_blocked;
+
+  // Block BUY if the player is category-blocked and the user doesn't already hold it.
+  // Never block SELL — the user must always be able to exit a position they own.
+  const buyBlocked = mode === "buy" && player.category_blocked && holdingHuman === 0;
+
   const canTrade = buyBlocked ? false : mode === "buy"
     ? amountNum > 0 && amountNum <= balance
     : amountNum > 0 && amountNum <= holdingHuman;
@@ -446,12 +509,12 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
     setBusy(true);
     tgHaptic("impact", "medium");
     try {
-      const result = await api("/trade", {
+      await api("/trade", {
         method: "POST",
         body: JSON.stringify({ player_id: player.id, type: mode, amount: Math.floor(amountNum * PRECISION) }),
-      }).catch(() => null);
+      });
       tgHapticNotif("success");
-      onTrade({ mode, amount: amountNum, player, result });
+      onTrade({ mode, amount: amountNum, player });
       onClose();
     } catch (e) {
       tgHapticNotif("error");
@@ -483,6 +546,8 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
             <i className="ri-close-line" style={{ fontSize: 16 }} />
           </button>
         </div>
+
+        {/* Buy / Sell toggle — always show both tabs; sell tab is never blocked */}
         <div style={{ margin: "16px 18px 0", display: "flex", background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: 3 }}>
           {["buy", "sell"].map((m) => (
             <button key={m} onClick={() => { tgHaptic("impact", "light"); setMode(m); setAmount(""); setError(null); }} style={{
@@ -495,6 +560,8 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
             </button>
           ))}
         </div>
+
+        {/* Category block warning — only shown on the Buy tab */}
         {buyBlocked && (
           <div style={{ margin: "12px 18px 0", padding: "11px 13px", background: "rgba(245,200,66,0.07)", borderRadius: 10, border: "1px solid rgba(245,200,66,0.2)", display: "flex", alignItems: "flex-start", gap: 9 }}>
             <i className="ri-lock-line" style={{ fontSize: 16, color: "#F5C842", flexShrink: 0, marginTop: 1 }} />
@@ -503,12 +570,14 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
             </div>
           </div>
         )}
+
         <div style={{ margin: "12px 18px 0", background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: "9px 13px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: 12, fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.35)" }}>{mode === "buy" ? "Available" : "Your shares"}</span>
           <span style={{ fontSize: 13, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, color: "#00FF87" }}>
             {mode === "buy" ? `$${balance.toFixed(2)} vUSD` : `${holdingHuman.toFixed(4)} shares`}
           </span>
         </div>
+
         <div style={{ margin: "10px 18px 0", position: "relative", opacity: buyBlocked ? 0.4 : 1 }}>
           <div style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.2)" }}>
             <i className={mode === "buy" ? "ri-coin-line" : "ri-football-line"} style={{ fontSize: 18 }} />
@@ -522,6 +591,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
             </div>
           )}
         </div>
+
         {!buyBlocked && (
           <div style={{ margin: "9px 18px 0", display: "flex", gap: 7 }}>
             {presets.map((p) => (
@@ -531,6 +601,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
             ))}
           </div>
         )}
+
         {amountNum > 0 && !buyBlocked && (
           <div style={{ margin: "10px 18px 0", padding: "10px 13px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
@@ -545,11 +616,13 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
             </div>
           </div>
         )}
+
         {error && (
           <div style={{ margin: "9px 18px 0", padding: "9px 13px", background: "rgba(255,68,68,0.08)", borderRadius: 10, border: "1px solid rgba(255,68,68,0.2)", fontSize: 13, color: "#FF4444", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 7 }}>
             <i className="ri-error-warning-line" style={{ fontSize: 16, flexShrink: 0 }} /> {error}
           </div>
         )}
+
         <div style={{ margin: "14px 18px 0" }}>
           <button onClick={handleTrade} disabled={!canTrade || busy} style={{
             width: "100%", padding: "15px 0", borderRadius: 12, border: "none",
@@ -576,7 +649,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
   );
 }
 
-// ── PlayerDetail — hero image overlays header ──────────────────────────────────
+// ── PlayerDetail ───────────────────────────────────────────────────────────────
 
 function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
   const [showTrade, setShowTrade] = useState(false);
@@ -588,8 +661,11 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
   const pnl = holding ? holdingHuman * (player.price_apt - holding.avg_buy_apt) : 0;
   const pnlPct = holding?.avg_buy_apt > 0 ? ((player.price_apt - holding.avg_buy_apt) / holding.avg_buy_apt) * 100 : 0;
 
+  // Block BUY only if the player is category_blocked AND the user doesn't hold it.
+  // The user can always sell shares they own.
+  const buyBlocked = player.category_blocked && holdingHuman === 0;
+
   const HERO_H = player.image_url ? 260 : 0;
-  const HEADER_H = 64; // header bar height that overlays the hero
 
   useEffect(() => {
     tgShowBackBtn(onBack);
@@ -612,87 +688,47 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
     <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
       <div style={{ flex: 1, overflowY: "auto", position: "relative" }}>
 
-        {/* ── Hero image fills top, header floats over it ── */}
         {player.image_url ? (
           <div style={{ position: "relative", width: "100%", height: HERO_H, flexShrink: 0 }}>
-            <img
-              src={player.image_url}
-              alt={player.name}
-              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block" }}
-            />
-            {/* Gradient scrim so header text stays readable */}
+            <img src={player.image_url} alt={player.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block" }} />
             <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 40%, rgba(10,10,10,0.85) 85%, #0A0A0A 100%)" }} />
-
-            {/* Floating header pinned to top of hero */}
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "14px 18px 0", display: "flex", alignItems: "center", gap: 11, zIndex: 10 }}>
-              <button onClick={() => { tgHaptic("impact", "light"); onBack(); }} style={{
-                background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)",
-                border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10,
-                width: 36, height: 36, cursor: "pointer", color: "#fff",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
+              <button onClick={() => { tgHaptic("impact", "light"); onBack(); }} style={{ background: "rgba(0,0,0,0.35)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 10, width: 36, height: 36, cursor: "pointer", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <i className="ri-arrow-left-line" style={{ fontSize: 18 }} />
               </button>
               <div style={{ flex: 1 }}>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.03em", textShadow: "0 1px 8px rgba(0,0,0,0.6)" }}>{player.name}</div>
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif" }}>{player.team} · {player.league}</div>
               </div>
-              <div style={{
-                background: player.tradeable ? "rgba(0,255,135,0.15)" : "rgba(255,68,68,0.15)",
-                backdropFilter: "blur(8px)",
-                border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.35)" : "rgba(255,68,68,0.35)"}`,
-                borderRadius: 99, padding: "4px 10px",
-                fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11,
-                color: player.tradeable ? "#00FF87" : "#FF4444",
-                display: "flex", alignItems: "center", gap: 5,
-              }}>
+              <div style={{ background: player.tradeable ? "rgba(0,255,135,0.15)" : "rgba(255,68,68,0.15)", backdropFilter: "blur(8px)", border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.35)" : "rgba(255,68,68,0.35)"}`, borderRadius: 99, padding: "4px 10px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11, color: player.tradeable ? "#00FF87" : "#FF4444", display: "flex", alignItems: "center", gap: 5 }}>
                 <i className={player.tradeable ? "ri-radio-button-line" : "ri-pause-circle-line"} style={{ fontSize: 11 }} />
                 {player.tradeable ? "LIVE" : "PAUSED"}
               </div>
             </div>
           </div>
         ) : (
-          /* No image — standard header bar */
           <div style={{ padding: "14px 18px 0", display: "flex", alignItems: "center", gap: 11 }}>
-            <button onClick={() => { tgHaptic("impact", "light"); onBack(); }} style={{
-              background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10, width: 36, height: 36, cursor: "pointer",
-              color: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
+            <button onClick={() => { tgHaptic("impact", "light"); onBack(); }} style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, width: 36, height: 36, cursor: "pointer", color: "rgba(255,255,255,0.6)", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <i className="ri-arrow-left-line" style={{ fontSize: 18 }} />
             </button>
             <div style={{ flex: 1 }}>
               <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.03em" }}>{player.name}</div>
               <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif" }}>{player.team} · {player.league}</div>
             </div>
-            <div style={{
-              background: player.tradeable ? "rgba(0,255,135,0.08)" : "rgba(255,68,68,0.08)",
-              border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.25)" : "rgba(255,68,68,0.25)"}`,
-              borderRadius: 99, padding: "4px 10px",
-              fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11,
-              color: player.tradeable ? "#00FF87" : "#FF4444",
-              display: "flex", alignItems: "center", gap: 5,
-            }}>
+            <div style={{ background: player.tradeable ? "rgba(0,255,135,0.08)" : "rgba(255,68,68,0.08)", border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.25)" : "rgba(255,68,68,0.25)"}`, borderRadius: 99, padding: "4px 10px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11, color: player.tradeable ? "#00FF87" : "#FF4444", display: "flex", alignItems: "center", gap: 5 }}>
               <i className={player.tradeable ? "ri-radio-button-line" : "ri-pause-circle-line"} style={{ fontSize: 11 }} />
               {player.tradeable ? "LIVE" : "PAUSED"}
             </div>
           </div>
         )}
 
-        {/* ── Content below hero ── */}
         <div style={{ padding: "18px 18px 20px" }}>
-          {/* Price */}
           <div>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1 }}>
               {fmtUSD(player.price_apt)}
             </div>
             <div style={{ marginTop: 5, display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{
-                fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13,
-                color: positive ? "#00FF87" : "#FF4444",
-                background: positive ? "rgba(0,255,135,0.08)" : "rgba(255,68,68,0.08)",
-                padding: "3px 10px", borderRadius: 99, display: "flex", alignItems: "center", gap: 4,
-              }}>
+              <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: positive ? "#00FF87" : "#FF4444", background: positive ? "rgba(0,255,135,0.08)" : "rgba(255,68,68,0.08)", padding: "3px 10px", borderRadius: 99, display: "flex", alignItems: "center", gap: 4 }}>
                 <i className={positive ? "ri-arrow-up-line" : "ri-arrow-down-line"} style={{ fontSize: 12 }} />
                 {fmtChange(player.price_change_24h)} today
               </span>
@@ -700,14 +736,12 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
             </div>
           </div>
 
-          {/* Chart */}
           <div style={{ margin: "18px -18px 14px" }}>
             <svg width="100%" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ display: "block" }}>
               <polyline points={pts} fill="none" stroke={positive ? "#00FF87" : "#FF4444"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
 
-          {/* Stats grid */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 9 }}>
             {[
               { label: "Form", value: player.rps != null ? `${player.rps}/100` : "—", color: player.rps >= 85 ? "#00FF87" : player.rps >= 70 ? "#F5C842" : "#888", icon: "ri-bar-chart-line" },
@@ -724,7 +758,6 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
             ))}
           </div>
 
-          {/* Position card */}
           {holdingHuman > 0 && (
             <div style={{ marginTop: 13, padding: "15px", borderRadius: 14, background: "rgba(0,255,135,0.05)", border: "1px solid rgba(0,255,135,0.15)" }}>
               <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.1em", display: "flex", alignItems: "center", gap: 5 }}>
@@ -753,9 +786,11 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
         </div>
       </div>
 
-      {/* Trade buttons */}
+      {/* Trade buttons footer */}
       <div style={{ padding: "11px 18px 22px", borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", gap: 9, background: "#0A0A0A" }}>
-        {player.category_blocked && (
+
+        {/* Category block notice — only show when buy is blocked and user doesn't own this player */}
+        {buyBlocked && (
           <div style={{ padding: "11px 14px", borderRadius: 11, background: "rgba(245,200,66,0.07)", border: "1px solid rgba(245,200,66,0.2)", display: "flex", alignItems: "flex-start", gap: 9 }}>
             <i className="ri-error-warning-line" style={{ fontSize: 16, color: "#F5C842", flexShrink: 0, marginTop: 1 }} />
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
@@ -763,8 +798,23 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
             </div>
           </div>
         )}
+
         <div style={{ display: "flex", gap: 9 }}>
-          {player.tradeable && !player.category_blocked ? (
+          {!player.tradeable ? (
+            // Pool is paused — neither buy nor sell
+            <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.25)", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+              <i className="ri-pause-circle-line" style={{ fontSize: 15 }} /> Not yet tradeable
+            </div>
+          ) : buyBlocked ? (
+            // Buy is blocked, but sell is still available if the user holds this player
+            // (they don't — that's the whole point of the block — so just show the locked state)
+            <>
+              <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(245,200,66,0.06)", border: "1px solid rgba(245,200,66,0.2)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "#F5C842", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+                <i className="ri-lock-line" style={{ fontSize: 15 }} /> Buy locked — sell {player.category_blocked_player_symbol} first
+              </div>
+            </>
+          ) : (
+            // Normal state — show buy and optionally sell
             <>
               <button onClick={() => openTrade("buy")} style={{ flex: 1, padding: "14px 0", borderRadius: 12, border: "none", background: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#000", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
                 <i className="ri-arrow-up-circle-fill" style={{ fontSize: 16 }} /> Buy
@@ -775,14 +825,6 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
                 </button>
               )}
             </>
-          ) : player.category_blocked ? (
-            <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(245,200,66,0.06)", border: "1px solid rgba(245,200,66,0.2)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "#F5C842", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-lock-line" style={{ fontSize: 15 }} /> Buy locked — sell {player.category_blocked_player_symbol} first
-            </div>
-          ) : (
-            <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.25)", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-pause-circle-line" style={{ fontSize: 15 }} /> Not yet tradeable
-            </div>
           )}
         </div>
       </div>
@@ -1089,15 +1131,23 @@ export default function App() {
           api("/leaderboard"),
         ]);
         if (cancelled) return;
-        if (playersRes.status === "fulfilled") setPlayers(playersRes.value);
-        else setPlayers(MOCK_PLAYERS);
-        if (portfolioRes.status === "fulfilled") setPortfolio(portfolioRes.value);
-        else setPortfolio(MOCK_PORTFOLIO);
+
+        const rawPlayers   = playersRes.status   === "fulfilled" ? playersRes.value   : MOCK_PLAYERS;
+        const rawPortfolio = portfolioRes.status === "fulfilled" ? portfolioRes.value : MOCK_PORTFOLIO;
+
+        // ── Compute category blocking from live portfolio data ─────────────────
+        // This mirrors the bot's handlePlayerCard logic: a player is blocked for
+        // BUY when the user holds a DIFFERENT player in the same category_id.
+        const annotatedPlayers = computeCategoryBlocking(rawPlayers, rawPortfolio);
+
+        setPlayers(annotatedPlayers);
+        setPortfolio(rawPortfolio);
+
         if (balanceRes.status === "fulfilled") setBalance(balanceRes.value?.balance_vusd ?? 0);
-        if (lbRes.status === "fulfilled") setLeaderboard(lbRes.value);
-        else setLeaderboard(MOCK_LEADERBOARD);
+        setLeaderboard(lbRes.status === "fulfilled" ? lbRes.value : MOCK_LEADERBOARD);
       } catch {
-        setPlayers(MOCK_PLAYERS);
+        const annotated = computeCategoryBlocking(MOCK_PLAYERS, MOCK_PORTFOLIO);
+        setPlayers(annotated);
         setPortfolio(MOCK_PORTFOLIO);
         setLeaderboard(MOCK_LEADERBOARD);
       } finally {
@@ -1114,28 +1164,58 @@ export default function App() {
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3500);
   }, []);
 
-  const handleTrade = useCallback(({ mode, amount, player, result }) => {
+  // After a trade completes, recompute blocking because the portfolio has changed.
+  const handleTrade = useCallback(({ mode, amount, player }) => {
     if (mode === "buy") {
       const fee = amount * 0.01;
       const tokens = Math.floor(((amount - fee) / player.price_apt) * PRECISION);
       setBalance((b) => b - amount);
-      setPortfolio((p) => {
-        const existing = p.find((x) => x.player_id === player.id);
-        if (existing) return p.map((x) => x.player_id === player.id ? { ...x, token_amount: x.token_amount + tokens } : x);
-        return [...p, { player_id: player.id, player_name: player.name, player_symbol: player.symbol, token_amount: tokens, avg_buy_apt: player.price_apt, current_price: player.price_apt }];
+      setPortfolio((prevPortfolio) => {
+        const existing = prevPortfolio.find((x) => x.player_id === player.id);
+        const newPortfolio = existing
+          ? prevPortfolio.map((x) => x.player_id === player.id ? { ...x, token_amount: x.token_amount + tokens } : x)
+          : [...prevPortfolio, { player_id: player.id, player_name: player.name, player_symbol: player.symbol, token_amount: tokens, avg_buy_apt: player.price_apt, current_price: player.price_apt }];
+
+        // Recompute blocking with the updated portfolio
+        setPlayers((prevPlayers) => computeCategoryBlocking(
+          prevPlayers.map((p) => ({ ...p, category_blocked: false, category_blocked_player_id: undefined, category_blocked_player_name: undefined, category_blocked_player_symbol: undefined })),
+          newPortfolio,
+        ));
+
+        return newPortfolio;
       });
       addToast(`Bought ${(tokens / PRECISION).toFixed(2)} ${player.symbol} shares`);
     } else {
       const vusd = amount * player.price_apt * 0.99;
       setBalance((b) => b + vusd);
-      setPortfolio((p) => p.map((x) => {
-        if (x.player_id !== player.id) return x;
-        const remaining = x.token_amount - Math.floor(amount * PRECISION);
-        return remaining <= 0 ? null : { ...x, token_amount: remaining };
-      }).filter(Boolean));
+      setPortfolio((prevPortfolio) => {
+        const newPortfolio = prevPortfolio.map((x) => {
+          if (x.player_id !== player.id) return x;
+          const remaining = x.token_amount - Math.floor(amount * PRECISION);
+          return remaining <= 0 ? null : { ...x, token_amount: remaining };
+        }).filter(Boolean);
+
+        // Recompute blocking — selling might unblock other players in the same category
+        setPlayers((prevPlayers) => computeCategoryBlocking(
+          prevPlayers.map((p) => ({ ...p, category_blocked: false, category_blocked_player_id: undefined, category_blocked_player_name: undefined, category_blocked_player_symbol: undefined })),
+          newPortfolio,
+        ));
+
+        return newPortfolio;
+      });
       addToast(`Sold ${Number(amount).toFixed(2)} ${player.symbol} shares`);
     }
   }, [addToast]);
+
+  // When selecting a player to view, always pull the freshest version from state
+  // (which already has the correct category_blocked annotation).
+  const handleSelectPlayer = useCallback((player) => {
+    setPlayers((current) => {
+      const fresh = current.find((p) => p.id === player.id);
+      setSelectedPlayer(fresh ?? player);
+      return current;
+    });
+  }, []);
 
   const holdingMap = Object.fromEntries(portfolio.map((p) => [p.player_id, p]));
 
@@ -1169,8 +1249,8 @@ export default function App() {
             />
           ) : (
             <>
-              {tab === "market" && <MarketTab players={players} portfolio={portfolio} onSelect={setSelectedPlayer} loading={loading} />}
-              {tab === "portfolio" && <PortfolioTab players={players} portfolio={portfolio} balance={balance} onSelect={setSelectedPlayer} loading={loading} />}
+              {tab === "market"      && <MarketTab      players={players} portfolio={portfolio} onSelect={handleSelectPlayer} loading={loading} />}
+              {tab === "portfolio"   && <PortfolioTab   players={players} portfolio={portfolio} balance={balance} onSelect={handleSelectPlayer} loading={loading} />}
               {tab === "leaderboard" && <LeaderboardTab entries={leaderboard} loading={loading} />}
             </>
           )}
