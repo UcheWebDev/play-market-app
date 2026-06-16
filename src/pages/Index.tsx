@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Telegram WebApp SDK
+// ─────────────────────────────────────────────────────────────────────────────
 const tg = window?.Telegram?.WebApp ?? null;
 
 const tgReady         = ()            => tg?.ready();
@@ -16,6 +19,9 @@ const tgUser          = ()            => tg?.initDataUnsafe?.user ?? null;
 const tgColorScheme   = ()            => tg?.colorScheme ?? "dark";
 const tgViewportH     = ()            => tg?.viewportStableHeight ?? window.innerHeight;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// API
+// ─────────────────────────────────────────────────────────────────────────────
 const API_BASE = import.meta.env.VITE_API_BASE;
 const ANON_KEY = import.meta.env.VITE_ANON_KEY;
 
@@ -36,6 +42,9 @@ async function api(path, opts = {}) {
   return res.json();
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Constants & Formatters
+// ─────────────────────────────────────────────────────────────────────────────
 const PRECISION = 100_000_000;
 const NGN_RATE  = 1580;
 
@@ -45,15 +54,18 @@ const fmtShares = (n) => (n / PRECISION).toFixed(2);
 const fmtChange = (n) => `${n >= 0 ? "+" : ""}${Number(n).toFixed(1)}%`;
 const fmtVol    = (n) => n >= 1_000_000 ? `$${(n / 1_000_000).toFixed(1)}M` : `$${(n / 1000).toFixed(0)}K`;
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Mock Data
+// ─────────────────────────────────────────────────────────────────────────────
 const MOCK_PLAYERS = [
-  { id: 1, name: "Alexander Isak",  symbol: "ISAK",       team: "Liverpool",   league: "PL",      price_apt: 9.49,  price_change_24h:  8.0, volume_apt: 3259744,  tradeable: true, image_url: null, rps: 82, category_id: 0, category_blocked: false },
-  { id: 2, name: "Erling Haaland",  symbol: "HAALAND",    team: "Man City",    league: "PL",      price_apt: 24.20, price_change_24h: -2.3, volume_apt: 8100000,  tradeable: true, image_url: null, rps: 91, category_id: 0, category_blocked: false },
-  { id: 3, name: "Cole Palmer",     symbol: "PALMER",     team: "Chelsea",     league: "PL",      price_apt: 15.75, price_change_24h:  5.1, volume_apt: 5400000,  tradeable: true, image_url: null, rps: 88, category_id: 0, category_blocked: false },
-  { id: 4, name: "Bukayo Saka",     symbol: "SAKA",       team: "Arsenal",     league: "PL",      price_apt: 18.30, price_change_24h:  1.2, volume_apt: 4200000,  tradeable: true, image_url: null, rps: 86, category_id: 0, category_blocked: false },
-  { id: 5, name: "Mohamed Salah",   symbol: "SALAH",      team: "Liverpool",   league: "PL",      price_apt: 31.00, price_change_24h: -0.8, volume_apt: 9800000,  tradeable: true, image_url: null, rps: 93, category_id: 0, category_blocked: false },
-  { id: 6, name: "Kylian Mbappé",   symbol: "MBAPPE",     team: "Real Madrid", league: "LaLiga",  price_apt: 42.50, price_change_24h:  3.7, volume_apt: 12400000, tradeable: true, image_url: null, rps: 95, category_id: 1, category_blocked: false },
-  { id: 7, name: "Jude Bellingham", symbol: "BELLINGHAM", team: "Real Madrid", league: "LaLiga",  price_apt: 28.80, price_change_24h: -1.5, volume_apt: 7600000,  tradeable: true, image_url: null, rps: 89, category_id: 1, category_blocked: false },
-  { id: 8, name: "Vinicius Jr",     symbol: "VINI",       team: "Real Madrid", league: "LaLiga",  price_apt: 35.10, price_change_24h:  6.4, volume_apt: 11200000, tradeable: true, image_url: null, rps: 92, category_id: 1, category_blocked: false },
+  { id: 1, name: "Alexander Isak",  symbol: "ISAK",       team: "Liverpool",   league: "PL",      price_apt: 9.49,  price_change_24h:  8.0, volume_apt: 3259744,  tradeable: true, image_url: null, rps: 82, category_id: 0 },
+  { id: 2, name: "Erling Haaland",  symbol: "HAALAND",    team: "Man City",    league: "PL",      price_apt: 24.20, price_change_24h: -2.3, volume_apt: 8100000,  tradeable: true, image_url: null, rps: 91, category_id: 0 },
+  { id: 3, name: "Cole Palmer",     symbol: "PALMER",     team: "Chelsea",     league: "PL",      price_apt: 15.75, price_change_24h:  5.1, volume_apt: 5400000,  tradeable: true, image_url: null, rps: 88, category_id: 0 },
+  { id: 4, name: "Bukayo Saka",     symbol: "SAKA",       team: "Arsenal",     league: "PL",      price_apt: 18.30, price_change_24h:  1.2, volume_apt: 4200000,  tradeable: true, image_url: null, rps: 86, category_id: 0 },
+  { id: 5, name: "Mohamed Salah",   symbol: "SALAH",      team: "Liverpool",   league: "PL",      price_apt: 31.00, price_change_24h: -0.8, volume_apt: 9800000,  tradeable: true, image_url: null, rps: 93, category_id: 0 },
+  { id: 6, name: "Kylian Mbappé",   symbol: "MBAPPE",     team: "Real Madrid", league: "LaLiga",  price_apt: 42.50, price_change_24h:  3.7, volume_apt: 12400000, tradeable: true, image_url: null, rps: 95, category_id: 1 },
+  { id: 7, name: "Jude Bellingham", symbol: "BELLINGHAM", team: "Real Madrid", league: "LaLiga",  price_apt: 28.80, price_change_24h: -1.5, volume_apt: 7600000,  tradeable: true, image_url: null, rps: 89, category_id: 1 },
+  { id: 8, name: "Vinicius Jr",     symbol: "VINI",       team: "Real Madrid", league: "LaLiga",  price_apt: 35.10, price_change_24h:  6.4, volume_apt: 11200000, tradeable: true, image_url: null, rps: 92, category_id: 1 },
 ];
 const MOCK_PORTFOLIO = [
   { player_id: 1, player_name: "Alexander Isak", player_symbol: "ISAK",   token_amount: 373000000, avg_buy_apt: 9.49,  current_price: 9.49  },
@@ -67,6 +79,9 @@ const MOCK_LEADERBOARD = [
   { rank: 5, username: "ibadan_trader",   pnl_apt:  380.40, pnl_pct:  52.8 },
 ];
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Sparkline
+// ─────────────────────────────────────────────────────────────────────────────
 function generateSparkline(basePrice, change, points = 20) {
   const data = [];
   let price = basePrice * (1 - change / 100);
@@ -91,6 +106,9 @@ function SparklineSVG({ data, positive, width = 80, height = 32 }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Player Avatar
+// ─────────────────────────────────────────────────────────────────────────────
 function PlayerAvatar({ player, size = 48 }) {
   const [imgError, setImgError] = useState(false);
   const hue = (player.id * 47) % 360;
@@ -102,18 +120,29 @@ function PlayerAvatar({ player, size = 48 }) {
   if (player.image_url && !imgError) {
     return (
       <div style={{ ...base, background: `hsl(${hue},60%,12%)` }}>
-        <img src={player.image_url} alt={player.name} onError={() => setImgError(true)}
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center" }} />
+        <img
+          src={player.image_url} alt={player.name}
+          onError={() => setImgError(true)}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center" }}
+        />
       </div>
     );
   }
   return (
-    <div style={{ ...base, background: `hsl(${hue},40%,16%)`, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: size * 0.28, color: `hsl(${hue},80%,75%)`, letterSpacing: "-0.02em" }}>
+    <div style={{
+      ...base,
+      background: `hsl(${hue},40%,16%)`,
+      fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700,
+      fontSize: size * 0.28, color: `hsl(${hue},80%,75%)`, letterSpacing: "-0.02em",
+    }}>
       {player.symbol.slice(0, 3)}
     </div>
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Ticker Tape
+// ─────────────────────────────────────────────────────────────────────────────
 function TickerTape({ players }) {
   const items = [...players, ...players];
   return (
@@ -132,6 +161,9 @@ function TickerTape({ players }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Form Badge (rPS score)
+// ─────────────────────────────────────────────────────────────────────────────
 function FormBadge({ rps }) {
   const grade  = rps >= 90 ? "S" : rps >= 80 ? "A" : rps >= 70 ? "B" : "C";
   const colors = { S: "#F5C842", A: "#00FF87", B: "#4ECDC4", C: "#888" };
@@ -143,9 +175,12 @@ function FormBadge({ rps }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Player List Card
+// ─────────────────────────────────────────────────────────────────────────────
 function PlayerCard({ player, onClick, holding }) {
   const [sparkData] = useState(() => generateSparkline(player.price_apt, player.price_change_24h));
-  const positive   = player.price_change_24h >= 0;
+  const positive = player.price_change_24h >= 0;
   const hasHolding = holding?.token_amount > 0;
 
   return (
@@ -153,19 +188,17 @@ function PlayerCard({ player, onClick, holding }) {
       onClick={() => { tgHaptic("impact", "light"); onClick(player); }}
       style={{
         background: "#111",
-        border: `1px solid ${hasHolding ? "rgba(0,255,135,0.2)" : player.category_blocked ? "rgba(245,200,66,0.15)" : "rgba(255,255,255,0.07)"}`,
+        border: `1px solid ${hasHolding ? "rgba(0,255,135,0.2)" : "rgba(255,255,255,0.07)"}`,
         borderRadius: 14, padding: "13px 14px",
         display: "flex", alignItems: "center", gap: 12,
         cursor: "pointer", transition: "transform 0.1s ease",
         position: "relative", overflow: "hidden",
         WebkitTapHighlightColor: "transparent",
-        opacity: player.category_blocked ? 0.7 : 1,
       }}
       onTouchStart={e => e.currentTarget.style.transform = "scale(0.985)"}
       onTouchEnd={e => e.currentTarget.style.transform = "scale(1)"}
     >
       {hasHolding && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1.5, background: "linear-gradient(90deg, #00FF87, transparent)" }} />}
-      {player.category_blocked && !hasHolding && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 1.5, background: "linear-gradient(90deg, #F5C842, transparent)" }} />}
       <PlayerAvatar player={player} size={44} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
@@ -177,21 +210,17 @@ function PlayerCard({ player, onClick, holding }) {
           <span style={{ color: "rgba(255,255,255,0.15)" }}>·</span><span style={{ color: "rgba(255,255,255,0.2)" }}>{player.league}</span>
         </div>
         {hasHolding && (
-          <div style={{ marginTop: 4, fontSize: 11, fontFamily: "'Space Grotesk', sans-serif", color: "#00FF87", fontWeight: 600 }}>
-            {fmtShares(holding.token_amount)} shares held
-          </div>
-        )}
-        {player.category_blocked && !hasHolding && (
-          <div style={{ marginTop: 4, fontSize: 11, fontFamily: "'Space Grotesk', sans-serif", color: "#F5C842", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
-            <i className="ri-lock-line" style={{ fontSize: 11 }} />
-            Hold {player.category_blocked_player_symbol} — sell first
+          <div style={{ marginTop: 4, fontSize: 11, fontFamily: "'Space Grotesk', sans-serif", color: "#00FF87", fontWeight: 600, display: "flex", alignItems: "center", gap: 4 }}>
+            <i className="ri-pie-chart-line" style={{ fontSize: 11 }} />
+            {fmtShares(holding.token_amount)} shares
           </div>
         )}
       </div>
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
         <SparklineSVG data={sparkData} positive={positive} width={64} height={26} />
         <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "-0.02em" }}>{fmtUSD(player.price_apt)}</div>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 11, color: positive ? "#00FF87" : "#FF4444", background: positive ? "rgba(0,255,135,0.08)" : "rgba(255,68,68,0.08)", padding: "2px 7px", borderRadius: 99 }}>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 11, color: positive ? "#00FF87" : "#FF4444", background: positive ? "rgba(0,255,135,0.08)" : "rgba(255,68,68,0.08)", padding: "2px 7px", borderRadius: 99, display: "flex", alignItems: "center", gap: 3 }}>
+          <i className={positive ? "ri-arrow-up-s-line" : "ri-arrow-down-s-line"} style={{ fontSize: 12 }} />
           {fmtChange(player.price_change_24h)}
         </div>
       </div>
@@ -199,34 +228,31 @@ function PlayerCard({ player, onClick, holding }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Trade Sheet
+// ─────────────────────────────────────────────────────────────────────────────
 function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
-  const [mode, setMode]     = useState("buy");
+  const [mode, setMode]   = useState("buy");
   const [amount, setAmount] = useState("");
-  const [busy, setBusy]     = useState(false);
-  const [error, setError]   = useState(null);
+  const [busy, setBusy]   = useState(false);
+  const [error, setError] = useState(null);
 
-  const price        = player.price_apt;
-  const amountNum    = parseFloat(amount) || 0;
-  const tokensGet    = mode === "buy" ? amountNum / price : 0;
-  const vusdGet      = mode === "sell" ? amountNum * price : 0;
-  const fee          = amountNum * 0.01;
+  const price       = player.price_apt;
+  const amountNum   = parseFloat(amount) || 0;
+  const tokensGet   = mode === "buy" ? amountNum / price : 0;
+  const vusdGet     = mode === "sell" ? amountNum * price : 0;
+  const fee         = amountNum * 0.01;
   const holdingHuman = holding ? holding.token_amount / PRECISION : 0;
   const presets      = mode === "buy" ? [10, 25, 50, 100] : [25, 50, 75, 100];
-
-  // ── Category block guard — buy is disabled if user holds a different player
-  //    in the same category. Mirrors executeBuy pre-check in the edge function.
-  const buyBlocked = mode === "buy" && player.category_blocked;
-
-  const canTrade = buyBlocked
-    ? false
-    : mode === "buy"
-      ? amountNum > 0 && amountNum <= balance
-      : amountNum > 0 && amountNum <= holdingHuman;
 
   const handlePreset = (val) => {
     tgHaptic("impact", "light");
     setAmount(mode === "buy" ? String(val) : (holdingHuman * val / 100).toFixed(4));
   };
+
+  const canTrade = mode === "buy"
+    ? amountNum > 0 && amountNum <= balance
+    : amountNum > 0 && amountNum <= holdingHuman;
 
   const handleTrade = async () => {
     if (!canTrade) return;
@@ -258,6 +284,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
       <div style={{ position: "relative", zIndex: 1, background: "#111", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.09)", borderBottom: "none", padding: "0 0 32px", animation: "slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)" }}>
+        {/* Handle */}
         <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 0" }}>
           <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.12)" }} />
         </div>
@@ -279,27 +306,16 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
         {/* Toggle */}
         <div style={{ margin: "16px 18px 0", display: "flex", background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: 3 }}>
           {["buy", "sell"].map(m => (
-            <button key={m} onClick={() => { tgHaptic("impact", "light"); setMode(m); setAmount(""); setError(null); }}
-              style={{ flex: 1, padding: "9px 0", borderRadius: 8, border: "none", cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, transition: "all 0.15s", background: mode === m ? (m === "buy" ? "#00FF87" : "#FF4444") : "transparent", color: mode === m ? (m === "buy" ? "#000" : "#fff") : "rgba(255,255,255,0.35)" }}>
+            <button key={m} onClick={() => { tgHaptic("impact", "light"); setMode(m); setAmount(""); setError(null); }} style={{ flex: 1, padding: "9px 0", borderRadius: 8, border: "none", cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, transition: "all 0.15s", background: mode === m ? (m === "buy" ? "#00FF87" : "#FF4444") : "transparent", color: mode === m ? (m === "buy" ? "#000" : "#fff") : "rgba(255,255,255,0.35)" }}>
               {m === "buy" ? "Buy" : "Sell"}
             </button>
           ))}
         </div>
 
-        {/* Category block notice inside sheet */}
-        {buyBlocked && (
-          <div style={{ margin: "12px 18px 0", padding: "11px 13px", background: "rgba(245,200,66,0.07)", borderRadius: 10, border: "1px solid rgba(245,200,66,0.2)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-            <i className="ri-lock-line" style={{ fontSize: 16, color: "#F5C842", flexShrink: 0, marginTop: 1 }} />
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
-              You hold <span style={{ color: "#F5C842", fontWeight: 700 }}>{player.category_blocked_player_name} ({player.category_blocked_player_symbol})</span> in this group.
-              {" "}Sell those shares first before buying here.
-            </div>
-          </div>
-        )}
-
         {/* Balance row */}
         <div style={{ margin: "12px 18px 0", background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: "9px 13px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: 12, fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.35)" }}>
+          <span style={{ fontSize: 12, fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.35)", display: "flex", alignItems: "center", gap: 5 }}>
+            <i className={mode === "buy" ? "ri-wallet-3-line" : "ri-stack-line"} style={{ fontSize: 13 }} />
             {mode === "buy" ? "Available" : "Your shares"}
           </span>
           <span style={{ fontSize: 13, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, color: "#00FF87" }}>
@@ -307,19 +323,18 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
           </span>
         </div>
 
-        {/* Amount input — disabled when buy is blocked */}
-        <div style={{ margin: "10px 18px 0", position: "relative", opacity: buyBlocked ? 0.4 : 1 }}>
+        {/* Amount input */}
+        <div style={{ margin: "10px 18px 0", position: "relative" }}>
           <div style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.2)" }}>
             <i className={mode === "buy" ? "ri-coin-line" : "ri-football-line"} style={{ fontSize: 18 }} />
           </div>
           <input
             type="number" inputMode="decimal" value={amount}
-            onChange={e => !buyBlocked && setAmount(e.target.value)}
-            disabled={buyBlocked}
+            onChange={e => setAmount(e.target.value)}
             placeholder={mode === "buy" ? "0.00" : "0.0000"}
             style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: `1px solid ${canTrade ? "rgba(0,255,135,0.25)" : "rgba(255,255,255,0.08)"}`, borderRadius: 10, padding: "13px 13px 13px 38px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 20, color: "#fff", outline: "none", transition: "border-color 0.15s" }}
           />
-          {amount && !buyBlocked && (
+          {amount && (
             <div style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>
               {mode === "buy" ? `≈ ${tokensGet.toFixed(4)} shares` : `≈ $${vusdGet.toFixed(2)}`}
             </div>
@@ -327,25 +342,27 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
         </div>
 
         {/* Presets */}
-        {!buyBlocked && (
-          <div style={{ margin: "9px 18px 0", display: "flex", gap: 7 }}>
-            {presets.map(p => (
-              <button key={p} onClick={() => handlePreset(p)} style={{ flex: 1, padding: "8px 4px", borderRadius: 9, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>
-                {mode === "sell" ? `${p}%` : `$${p}`}
-              </button>
-            ))}
-          </div>
-        )}
+        <div style={{ margin: "9px 18px 0", display: "flex", gap: 7 }}>
+          {presets.map(p => (
+            <button key={p} onClick={() => handlePreset(p)} style={{ flex: 1, padding: "8px 4px", borderRadius: 9, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>
+              {mode === "sell" ? `${p}%` : `$${p}`}
+            </button>
+          ))}
+        </div>
 
         {/* Fee summary */}
-        {amountNum > 0 && !buyBlocked && (
+        {amountNum > 0 && (
           <div style={{ margin: "10px 18px 0", padding: "10px 13px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif" }}>Fee (1%)</span>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 5 }}>
+                <i className="ri-percent-line" style={{ fontSize: 13 }} /> Fee (1%)
+              </span>
               <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>-${fee.toFixed(4)}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif" }}>You receive</span>
+              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 5 }}>
+                <i className="ri-arrow-right-line" style={{ fontSize: 13 }} /> You receive
+              </span>
               <span style={{ fontSize: 13, color: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700 }}>
                 {mode === "buy" ? `${(tokensGet * 0.99).toFixed(4)} shares` : `$${(vusdGet * 0.99).toFixed(2)}`}
               </span>
@@ -362,12 +379,9 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
 
         {/* CTA */}
         <div style={{ margin: "14px 18px 0" }}>
-          <button onClick={handleTrade} disabled={!canTrade || busy}
-            style={{ width: "100%", padding: "15px 0", borderRadius: 12, border: "none", cursor: canTrade && !busy ? "pointer" : "not-allowed", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: "-0.01em", transition: "all 0.15s", background: busy ? "rgba(255,255,255,0.06)" : !canTrade ? "rgba(255,255,255,0.05)" : mode === "buy" ? "#00FF87" : "#FF4444", color: busy || !canTrade ? "rgba(255,255,255,0.2)" : mode === "buy" ? "#000" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <button onClick={handleTrade} disabled={!canTrade || busy} style={{ width: "100%", padding: "15px 0", borderRadius: 12, border: "none", cursor: canTrade && !busy ? "pointer" : "not-allowed", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: "-0.01em", transition: "all 0.15s", background: busy ? "rgba(255,255,255,0.06)" : !canTrade ? "rgba(255,255,255,0.05)" : mode === "buy" ? "#00FF87" : "#FF4444", color: busy || !canTrade ? "rgba(255,255,255,0.2)" : mode === "buy" ? "#000" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
             {busy ? (
               <><i className="ri-loader-4-line" style={{ fontSize: 16 }} /> Processing…</>
-            ) : buyBlocked ? (
-              <><i className="ri-lock-line" style={{ fontSize: 16 }} /> Sell {player.category_blocked_player_symbol} first</>
             ) : canTrade ? (
               <><i className={mode === "buy" ? "ri-arrow-up-circle-line" : "ri-arrow-down-circle-line"} style={{ fontSize: 16 }} /> {mode === "buy" ? "Buy" : "Sell"} {player.symbol}</>
             ) : (
@@ -380,15 +394,18 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Player Detail Screen
+// ─────────────────────────────────────────────────────────────────────────────
 function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
   const [showTrade, setShowTrade] = useState(false);
   const [tradeMode, setTradeMode] = useState("buy");
   const [chartData] = useState(() => generateSparkline(player.price_apt, player.price_change_24h, 40));
-  const positive     = player.price_change_24h >= 0;
+  const positive   = player.price_change_24h >= 0;
   const holdingHuman = holding ? holding.token_amount / PRECISION : 0;
   const holdingValue = holdingHuman * player.price_apt;
-  const pnl          = holding ? holdingHuman * (player.price_apt - holding.avg_buy_apt) : 0;
-  const pnlPct       = holding?.avg_buy_apt > 0 ? ((player.price_apt - holding.avg_buy_apt) / holding.avg_buy_apt) * 100 : 0;
+  const pnl = holding ? holdingHuman * (player.price_apt - holding.avg_buy_apt) : 0;
+  const pnlPct = holding?.avg_buy_apt > 0 ? ((player.price_apt - holding.avg_buy_apt) / holding.avg_buy_apt) * 100 : 0;
 
   useEffect(() => {
     tgShowBackBtn(onBack);
@@ -491,40 +508,23 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
       </div>
 
       {/* Trade buttons */}
-      <div style={{ padding: "11px 18px 22px", borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", gap: 9, background: "#0A0A0A" }}>
-
-        {/* Category block notice — mirrors categoryBlockNotice in callbacks.ts */}
-        {player.category_blocked && (
-          <div style={{ padding: "11px 14px", borderRadius: 11, background: "rgba(245,200,66,0.07)", border: "1px solid rgba(245,200,66,0.2)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-            <i className="ri-error-warning-line" style={{ fontSize: 16, color: "#F5C842", flexShrink: 0, marginTop: 1 }} />
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
-              You already hold <span style={{ color: "#F5C842", fontWeight: 700 }}>{player.category_blocked_player_name} ({player.category_blocked_player_symbol})</span> shares in this group. Sell them first before buying here.
-            </div>
+      <div style={{ padding: "11px 18px 22px", borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", gap: 9, background: "#0A0A0A" }}>
+        {player.tradeable ? (
+          <>
+            <button onClick={() => openTrade("buy")} style={{ flex: 1, padding: "14px 0", borderRadius: 12, border: "none", background: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#000", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+              <i className="ri-arrow-up-circle-fill" style={{ fontSize: 16 }} /> Buy
+            </button>
+            {holdingHuman > 0 && (
+              <button onClick={() => openTrade("sell")} style={{ flex: 1, padding: "14px 0", borderRadius: 12, border: "1px solid rgba(255,68,68,0.3)", background: "rgba(255,68,68,0.08)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#FF4444", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+                <i className="ri-arrow-down-circle-line" style={{ fontSize: 16 }} /> Sell
+              </button>
+            )}
+          </>
+        ) : (
+          <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.25)", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
+            <i className="ri-pause-circle-line" style={{ fontSize: 15 }} /> Not yet tradeable
           </div>
         )}
-
-        <div style={{ display: "flex", gap: 9 }}>
-          {player.tradeable && !player.category_blocked ? (
-            <>
-              <button onClick={() => openTrade("buy")} style={{ flex: 1, padding: "14px 0", borderRadius: 12, border: "none", background: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#000", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-                <i className="ri-arrow-up-circle-fill" style={{ fontSize: 16 }} /> Buy
-              </button>
-              {holdingHuman > 0 && (
-                <button onClick={() => openTrade("sell")} style={{ flex: 1, padding: "14px 0", borderRadius: 12, border: "1px solid rgba(255,68,68,0.3)", background: "rgba(255,68,68,0.08)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#FF4444", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-                  <i className="ri-arrow-down-circle-line" style={{ fontSize: 16 }} /> Sell
-                </button>
-              )}
-            </>
-          ) : player.category_blocked ? (
-            <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(245,200,66,0.06)", border: "1px solid rgba(245,200,66,0.2)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "#F5C842", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-lock-line" style={{ fontSize: 15 }} /> Buy locked — sell {player.category_blocked_player_symbol} first
-            </div>
-          ) : (
-            <div style={{ flex: 1, padding: "14px 0", borderRadius: 12, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.25)", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-pause-circle-line" style={{ fontSize: 15 }} /> Not yet tradeable
-            </div>
-          )}
-        </div>
       </div>
 
       {showTrade && (
@@ -534,6 +534,9 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Market Tab
+// ─────────────────────────────────────────────────────────────────────────────
 function MarketTab({ players, portfolio, onSelect, loading }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
@@ -556,10 +559,14 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
             {players.filter(p => p.tradeable).length} players trading live
           </div>
         </div>
+
+        {/* Search */}
         <div style={{ position: "relative", marginBottom: 11 }}>
           <i className="ri-search-line" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "rgba(255,255,255,0.25)" }} />
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search players, teams…" style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, color: "#fff", outline: "none" }} />
         </div>
+
+        {/* League filter pills */}
         <div style={{ display: "flex", gap: 7, overflowX: "auto", paddingBottom: 4, marginBottom: 16 }}>
           {leagues.map(l => (
             <button key={l} onClick={() => { tgHaptic("impact", "light"); setFilter(l); }} style={{ flexShrink: 0, padding: "5px 13px", borderRadius: 99, border: `1px solid ${filter === l ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.07)"}`, background: filter === l ? "rgba(255,255,255,0.1)" : "transparent", color: filter === l ? "#fff" : "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, cursor: "pointer", whiteSpace: "nowrap" }}>
@@ -567,6 +574,8 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
             </button>
           ))}
         </div>
+
+        {/* Top Gainers */}
         {!search && filter === "all" && (
           <div style={{ marginBottom: 18 }}>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 9, display: "flex", alignItems: "center", gap: 6 }}>
@@ -577,21 +586,30 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                 <button key={p.id} onClick={() => onSelect(p)} style={{ flex: 1, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: "11px 10px", cursor: "pointer", textAlign: "left" }}>
                   <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11, color: "rgba(255,255,255,0.5)", marginBottom: 4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.symbol}</div>
                   <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 14, color: "#fff" }}>{fmtUSD(p.price_apt)}</div>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11, color: "#00FF87", marginTop: 2 }}>{fmtChange(p.price_change_24h)}</div>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11, color: "#00FF87", marginTop: 2, display: "flex", alignItems: "center", gap: 3 }}>
+                    <i className="ri-arrow-up-line" style={{ fontSize: 11 }} />{fmtChange(p.price_change_24h)}
+                  </div>
                 </button>
               ))}
             </div>
           </div>
         )}
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 9 }}>All Players</div>
+
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 9, display: "flex", alignItems: "center", gap: 6 }}>
+          <i className="ri-user-line" style={{ fontSize: 13 }} /> All Players
+        </div>
       </div>
+
       <div style={{ padding: "0 18px 100px", display: "flex", flexDirection: "column", gap: 7 }}>
         {loading ? (
           Array.from({ length: 4 }).map((_, i) => (
             <div key={i} style={{ height: 76, borderRadius: 14, background: "rgba(255,255,255,0.04)", animation: "pulse 1.4s ease-in-out infinite", animationDelay: `${i * 0.1}s` }} />
           ))
         ) : filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No players found</div>
+          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+            <i className="ri-search-eye-line" style={{ fontSize: 32 }} />
+            No players found
+          </div>
         ) : (
           filtered.map(p => <PlayerCard key={p.id} player={p} onClick={onSelect} holding={holdingMap[p.id]} />)
         )}
@@ -600,8 +618,11 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Portfolio Tab
+// ─────────────────────────────────────────────────────────────────────────────
 function PortfolioTab({ portfolio, players, balance, onSelect }) {
-  const playerMap  = Object.fromEntries(players.map(p => [p.id, p]));
+  const playerMap = Object.fromEntries(players.map(p => [p.id, p]));
   const totalValue = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * (playerMap[pos.player_id]?.price_apt ?? pos.avg_buy_apt), 0);
   const totalCost  = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt, 0);
   const totalPnl   = totalValue - totalCost;
@@ -609,26 +630,37 @@ function PortfolioTab({ portfolio, players, balance, onSelect }) {
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "0 0 100px" }}>
+      {/* Summary card */}
       <div style={{ margin: "18px 18px 0", padding: "22px", borderRadius: 16, background: "#111", border: "1px solid rgba(255,255,255,0.08)", position: "relative", overflow: "hidden" }}>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.08em" }}>Total Portfolio Value</div>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 4, display: "flex", alignItems: "center", gap: 5, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+          <i className="ri-briefcase-4-line" style={{ fontSize: 12 }} /> Total Portfolio Value
+        </div>
         <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 4 }}>{fmtUSD(totalValue + balance)}</div>
         <div style={{ fontSize: 12, color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 18 }}>{fmtNGN(totalValue + balance)}</div>
         <div style={{ display: "flex", gap: 16 }}>
           <div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>Open P&L</div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: totalPnl >= 0 ? "#00FF87" : "#FF4444" }}>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 4 }}>
+              <i className="ri-line-chart-line" style={{ fontSize: 12 }} /> Open P&L
+            </div>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: totalPnl >= 0 ? "#00FF87" : "#FF4444", display: "flex", alignItems: "center", gap: 4 }}>
+              <i className={totalPnl >= 0 ? "ri-arrow-up-line" : "ri-arrow-down-line"} style={{ fontSize: 14 }} />
               {totalPnl >= 0 ? "+" : ""}{fmtUSD(totalPnl)} ({fmtChange(totalPct)})
             </div>
           </div>
           <div style={{ width: 1, background: "rgba(255,255,255,0.07)" }} />
           <div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>vUSD Balance</div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 4 }}>
+              <i className="ri-coin-line" style={{ fontSize: 12 }} /> vUSD Balance
+            </div>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>{fmtUSD(balance)}</div>
           </div>
         </div>
       </div>
+
       <div style={{ padding: "18px 18px 0" }}>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Holdings</div>
+        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+          <i className="ri-stack-line" style={{ fontSize: 13 }} /> Holdings
+        </div>
         {portfolio.length === 0 ? (
           <div style={{ textAlign: "center", padding: "40px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
             <i className="ri-football-line" style={{ fontSize: 36, color: "rgba(255,255,255,0.15)" }} />
@@ -650,13 +682,14 @@ function PortfolioTab({ portfolio, players, balance, onSelect }) {
                   <PlayerAvatar player={player} size={42} />
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{player.name}</div>
-                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>
-                      {tokens.toFixed(2)} shares · avg {fmtUSD(pos.avg_buy_apt)}
+                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 5 }}>
+                      <i className="ri-stack-line" style={{ fontSize: 11 }} /> {tokens.toFixed(2)} shares · avg {fmtUSD(pos.avg_buy_apt)}
                     </div>
                   </div>
                   <div style={{ textAlign: "right" }}>
                     <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{fmtUSD(value)}</div>
-                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, color: pnl >= 0 ? "#00FF87" : "#FF4444" }}>
+                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, color: pnl >= 0 ? "#00FF87" : "#FF4444", display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 3 }}>
+                      <i className={pnl >= 0 ? "ri-arrow-up-s-line" : "ri-arrow-down-s-line"} style={{ fontSize: 13 }} />
                       {pnl >= 0 ? "+" : ""}{fmtUSD(pnl)} ({fmtChange(pct)})
                     </div>
                   </div>
@@ -670,23 +703,32 @@ function PortfolioTab({ portfolio, players, balance, onSelect }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Leaderboard Tab
+// ─────────────────────────────────────────────────────────────────────────────
 function LeaderboardTab({ entries }) {
-  const podiumIcons  = ["ri-medal-2-line", "ri-medal-line", "ri-award-line"];
+  const podiumIcons = ["ri-medal-2-line", "ri-medal-line", "ri-award-line"];
   const podiumColors = ["#F5C842", "#C0C0C0", "#CD7F32"];
+
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "18px 18px 100px" }}>
       <div style={{ marginBottom: 18 }}>
         <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", letterSpacing: "-0.04em" }}>Leaderboard</div>
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 2 }}>Season rankings by P&L</div>
+        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 5, marginTop: 2 }}>
+          <i className="ri-trophy-line" style={{ fontSize: 11, color: "#F5C842" }} /> Season rankings by P&L
+        </div>
       </div>
+
+      {/* Podium */}
       <div style={{ display: "flex", alignItems: "flex-end", gap: 9, marginBottom: 20, height: 110 }}>
         {[1, 0, 2].map(i => {
           const e = entries[i]; if (!e) return null;
           const h = [86, 110, 70][[1, 0, 2].indexOf(i)];
+          const c = podiumColors[i];
           return (
             <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <i className={podiumIcons[i]} style={{ fontSize: 18, color: podiumColors[i], marginBottom: 4 }} />
-              <div style={{ width: "100%", height: h, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "9px 9px 0 0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "6px 4px" }}>
+              <i className={podiumIcons[i]} style={{ fontSize: 18, color: c, marginBottom: 4 }} />
+              <div style={{ width: "100%", height: h, background: "rgba(255,255,255,0.04)", border: `1px solid rgba(255,255,255,0.08)`, borderRadius: "9px 9px 0 0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "6px 4px" }}>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.6)", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%", padding: "0 6px" }}>{e.username.replace(/_/g, " ")}</div>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 12, color: "#00FF87", marginTop: 4 }}>+{fmtUSD(e.pnl_apt)}</div>
               </div>
@@ -694,16 +736,24 @@ function LeaderboardTab({ entries }) {
           );
         })}
       </div>
+
+      {/* List */}
       <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
         {entries.map((e, i) => (
           <div key={i} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "13px 14px", display: "flex", alignItems: "center", gap: 11 }}>
             <div style={{ width: 30, height: 30, borderRadius: 8, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              {i < 3 ? <i className={podiumIcons[i]} style={{ fontSize: 15, color: podiumColors[i] }} />
-                      : <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)" }}>#{e.rank}</span>}
+              {i < 3
+                ? <i className={podiumIcons[i]} style={{ fontSize: 15, color: podiumColors[i] }} />
+                : <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)" }}>#{e.rank}</span>
+              }
             </div>
-            <div style={{ flex: 1, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>@{e.username}</div>
+            <div style={{ flex: 1, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: "#fff", display: "flex", alignItems: "center", gap: 6 }}>
+              <i className="ri-at-line" style={{ fontSize: 13, color: "rgba(255,255,255,0.3)" }} />{e.username}
+            </div>
             <div style={{ textAlign: "right" }}>
-              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 14, color: "#00FF87" }}>+{fmtUSD(e.pnl_apt)}</div>
+              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 14, color: "#00FF87", display: "flex", alignItems: "center", gap: 3 }}>
+                <i className="ri-arrow-up-line" style={{ fontSize: 12 }} />+{fmtUSD(e.pnl_apt)}
+              </div>
               <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 11, color: "rgba(255,255,255,0.3)" }}>+{e.pnl_pct.toFixed(1)}%</div>
             </div>
           </div>
@@ -713,6 +763,9 @@ function LeaderboardTab({ entries }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Deposit Sheet
+// ─────────────────────────────────────────────────────────────────────────────
 function DepositSheet({ onClose }) {
   const currencies = [
     { id: "usdt", label: "USDT",  network: "TRC20",    icon: "ri-exchange-dollar-line" },
@@ -722,11 +775,15 @@ function DepositSheet({ onClose }) {
     { id: "eth",  label: "ETH",   network: "Ethereum", icon: "ri-money-dollar-circle-line" },
     { id: "sol",  label: "SOL",   network: "Solana",   icon: "ri-sun-line" },
   ];
+
   const handleSelect = (currency) => {
     tgHaptic("impact", "medium");
-    if (tg?.sendData) tg.sendData(JSON.stringify({ action: "deposit", currency: currency.id }));
+    if (tg?.sendData) {
+      tg.sendData(JSON.stringify({ action: "deposit", currency: currency.id }));
+    }
     onClose();
   };
+
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
       <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
@@ -735,7 +792,9 @@ function DepositSheet({ onClose }) {
           <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.12)" }} />
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff" }}>Add Funds</div>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff", display: "flex", alignItems: "center", gap: 9 }}>
+            <i className="ri-add-circle-line" style={{ fontSize: 20, color: "#00FF87" }} /> Add Funds
+          </div>
           <button onClick={onClose} style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <i className="ri-close-line" style={{ fontSize: 16 }} />
           </button>
@@ -762,11 +821,14 @@ function DepositSheet({ onClose }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Bottom Nav
+// ─────────────────────────────────────────────────────────────────────────────
 function BottomNav({ active, onChange, onDeposit }) {
   const tabs = [
-    { id: "market",      icon: "ri-line-chart-line",  label: "Market" },
-    { id: "portfolio",   icon: "ri-briefcase-4-line", label: "Portfolio" },
-    { id: "leaderboard", icon: "ri-trophy-line",       label: "Ranks" },
+    { id: "market",      icon: "ri-line-chart-line",    label: "Market" },
+    { id: "portfolio",   icon: "ri-briefcase-4-line",   label: "Portfolio" },
+    { id: "leaderboard", icon: "ri-trophy-line",         label: "Ranks" },
   ];
   return (
     <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(10,10,10,0.97)", backdropFilter: "blur(16px)", borderTop: "1px solid rgba(255,255,255,0.07)", display: "flex", alignItems: "center", padding: "8px 18px 24px", zIndex: 500, gap: 4 }}>
@@ -784,6 +846,9 @@ function BottomNav({ active, onChange, onDeposit }) {
   );
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Root App
+// ─────────────────────────────────────────────────────────────────────────────
 export default function App() {
   const [tab, setTab]                       = useState("market");
   const [selectedPlayer, setSelectedPlayer] = useState(null);
@@ -812,10 +877,10 @@ export default function App() {
           api("/leaderboard"),
         ]);
         if (cancelled) return;
-        if (playersRes.status   === "fulfilled") setPlayers(playersRes.value);
-        if (portfolioRes.status === "fulfilled") setPortfolio(portfolioRes.value);
-        if (balanceRes.status   === "fulfilled") setBalance(balanceRes.value?.balance_vusd ?? 0);
-        if (lbRes.status        === "fulfilled") setLeaderboard(lbRes.value);
+        if (playersRes.status    === "fulfilled") setPlayers(playersRes.value);
+        if (portfolioRes.status  === "fulfilled") setPortfolio(portfolioRes.value);
+        if (balanceRes.status    === "fulfilled") setBalance(balanceRes.value?.balance_vusd ?? 0);
+        if (lbRes.status         === "fulfilled") setLeaderboard(lbRes.value);
       } catch { /* keep mock data */ } finally {
         if (!cancelled) setLoading(false);
       }
@@ -859,7 +924,6 @@ export default function App() {
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
-        @import url('https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css');
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: #0A0A0A; color: #fff; overflow: hidden; }
         input { color: #fff; font-family: 'Space Grotesk', sans-serif; }
@@ -867,14 +931,28 @@ export default function App() {
         input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
         button { font-family: 'Space Grotesk', sans-serif; }
         ::-webkit-scrollbar { display: none; }
-        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.6; } }
+        @keyframes ticker {
+          0%   { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes slideUp {
+          from { transform: translateY(100%); }
+          to   { transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 0.3; }
+          50%       { opacity: 0.6; }
+        }
       `}</style>
 
       <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "#0A0A0A", maxWidth: 480, margin: "0 auto", position: "relative", overflow: "hidden" }}>
+
         <TickerTape players={players} />
+
         <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
           {selectedPlayer ? (
             <PlayerDetail
@@ -893,8 +971,14 @@ export default function App() {
             </>
           )}
         </div>
-        {!selectedPlayer && <BottomNav active={tab} onChange={setTab} onDeposit={() => setShowDeposit(true)} />}
+
+        {!selectedPlayer && (
+          <BottomNav active={tab} onChange={setTab} onDeposit={() => setShowDeposit(true)} />
+        )}
+
         {showDeposit && <DepositSheet onClose={() => setShowDeposit(false)} />}
+
+        {/* Toasts */}
         <div style={{ position: "fixed", top: 48, left: 18, right: 18, zIndex: 9999, display: "flex", flexDirection: "column", gap: 7, pointerEvents: "none" }}>
           {toasts.map(t => (
             <div key={t.id} style={{ background: t.type === "error" ? "rgba(255,68,68,0.1)" : "rgba(255,255,255,0.07)", border: `1px solid ${t.type === "error" ? "rgba(255,68,68,0.2)" : "rgba(255,255,255,0.1)"}`, borderRadius: 10, padding: "11px 14px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: t.type === "error" ? "#FF4444" : "#fff", animation: "fadeIn 0.2s ease", display: "flex", alignItems: "center", gap: 8 }}>
