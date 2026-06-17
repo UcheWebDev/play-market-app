@@ -605,26 +605,29 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
   const [error, setError] = useState(null);
   const price = player.price_apt;
   const amountNum = parseFloat(amount) || 0;
+  const amountRaw = Math.floor(amountNum * PRECISION); // what we'll actually send
+
   const tokensGet = mode === "buy" ? amountNum / price : 0;
-  const vusdGet = mode === "sell" ? amountNum * price : 0;
+  const vusdGet = mode === "sell" ? (amountRaw / PRECISION) * price : 0;
   const fee = amountNum * 0.01;
-  const holdingHuman = holding ? holding.token_amount / PRECISION : 0;
+  const holdingRaw = holding ? holding.token_amount : 0; // raw integer, source of truth
+  const holdingHuman = holdingRaw / PRECISION; // only for display
   const presets = mode === "buy" ? [10, 25, 50, 100] : [25, 50, 75, 100];
   const buyBlocked = mode === "buy" && player.category_blocked;
   const canTrade = buyBlocked
     ? false
     : mode === "buy"
-      ? amountNum > 0 && amountNum <= balance
-      : amountNum > 0 && amountNum <= holdingHuman + 0.00001;
+      ? amountRaw > 0 && amountNum <= balance
+      : amountRaw > 0 && amountRaw <= holdingRaw; // integer comparison, no float issues
 
   const handlePreset = (val) => {
     tgHaptic("impact", "light");
     if (mode === "buy") {
       setAmount(String(val));
     } else {
-      // For 100%, use exact holdingHuman to avoid float precision issues
-      const pct = val === 100 ? holdingHuman : (holdingHuman * val) / 100;
-      setAmount(pct.toFixed(4));
+      // Work in raw units, then convert back — avoids all float drift
+      const rawToSell = Math.floor((holdingRaw * val) / 100);
+      setAmount(String(rawToSell / PRECISION)); // store as human for display
     }
   };
   const handleTrade = async () => {
@@ -633,21 +636,21 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
     setBusy(true);
     tgHaptic("impact", "medium");
     try {
-      // Clamp sell amount to actual holding to avoid raw unit overflow
-      const safeAmount =
-        mode === "sell" ? Math.min(amountNum, holdingHuman) : amountNum;
+      // For sells, clamp to holdingRaw to prevent any off-by-one
+      const rawToSend =
+        mode === "sell" ? Math.min(amountRaw, holdingRaw) : amountRaw;
 
       const result = await api("/trade", {
         method: "POST",
         body: JSON.stringify({
           player_id: player.id,
           type: mode,
-          amount: Math.floor(safeAmount * PRECISION),
+          amount: rawToSend,
         }),
       });
 
       tgHapticNotif("success");
-      onTrade({ mode, amount: safeAmount, player, result });
+      onTrade({ mode, amount: amountNum, player, result });
       onClose();
     } catch (e) {
       tgHapticNotif("error");
