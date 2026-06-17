@@ -615,12 +615,17 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
     ? false
     : mode === "buy"
       ? amountNum > 0 && amountNum <= balance
-      : amountNum > 0 && amountNum <= holdingHuman;
+      : amountNum > 0 && amountNum <= holdingHuman + 0.00001;
+
   const handlePreset = (val) => {
     tgHaptic("impact", "light");
-    setAmount(
-      mode === "buy" ? String(val) : ((holdingHuman * val) / 100).toFixed(4)
-    );
+    if (mode === "buy") {
+      setAmount(String(val));
+    } else {
+      // For 100%, use exact holdingHuman to avoid float precision issues
+      const pct = val === 100 ? holdingHuman : (holdingHuman * val) / 100;
+      setAmount(pct.toFixed(4));
+    }
   };
   const handleTrade = async () => {
     if (!canTrade) return;
@@ -628,16 +633,21 @@ function TradeSheet({ player, holding, balance, onClose, onTrade, onToast }) {
     setBusy(true);
     tgHaptic("impact", "medium");
     try {
+      // Clamp sell amount to actual holding to avoid raw unit overflow
+      const safeAmount =
+        mode === "sell" ? Math.min(amountNum, holdingHuman) : amountNum;
+
       const result = await api("/trade", {
         method: "POST",
         body: JSON.stringify({
           player_id: player.id,
           type: mode,
-          amount: Math.floor(amountNum * PRECISION),
+          amount: Math.floor(safeAmount * PRECISION),
         }),
       });
+
       tgHapticNotif("success");
-      onTrade({ mode, amount: amountNum, player, result });
+      onTrade({ mode, amount: safeAmount, player, result });
       onClose();
     } catch (e) {
       tgHapticNotif("error");
