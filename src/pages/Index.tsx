@@ -250,7 +250,6 @@ function FormBadge({ rps }) {
   );
 }
 
-/* ─── Flat row player item (Robinhood style) ─── */
 function PlayerRow({ player, onClick, holding }) {
   const [sparkData] = useState(() => generateSparkline(player.price_apt, player.price_change_24h));
   const positive = player.price_change_24h >= 0;
@@ -274,10 +273,7 @@ function PlayerRow({ player, onClick, holding }) {
       onTouchStart={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
       onTouchEnd={(e) => (e.currentTarget.style.background = hasHolding ? "rgba(0,255,135,0.02)" : "transparent")}
     >
-      {/* Avatar — circular */}
       <PlayerAvatar player={player} size={46} />
-
-      {/* Name + meta */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2 }}>
           <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
@@ -297,8 +293,6 @@ function PlayerRow({ player, onClick, holding }) {
           )}
         </div>
       </div>
-
-      {/* Sparkline + price */}
       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
         <SparklineSVG data={sparkData} positive={positive} width={56} height={24} />
         <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>
@@ -308,10 +302,92 @@ function PlayerRow({ player, onClick, holding }) {
           {fmtChange(player.price_change_24h)}
         </div>
       </div>
-
-      {/* Sliders icon (like Robinhood) */}
       <div style={{ marginLeft: 6, display: "flex", alignItems: "center" }}>
         <i className="ri-equalizer-2-line" style={{ fontSize: 16, color: "rgba(255,255,255,0.18)" }} />
+      </div>
+    </div>
+  );
+}
+
+/* ─── PLAYER LIST SHEET — opens when "Buy Shares" is tapped ─── */
+function PlayerListSheet({ players, portfolio, onClose, onSelect }) {
+  const [search, setSearch] = useState("");
+  const holdingMap = Object.fromEntries(portfolio.map((p) => [Number(p.player_id), p]));
+
+  const filtered = players.filter((p) => {
+    const q = search.toLowerCase();
+    return !q || p.name.toLowerCase().includes(q) || p.symbol.toLowerCase().includes(q) || p.team?.toLowerCase().includes(q);
+  });
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 900, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
+      <div style={{
+        position: "relative",
+        zIndex: 1,
+        background: "#0F0F0F",
+        borderRadius: "20px 20px 0 0",
+        border: "1px solid rgba(255,255,255,0.09)",
+        borderBottom: "none",
+        display: "flex",
+        flexDirection: "column",
+        maxHeight: "88vh",
+        animation: "slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)",
+      }}>
+        {/* Handle */}
+        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 0", flexShrink: 0 }}>
+          <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.12)" }} />
+        </div>
+
+        {/* Header */}
+        <div style={{ padding: "14px 18px 0", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff", letterSpacing: "-0.03em" }}>
+            Buy Shares
+          </div>
+          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <i className="ri-close-line" style={{ fontSize: 16 }} />
+          </button>
+        </div>
+
+        {/* Live count */}
+        <div style={{ padding: "6px 18px 0", flexShrink: 0 }}>
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 5 }}>
+            <i className="ri-radio-button-line" style={{ fontSize: 11, color: "#00FF87" }} />
+            {players.filter((p) => p.tradeable).length} players live
+          </div>
+        </div>
+
+        {/* Search */}
+        <div style={{ padding: "12px 18px 8px", flexShrink: 0 }}>
+          <div style={{ position: "relative" }}>
+            <i className="ri-search-line" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "rgba(255,255,255,0.25)" }} />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search players, teams…"
+              autoFocus
+              style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, color: "#fff", outline: "none" }}
+            />
+          </div>
+        </div>
+
+        {/* Scrollable list */}
+        <div style={{ flex: 1, overflowY: "auto", paddingBottom: 24 }}>
+          {filtered.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+              No players found
+            </div>
+          ) : (
+            filtered.map((p) => (
+              <PlayerRow
+                key={p.id}
+                player={p}
+                onClick={(player) => { onClose(); onSelect(player); }}
+                holding={holdingMap[Number(p.id)]}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
@@ -594,47 +670,35 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade, onToast }) {
   );
 }
 
-/* ─── MARKET TAB: Robinhood-style layout ─── */
-function MarketTab({ players, portfolio, balance, onSelect, loading }) {
-  const [search, setSearch] = useState("");
+/* ─── MARKET TAB: My Shares only, no player list/search ─── */
+function MarketTab({ players, portfolio, balance, onSelect, onBuyShares, loading }) {
   const holdingMap = Object.fromEntries(portfolio.map((p) => [Number(p.player_id), p]));
-
   const myShares = portfolio.filter((p) => p.token_amount > 0);
   const playerMap = Object.fromEntries(players.map((p) => [Number(p.id), p]));
 
-  // total portfolio value for the header
   const totalStockValue = myShares.reduce((s, pos) => {
     const p = playerMap[Number(pos.player_id)];
     return s + (pos.token_amount / PRECISION) * (p?.price_apt ?? pos.avg_buy_apt);
   }, 0);
   const totalValue = totalStockValue + balance;
-
   const totalCost = myShares.reduce((s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt, 0);
   const totalPnl = totalStockValue - totalCost;
   const totalPnlPct = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0;
   const positiveDay = totalPnl >= 0;
 
-  const filtered = players.filter((p) => {
-    const q = search.toLowerCase();
-    return !q || p.name.toLowerCase().includes(q) || p.symbol.toLowerCase().includes(q) || p.team?.toLowerCase().includes(q);
-  });
-
   return (
     <div style={{ height: "100%", overflowY: "auto" }}>
-      {/* ── HERO HEADER (green-style from screenshot, dark version) ── */}
+      {/* ── HERO HEADER ── */}
       <div style={{
         background: "linear-gradient(160deg, #0f2e1e 0%, #0A0A0A 60%)",
         padding: "56px 20px 28px",
         position: "relative",
         overflow: "hidden",
       }}>
-        {/* Subtle glow */}
         <div style={{ position: "absolute", top: -60, left: "50%", transform: "translateX(-50%)", width: 300, height: 200, background: "radial-gradient(ellipse, rgba(0,255,135,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
 
-        {/* Top bar */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 22 }}>
           <i className="ri-flashlight-line" style={{ fontSize: 22, color: "#fff" }} />
-          <i className="ri-search-line" style={{ fontSize: 22, color: "#fff" }} />
         </div>
 
         {loading ? (
@@ -646,7 +710,6 @@ function MarketTab({ players, portfolio, balance, onSelect, loading }) {
           </>
         ) : (
           <>
-            {/* Big dollar value */}
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 8, display: "flex", alignItems: "flex-start" }}>
               <span style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", marginTop: 6 }}>$</span>
               <span style={{ fontSize: 52, color: "#fff" }}>{Math.floor(totalValue).toLocaleString()}</span>
@@ -655,13 +718,11 @@ function MarketTab({ players, portfolio, balance, onSelect, loading }) {
               </span>
             </div>
 
-            {/* PnL line */}
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 14, fontWeight: 700, color: positiveDay ? "#00FF87" : "#FF4444", marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}>
               <span>{positiveDay ? "+" : ""}{fmtUSD(totalPnl)} ({positiveDay ? "+" : ""}{totalPnlPct.toFixed(2)}%)</span>
               <span style={{ fontWeight: 400, color: "rgba(255,255,255,0.4)", fontSize: 12 }}>TODAY</span>
             </div>
 
-            {/* Labels */}
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", letterSpacing: "0.08em", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
               PORTFOLIO VALUE
               <i className="ri-information-line" style={{ fontSize: 13, color: "rgba(255,255,255,0.25)" }} />
@@ -671,79 +732,75 @@ function MarketTab({ players, portfolio, balance, onSelect, loading }) {
               <span style={{ fontWeight: 400, fontSize: 12, color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em" }}>BUYING POWER</span>
             </div>
 
-            {/* Deposit button */}
+            {/* Buy Shares button */}
             <button
+              onClick={() => { tgHaptic("impact", "medium"); onBuyShares(); }}
               style={{
                 width: "100%",
                 padding: "14px 0",
                 borderRadius: 12,
                 border: "none",
-                background: "#fff",
+                background: "#00FF87",
                 fontFamily: "'Space Grotesk', sans-serif",
                 fontWeight: 800,
                 fontSize: 15,
                 color: "#000",
                 cursor: "pointer",
                 letterSpacing: "-0.01em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 7,
               }}
             >
-              Deposit
+              <i className="ri-search-line" style={{ fontSize: 16 }} />
+              Buy Shares
             </button>
           </>
         )}
       </div>
 
       {/* ── MY SHARES section ── */}
-      {!loading && myShares.length > 0 && (
-        <div style={{ marginTop: 8 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px 10px" }}>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>My Shares</div>
-            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: "#00FF87", cursor: "pointer" }}>See All</span>
+      <div style={{ paddingBottom: 100 }}>
+        {loading ? (
+          <div style={{ padding: "16px 20px 0" }}>
+            <Skel w={120} h={17} style={{ marginBottom: 14 }} />
+            {Array.from({ length: 4 }).map((_, i) => <PlayerCardSkeleton key={i} />)}
           </div>
-          <div style={{ background: "#111", marginHorizontal: 0 }}>
+        ) : myShares.length === 0 ? (
+          <div style={{ textAlign: "center", padding: "52px 32px", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{
+              width: 64, height: 64, borderRadius: 20,
+              background: "rgba(0,255,135,0.06)",
+              border: "1px solid rgba(0,255,135,0.12)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}>
+              <i className="ri-football-line" style={{ fontSize: 28, color: "rgba(0,255,135,0.4)" }} />
+            </div>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 16, color: "rgba(255,255,255,0.5)", letterSpacing: "-0.02em" }}>
+              No shares yet
+            </div>
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1.5, maxWidth: 220 }}>
+              Tap <strong style={{ color: "rgba(255,255,255,0.4)" }}>Buy Shares</strong> to browse players and make your first trade.
+            </div>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 10px" }}>
+              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>My Shares</div>
+              <span
+                onClick={() => { tgHaptic("impact", "light"); onBuyShares(); }}
+                style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: "#00FF87", cursor: "pointer" }}
+              >
+                + Add More
+              </span>
+            </div>
             {myShares.map((pos) => {
               const p = playerMap[Number(pos.player_id)];
               if (!p) return null;
               return <PlayerRow key={pos.player_id} player={p} onClick={onSelect} holding={pos} />;
             })}
-          </div>
-        </div>
-      )}
-
-      {/* ── SEARCH BAR ── */}
-      <div style={{ padding: "16px 20px 8px" }}>
-        <div style={{ position: "relative" }}>
-          <i className="ri-search-line" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "rgba(255,255,255,0.25)" }} />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search players, teams…"
-            style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, color: "#fff", outline: "none" }}
-          />
-        </div>
-      </div>
-
-      {/* ── ALL PLAYERS label ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 20px 6px" }}>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>All Players</div>
-        {!loading && (
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 4 }}>
-            <i className="ri-radio-button-line" style={{ fontSize: 11, color: "#00FF87" }} />
-            {players.filter((p) => p.tradeable).length} live
-          </div>
-        )}
-      </div>
-
-      {/* ── FLAT LIST ── */}
-      <div style={{ paddingBottom: 100 }}>
-        {loading ? (
-          Array.from({ length: 6 }).map((_, i) => <PlayerCardSkeleton key={i} />)
-        ) : filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No players found</div>
-        ) : (
-          filtered.map((p) => (
-            <PlayerRow key={p.id} player={p} onClick={onSelect} holding={holdingMap[Number(p.id)]} />
-          ))
+          </>
         )}
       </div>
     </div>
@@ -892,57 +949,8 @@ function LeaderboardTab({ entries, loading }) {
   );
 }
 
-function DepositSheet({ onClose }) {
-  const currencies = [
-    { id: "usdt", label: "USDT", network: "TRC20", icon: "ri-exchange-dollar-line" },
-    { id: "usdc", label: "USDC", network: "Polygon", icon: "ri-coin-line" },
-    { id: "apt", label: "APT", network: "Aptos", icon: "ri-swap-line" },
-    { id: "btc", label: "BTC", network: "Bitcoin", icon: "ri-bit-coin-line" },
-    { id: "eth", label: "ETH", network: "Ethereum", icon: "ri-money-dollar-circle-line" },
-    { id: "sol", label: "SOL", network: "Solana", icon: "ri-sun-line" },
-  ];
-  const handleSelect = (currency) => {
-    tgHaptic("impact", "medium");
-    if (tg?.sendData) tg.sendData(JSON.stringify({ action: "deposit", currency: currency.id }));
-    onClose();
-  };
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
-      <div style={{ position: "relative", zIndex: 1, background: "#111", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.09)", borderBottom: "none", padding: "0 18px 36px", animation: "slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)" }}>
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0" }}>
-          <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.12)" }} />
-        </div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff" }}>Add Funds</div>
-          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <i className="ri-close-line" style={{ fontSize: 16 }} />
-          </button>
-        </div>
-        <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 15 }}>
-          Credited as <span style={{ color: "#fff", fontWeight: 700 }}>vUSD</span> — always worth exactly $1.
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-          {currencies.map((c) => (
-            <button key={c.id} onClick={() => handleSelect(c)} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "13px 14px", cursor: "pointer", display: "flex", alignItems: "center", gap: 12, textAlign: "left" }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <i className={c.icon} style={{ fontSize: 18, color: "rgba(255,255,255,0.6)" }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{c.label}</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>{c.network}</div>
-              </div>
-              <i className="ri-arrow-right-s-line" style={{ fontSize: 18, color: "rgba(255,255,255,0.2)" }} />
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── PILL-SHAPED BOTTOM NAV ─── */
-function BottomNav({ active, onChange, onDeposit }) {
+function BottomNav({ active, onChange, onBuyShares }) {
   const tabs = [
     { id: "market", icon: "ri-line-chart-line", label: "Market" },
     { id: "portfolio", icon: "ri-briefcase-4-line", label: "Portfolio" },
@@ -963,7 +971,6 @@ function BottomNav({ active, onChange, onDeposit }) {
       alignItems: "center",
       gap: 6,
     }}>
-      {/* Nav pills container */}
       <div style={{ flex: 1, display: "flex", alignItems: "center", background: "rgba(255,255,255,0.04)", borderRadius: 99, padding: "4px", gap: 2 }}>
         {tabs.map((t) => {
           const isActive = active === t.id;
@@ -994,14 +1001,14 @@ function BottomNav({ active, onChange, onDeposit }) {
         })}
       </div>
 
-      {/* Add / Deposit pill button */}
+      {/* Buy Shares pill */}
       <button
-        onClick={() => { tgHaptic("impact", "medium"); onDeposit(); }}
+        onClick={() => { tgHaptic("impact", "medium"); onBuyShares(); }}
         style={{
           background: "#00FF87",
           border: "none",
           borderRadius: 99,
-          padding: "11px 20px",
+          padding: "11px 18px",
           fontFamily: "'Space Grotesk', sans-serif",
           fontWeight: 800,
           fontSize: 13,
@@ -1014,7 +1021,7 @@ function BottomNav({ active, onChange, onDeposit }) {
           letterSpacing: "-0.01em",
         }}
       >
-        <i className="ri-add-line" style={{ fontSize: 15 }} /> Add
+        <i className="ri-add-line" style={{ fontSize: 15 }} /> Buy
       </button>
     </div>
   );
@@ -1027,7 +1034,7 @@ export default function App() {
   const [portfolio, setPortfolio] = useState([]);
   const [balance, setBalance] = useState(0);
   const [leaderboard, setLeaderboard] = useState([]);
-  const [showDeposit, setShowDeposit] = useState(false);
+  const [showPlayerList, setShowPlayerList] = useState(false);
   const [toasts, setToasts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -1093,6 +1100,8 @@ export default function App() {
 
   const holdingMap = Object.fromEntries(portfolio.map((p) => [p.player_id, p]));
 
+  const handleBuyShares = () => setShowPlayerList(true);
+
   return (
     <>
       <style>{`
@@ -1132,6 +1141,7 @@ export default function App() {
                   portfolio={portfolio}
                   balance={balance}
                   onSelect={setSelectedPlayer}
+                  onBuyShares={handleBuyShares}
                   loading={loading}
                 />
               )}
@@ -1151,9 +1161,19 @@ export default function App() {
           )}
         </div>
         {!selectedPlayer && (
-          <BottomNav active={tab} onChange={setTab} onDeposit={() => setShowDeposit(true)} />
+          <BottomNav active={tab} onChange={setTab} onBuyShares={handleBuyShares} />
         )}
-        {showDeposit && <DepositSheet onClose={() => setShowDeposit(false)} />}
+        {showPlayerList && (
+          <PlayerListSheet
+            players={players}
+            portfolio={portfolio}
+            onClose={() => setShowPlayerList(false)}
+            onSelect={(player) => {
+              setShowPlayerList(false);
+              setSelectedPlayer(player);
+            }}
+          />
+        )}
         <div style={{ position: "fixed", top: 16, left: 18, right: 18, zIndex: 9999, display: "flex", flexDirection: "column", gap: 7, pointerEvents: "none" }}>
           {toasts.map((t) => (
             <div key={t.id} style={{ background: t.type === "error" ? "rgba(255,68,68,0.1)" : "rgba(255,255,255,0.07)", border: `1px solid ${t.type === "error" ? "rgba(255,68,68,0.2)" : "rgba(255,255,255,0.1)"}`, borderRadius: 10, padding: "11px 14px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: t.type === "error" ? "#FF4444" : "#fff", animation: "fadeIn 0.2s ease", display: "flex", alignItems: "center", gap: 8 }}>
