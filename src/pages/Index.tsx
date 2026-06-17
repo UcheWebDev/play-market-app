@@ -1765,7 +1765,10 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const leagues = ["all", ...new Set(players.map((p) => p.league))];
-  const holdingMap = Object.fromEntries(portfolio.map((p) => [p.player_id, p]));
+  // const holdingMap = Object.fromEntries(portfolio.map((p) => [p.player_id, p]));
+  const holdingMap = Object.fromEntries(
+    portfolio.map((p) => [Number(p.player_id), p])
+  );
   const filtered = players.filter((p) => {
     const q = search.toLowerCase();
     return (
@@ -2035,7 +2038,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
               key={p.id}
               player={p}
               onClick={onSelect}
-              holding={holdingMap[p.id]}
+              holding={holdingMap[Number(p.id)]}
             />
           ))
         )}
@@ -2045,12 +2048,13 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
 }
 
 function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
-  const playerMap = Object.fromEntries(players.map((p) => [p.id, p]));
+  // const playerMap = Object.fromEntries(players.map((p) => [p.id, p]));
+  const playerMap = Object.fromEntries(players.map((p) => [Number(p.id), p]));
   const totalValue = portfolio.reduce(
     (s, pos) =>
       s +
       (pos.token_amount / PRECISION) *
-        (playerMap[pos.player_id]?.price_apt ?? pos.avg_buy_apt),
+        (playerMap[Number(pos.player_id)]?.price_apt ?? pos.avg_buy_apt),
     0
   );
   const totalCost = portfolio.reduce(
@@ -2951,7 +2955,7 @@ export default function App() {
             ) : (
               <PlayerDetail
                 player={selectedPlayer}
-                holding={holdingMap[selectedPlayer.id]}
+                holding={holdingMap[Number(selectedPlayer.id)]}
                 balance={balance}
                 onBack={() => setSelectedPlayer(null)}
                 onTrade={handleTrade}
