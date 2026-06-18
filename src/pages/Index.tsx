@@ -574,12 +574,10 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
   const myShares = portfolio.filter((p) => p.token_amount > 0);
   const playerMap = Object.fromEntries(players.map((p) => [Number(p.id), p]));
 
-  const totalStockValue = myShares.reduce((s, pos) => {
-    const p = playerMap[Number(pos.player_id)];
-    return s + (pos.token_amount / PRECISION) * (p?.price_apt ?? pos.avg_buy_apt);
-  }, 0);
+  /* Mirror PortfolioTab's calculation exactly so both tabs agree */
+  const totalStockValue = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * (playerMap[Number(pos.player_id)]?.price_apt ?? pos.avg_buy_apt), 0);
+  const totalCost = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt, 0);
   const totalValue = totalStockValue + balance;
-  const totalCost = myShares.reduce((s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt, 0);
   const totalPnl = totalStockValue - totalCost;
   const totalPnlPct = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0;
   const positiveDay = totalPnl >= 0;
@@ -613,7 +611,7 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
               PORTFOLIO VALUE <i className="ri-information-line" style={{ fontSize: 13, color: "rgba(255,255,255,0.25)" }} />
             </div>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 22 }}>
-              {fmtUSD(balance)} <span style={{ fontWeight: 400, fontSize: 12, color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em" }}>BUYING POWER</span>
+              {fmtUSD(balance)} <span style={{ fontWeight: 400, fontSize: 12, color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em" }}>AVAILABLE BALANCE</span>
             </div>
             <button onClick={() => { tgHaptic("impact", "medium"); onGoMarket(); }} style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#000", cursor: "pointer", letterSpacing: "-0.01em", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
               <i className="ri-search-line" style={{ fontSize: 16 }} /> Buy Shares
@@ -656,39 +654,177 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
   );
 }
 
-/* ─── MARKET TAB ─── */
+/* ─── MARKET TAB: Leagues → Categories → Players drill-down ───
+   Mirrors the bot's handleNavBrowseLeagues → handleOnChainLeague →
+   handleOnChainCategoryPage flow from callbacks.ts / screens.ts.
+   Built client-side from the players list (league + category fields),
+   so no extra endpoints are required. ─── */
 function MarketTab({ players, portfolio, onSelect, loading }) {
+  const [view, setView] = useState("leagues");        // "leagues" | "categories" | "players"
+  const [activeLeague, setActiveLeague] = useState(null);
+  const [activeCategory, setActiveCategory] = useState(null);
   const [search, setSearch] = useState("");
-  const holdingMap = Object.fromEntries(portfolio.map((p) => [Number(p.player_id), p]));
-  const filtered = players.filter((p) => {
-    const q = search.toLowerCase();
-    return !q || p.name.toLowerCase().includes(q) || p.symbol.toLowerCase().includes(q) || p.team?.toLowerCase().includes(q);
-  });
 
+  const holdingMap = Object.fromEntries(portfolio.map((p) => [Number(p.player_id), p]));
+
+  /* ── Derive leagues from players ── */
+  const leagueMap = {};
+  for (const p of players) {
+    const key = p.league ?? "Other";
+    if (!leagueMap[key]) leagueMap[key] = { name: key, players: [] };
+    leagueMap[key].players.push(p);
+  }
+  const leagues = Object.values(leagueMap).map((l) => ({
+    ...l,
+    playerCount: l.players.length,
+    liveCount: l.players.filter((p) => p.tradeable).length,
+  }));
+
+  /* ── Derive categories within the active league ──
+     Backend now returns `category_name` per player (alongside the existing
+     numeric `category_id`). Group by name when present; fall back to a
+     per-id label so the screen still works mid-rollout, and finally to a
+     single bucket for players with no category at all. ── */
+  let categories = [];
+  if (activeLeague) {
+    const catMap = {};
+    for (const p of activeLeague.players) {
+      const key = p.category_name ?? (p.category_id != null ? `Group ${p.category_id}` : "All Players");
+      if (!catMap[key]) catMap[key] = { name: key, players: [] };
+      catMap[key].players.push(p);
+    }
+    categories = Object.values(catMap).map((c) => ({
+      ...c,
+      playerCount: c.players.length,
+      liquidity: c.players.reduce((s, p) => s + (p.volume_apt ?? 0), 0),
+    }));
+  }
+
+  /* ── Players within active category, filtered by search ── */
+  const categoryPlayers = activeCategory
+    ? activeCategory.players.filter((p) => {
+        const q = search.toLowerCase();
+        return !q || p.name.toLowerCase().includes(q) || p.symbol.toLowerCase().includes(q) || p.team?.toLowerCase().includes(q);
+      })
+    : [];
+
+  const openLeague = (l) => { tgHaptic("impact", "light"); setActiveLeague(l); setView("categories"); };
+  const openCategory = (c) => { tgHaptic("impact", "light"); setActiveCategory(c); setView("players"); };
+  const backToLeagues = () => { tgHaptic("impact", "light"); setView("leagues"); setActiveLeague(null); setActiveCategory(null); setSearch(""); };
+  const backToCategories = () => { tgHaptic("impact", "light"); setView("categories"); setActiveCategory(null); setSearch(""); };
+
+  /* ── LEAGUES VIEW ── */
+  if (view === "leagues") {
+    return (
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: "56px 20px 16px", background: "#0A0A0A", flexShrink: 0 }}>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", letterSpacing: "-0.03em" }}>Browse Leagues</div>
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 4 }}>Choose a league to see player groups inside it</div>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: "0 20px 100px" }}>
+          {loading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px", marginBottom: 9, display: "flex", alignItems: "center", gap: 12 }}>
+                <Skel w={44} h={44} r={12} />
+                <div style={{ flex: 1 }}>
+                  <Skel w="50%" h={14} style={{ marginBottom: 6 }} />
+                  <Skel w="35%" h={11} />
+                </div>
+              </div>
+            ))
+          ) : leagues.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No leagues live yet — check back soon!</div>
+          ) : (
+            leagues.map((l) => (
+              <div
+                key={l.name}
+                onClick={() => openLeague(l)}
+                style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px", marginBottom: 9, display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(0,255,135,0.07)", border: "1px solid rgba(0,255,135,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <i className="ri-trophy-line" style={{ fontSize: 20, color: "#00FF87" }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.01em" }}>{l.name}</div>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2, display: "flex", alignItems: "center", gap: 6 }}>
+                    {l.playerCount} player{l.playerCount !== 1 ? "s" : ""}
+                    <span style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
+                    <i className="ri-radio-button-line" style={{ fontSize: 10, color: "#00FF87" }} /> {l.liveCount} live
+                  </div>
+                </div>
+                <i className="ri-arrow-right-s-line" style={{ fontSize: 20, color: "rgba(255,255,255,0.2)" }} />
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  /* ── CATEGORIES VIEW ── */
+  if (view === "categories") {
+    return (
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: "56px 20px 16px", background: "#0A0A0A", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+            <button onClick={backToLeagues} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
+            </button>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff", letterSpacing: "-0.02em" }}>{activeLeague?.name}</div>
+          </div>
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginLeft: 40 }}>Choose a group to see players and prices</div>
+        </div>
+        <div style={{ flex: 1, overflowY: "auto", padding: "8px 20px 100px" }}>
+          {categories.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No groups set up yet — check back soon!</div>
+          ) : (
+            categories.map((c) => (
+              <div
+                key={c.name}
+                onClick={() => openCategory(c)}
+                style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px", marginBottom: 9, display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}
+              >
+                <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <i className="ri-folder-2-line" style={{ fontSize: 19, color: "rgba(255,255,255,0.5)" }} />
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.01em" }}>{c.name}</div>
+                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>
+                    {c.playerCount} player{c.playerCount !== 1 ? "s" : ""} · {fmtVol(c.liquidity)} in the market
+                  </div>
+                </div>
+                <i className="ri-arrow-right-s-line" style={{ fontSize: 20, color: "rgba(255,255,255,0.2)" }} />
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  /* ── PLAYERS VIEW (within category) ── */
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "56px 20px 12px", background: "#0A0A0A", flexShrink: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", letterSpacing: "-0.03em" }}>Players</div>
-          {!loading && (
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 5 }}>
-              <i className="ri-radio-button-line" style={{ fontSize: 11, color: "#00FF87" }} />
-              {players.filter((p) => p.tradeable).length} live
-            </div>
-          )}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+          <button onClick={backToCategories} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
+          </button>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>{activeCategory?.name}</div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>{activeLeague?.name}</div>
+          </div>
         </div>
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", marginTop: 12 }}>
           <i className="ri-search-line" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "rgba(255,255,255,0.25)" }} />
           <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search players, teams…" style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, color: "#fff", outline: "none" }} />
         </div>
       </div>
       <div style={{ flex: 1, overflowY: "auto", paddingBottom: 100 }}>
-        {loading ? (
-          Array.from({ length: 7 }).map((_, i) => <PlayerCardSkeleton key={i} />)
-        ) : filtered.length === 0 ? (
+        {categoryPlayers.length === 0 ? (
           <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No players found</div>
         ) : (
-          filtered.map((p) => <PlayerRow key={p.id} player={p} onClick={onSelect} holding={holdingMap[Number(p.id)]} />)
+          categoryPlayers.map((p) => <PlayerRow key={p.id} player={p} onClick={onSelect} holding={holdingMap[Number(p.id)]} />)
         )}
       </div>
     </div>
