@@ -1328,10 +1328,9 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
         {/* Stat rows */}
         {/* Stat rows */}
         <div style={{ padding: "0 20px" }}>
-          <StatRow label="24h Volume" value={fmtVol(player.volume_apt)} />
           <StatRow
             label="Form Rating"
-            value={player.rps != null ? `${player.rps}/100` : "—"}
+            value={player.rps != null ? `${player.rps}%` : "—"}
             valueColor={
               player.rps >= 85
                 ? "#00FF87"
