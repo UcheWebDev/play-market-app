@@ -62,18 +62,45 @@ function generateSparkline(basePrice, change, points = 20) {
 /* ─── Skeleton primitives ─── */
 function Skel({ w, h, r = 8, style = {} }) {
   return (
-    <div style={{ width: w, height: h, borderRadius: r, background: "rgba(255,255,255,0.07)", animation: "pulse 1.4s ease-in-out infinite", flexShrink: 0, ...style }} />
+    <div
+      style={{
+        width: w,
+        height: h,
+        borderRadius: r,
+        background: "rgba(255,255,255,0.07)",
+        animation: "pulse 1.4s ease-in-out infinite",
+        flexShrink: 0,
+        ...style,
+      }}
+    />
   );
 }
 
 function PlayerCardSkeleton() {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 20px", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 7 }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        padding: "14px 20px",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+      }}
+    >
+      <div
+        style={{ flex: 1, display: "flex", flexDirection: "column", gap: 7 }}
+      >
         <Skel w="45%" h={14} />
         <Skel w="30%" h={11} />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: 6,
+        }}
+      >
         <Skel w={60} h={14} />
         <Skel w={44} h={11} />
       </div>
@@ -83,7 +110,15 @@ function PlayerCardSkeleton() {
 
 function PortfolioHeaderSkeleton() {
   return (
-    <div style={{ margin: "18px 18px 0", padding: "22px", borderRadius: 16, background: "#111", border: "1px solid rgba(255,255,255,0.08)" }}>
+    <div
+      style={{
+        margin: "18px 18px 0",
+        padding: "22px",
+        borderRadius: 16,
+        background: "#111",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
       <Skel w={130} h={11} style={{ marginBottom: 10 }} />
       <Skel w={180} h={34} r={6} style={{ marginBottom: 8 }} />
       <Skel w={100} h={12} style={{ marginBottom: 22 }} />
@@ -104,12 +139,31 @@ function PortfolioHeaderSkeleton() {
 
 function PortfolioCardSkeleton() {
   return (
-    <div style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "13px 14px", display: "flex", alignItems: "center", gap: 12 }}>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 7 }}>
+    <div
+      style={{
+        background: "#111",
+        border: "1px solid rgba(255,255,255,0.07)",
+        borderRadius: 14,
+        padding: "13px 14px",
+        display: "flex",
+        alignItems: "center",
+        gap: 12,
+      }}
+    >
+      <div
+        style={{ flex: 1, display: "flex", flexDirection: "column", gap: 7 }}
+      >
         <Skel w="50%" h={14} />
         <Skel w="70%" h={12} />
       </div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 6 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: 6,
+        }}
+      >
         <Skel w={60} h={14} />
         <Skel w={80} h={12} />
       </div>
@@ -119,32 +173,92 @@ function PortfolioCardSkeleton() {
 
 function PlayerDetailSkeleton() {
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0A0A0A" }}>
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        background: "#0A0A0A",
+      }}
+    >
       <div style={{ flex: 1, overflowY: "auto" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "52px 20px 0" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "52px 20px 0",
+          }}
+        >
           <Skel w={28} h={28} r={99} />
           <Skel w={60} h={24} r={99} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 20px 0", gap: 8 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "20px 20px 0",
+            gap: 8,
+          }}
+        >
           <Skel w={180} h={20} r={6} />
           <Skel w={130} h={13} r={4} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "22px 20px 4px", gap: 8 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: "22px 20px 4px",
+            gap: 8,
+          }}
+        >
           <Skel w={160} h={42} r={6} />
           <Skel w={90} h={12} r={4} />
         </div>
-        <div style={{ margin: "18px 0 0", height: 180, background: "rgba(255,255,255,0.04)", animation: "pulse 1.4s ease-in-out infinite" }} />
-        <div style={{ display: "flex", justifyContent: "space-around", padding: "14px 20px 18px" }}>
-          {[1,2,3,4,5,6].map(i => <Skel key={i} w={32} h={14} r={4} />)}
+        <div
+          style={{
+            margin: "18px 0 0",
+            height: 180,
+            background: "rgba(255,255,255,0.04)",
+            animation: "pulse 1.4s ease-in-out infinite",
+          }}
+        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            padding: "14px 20px 18px",
+          }}
+        >
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <Skel key={i} w={32} h={14} r={4} />
+          ))}
         </div>
         <div style={{ padding: "0 20px" }}>
-          {[1,2,3].map(i => (
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "22px 0", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+          {[1, 2, 3].map((i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "22px 0",
+                borderBottom: "1px solid rgba(255,255,255,0.07)",
+              }}
+            >
               <Skel w={120} h={13} r={4} />
               <Skel w={90} h={13} r={4} />
             </div>
           ))}
-          <div style={{ display: "flex", justifyContent: "space-between", padding: "20px 0" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "20px 0",
+            }}
+          >
             <Skel w={90} h={16} r={4} />
             <Skel w={24} h={24} r={99} />
           </div>
@@ -160,19 +274,54 @@ function PlayerDetailSkeleton() {
 function LeaderboardSkeleton() {
   return (
     <>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 9, marginBottom: 20, height: 110 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          gap: 9,
+          marginBottom: 20,
+          height: 110,
+        }}
+      >
         {[86, 110, 70].map((h, i) => (
-          <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div
+            key={i}
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <Skel w={20} h={20} r={99} style={{ marginBottom: 6 }} />
             <Skel w="100%" h={h} r="9px 9px 0 0" />
           </div>
         ))}
       </div>
       {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "13px 14px", display: "flex", alignItems: "center", gap: 11, marginBottom: 7 }}>
+        <div
+          key={i}
+          style={{
+            background: "#111",
+            border: "1px solid rgba(255,255,255,0.07)",
+            borderRadius: 12,
+            padding: "13px 14px",
+            display: "flex",
+            alignItems: "center",
+            gap: 11,
+            marginBottom: 7,
+          }}
+        >
           <Skel w={30} h={30} r={8} />
           <Skel w="45%" h={13} style={{ flex: 1 }} />
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 5 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: 5,
+            }}
+          >
             <Skel w={70} h={14} />
             <Skel w={40} h={11} />
           </div>
@@ -184,12 +333,26 @@ function LeaderboardSkeleton() {
 
 function SparklineSVG({ data, positive, width = 60, height = 28 }) {
   if (!data?.length) return null;
-  const min = Math.min(...data), max = Math.max(...data), range = max - min || 1;
-  const pts = data.map((v, i) => `${(i / (data.length - 1)) * width},${height - ((v - min) / range) * height}`).join(" ");
+  const min = Math.min(...data),
+    max = Math.max(...data),
+    range = max - min || 1;
+  const pts = data
+    .map(
+      (v, i) =>
+        `${(i / (data.length - 1)) * width},${height - ((v - min) / range) * height}`
+    )
+    .join(" ");
   const color = positive ? "#00FF87" : "#FF4444";
   return (
     <svg width={width} height={height} style={{ overflow: "visible" }}>
-      <polyline points={pts} fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <polyline
+        points={pts}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -199,7 +362,22 @@ function FormBadge({ rps }) {
   const colors = { S: "#F5C842", A: "#00FF87", B: "#4ECDC4", C: "#888" };
   const c = colors[grade];
   return (
-    <div style={{ width: 20, height: 20, borderRadius: 5, background: `${c}18`, border: `1px solid ${c}44`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 10, color: c }}>
+    <div
+      style={{
+        width: 20,
+        height: 20,
+        borderRadius: 5,
+        background: `${c}18`,
+        border: `1px solid ${c}44`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "'Space Grotesk', sans-serif",
+        fontWeight: 800,
+        fontSize: 10,
+        color: c,
+      }}
+    >
       {grade}
     </div>
   );
@@ -207,36 +385,120 @@ function FormBadge({ rps }) {
 
 /* ─── Flat list row — no avatar ─── */
 function PlayerRow({ player, onClick, holding }) {
-  const [sparkData] = useState(() => generateSparkline(player.price_apt, player.price_change_24h));
+  const [sparkData] = useState(() =>
+    generateSparkline(player.price_apt, player.price_change_24h)
+  );
   const positive = player.price_change_24h >= 0;
   const hasHolding = holding?.token_amount > 0;
   return (
     <div
-      onClick={() => { tgHaptic("impact", "light"); onClick(player); }}
-      style={{ display: "flex", alignItems: "center", gap: 14, padding: "13px 20px", borderBottom: "1px solid rgba(255,255,255,0.05)", cursor: "pointer", WebkitTapHighlightColor: "transparent", background: hasHolding ? "rgba(0,255,135,0.02)" : "transparent", transition: "background 0.1s" }}
-      onTouchStart={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.04)")}
-      onTouchEnd={(e) => (e.currentTarget.style.background = hasHolding ? "rgba(0,255,135,0.02)" : "transparent")}
+      onClick={() => {
+        tgHaptic("impact", "light");
+        onClick(player);
+      }}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        padding: "13px 20px",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        cursor: "pointer",
+        WebkitTapHighlightColor: "transparent",
+        background: hasHolding ? "rgba(0,255,135,0.02)" : "transparent",
+        transition: "background 0.1s",
+      }}
+      onTouchStart={(e) =>
+        (e.currentTarget.style.background = "rgba(255,255,255,0.04)")
+      }
+      onTouchEnd={(e) =>
+        (e.currentTarget.style.background = hasHolding
+          ? "rgba(0,255,135,0.02)"
+          : "transparent")
+      }
     >
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2 }}>
-          <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", letterSpacing: "-0.01em", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 5,
+            marginBottom: 2,
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: 14,
+              color: "#fff",
+              letterSpacing: "-0.01em",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
             {player.name}
           </span>
           {player.rps != null && <FormBadge rps={player.rps} />}
         </div>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)" }}>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: 12,
+            color: "rgba(255,255,255,0.35)",
+          }}
+        >
           {player.symbol}
-          {hasHolding && <span style={{ color: "#00FF87", marginLeft: 6, fontWeight: 600 }}>· {fmtShares(holding.token_amount)} shares</span>}
-          {player.category_blocked && !hasHolding && <span style={{ color: "#F5C842", marginLeft: 6 }}>· locked</span>}
+          {hasHolding && (
+            <span style={{ color: "#00FF87", marginLeft: 6, fontWeight: 600 }}>
+              · {fmtShares(holding.token_amount)} shares
+            </span>
+          )}
+          {player.category_blocked && !hasHolding && (
+            <span style={{ color: "#F5C842", marginLeft: 6 }}>· locked</span>
+          )}
         </div>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
-        <SparklineSVG data={sparkData} positive={positive} width={56} height={24} />
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{fmtUSD(player.price_apt)}</div>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 11, color: positive ? "#00FF87" : "#FF4444" }}>{fmtChange(player.price_change_24h)}</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: 4,
+        }}
+      >
+        <SparklineSVG
+          data={sparkData}
+          positive={positive}
+          width={56}
+          height={24}
+        />
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: 14,
+            color: "#fff",
+          }}
+        >
+          {fmtUSD(player.price_apt)}
+        </div>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 600,
+            fontSize: 11,
+            color: positive ? "#00FF87" : "#FF4444",
+          }}
+        >
+          {fmtChange(player.price_change_24h)}
+        </div>
       </div>
       <div style={{ marginLeft: 6 }}>
-        <i className="ri-equalizer-2-line" style={{ fontSize: 16, color: "rgba(255,255,255,0.18)" }} />
+        <i
+          className="ri-equalizer-2-line"
+          style={{ fontSize: 16, color: "rgba(255,255,255,0.18)" }}
+        />
       </div>
     </div>
   );
@@ -258,107 +520,497 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
   const holdingHuman = holdingRaw / PRECISION;
   const presets = mode === "buy" ? [10, 25, 50, 100] : [25, 50, 75, 100];
   const buyBlocked = mode === "buy" && player.category_blocked;
-  const canTrade = buyBlocked ? false : mode === "buy" ? amountRaw > 0 && amountNum <= balance : amountRaw > 0 && amountRaw <= holdingRaw;
+  const canTrade = buyBlocked
+    ? false
+    : mode === "buy"
+      ? amountRaw > 0 && amountNum <= balance
+      : amountRaw > 0 && amountRaw <= holdingRaw;
 
   const handlePreset = (val) => {
     tgHaptic("impact", "light");
-    if (mode === "buy") { setAmount(String(val)); }
-    else { setAmount(String(Math.floor((holdingRaw * val) / 100) / PRECISION)); }
+    if (mode === "buy") {
+      setAmount(String(val));
+    } else {
+      setAmount(String(Math.floor((holdingRaw * val) / 100) / PRECISION));
+    }
   };
 
   const handleTrade = async () => {
     if (!canTrade) return;
-    setError(null); setBusy(true); tgHaptic("impact", "medium");
+    setError(null);
+    setBusy(true);
+    tgHaptic("impact", "medium");
     try {
-      const rawToSend = mode === "sell" ? Math.min(amountRaw, holdingRaw) : amountRaw;
-      const result = await api("/trade", { method: "POST", body: JSON.stringify({ player_id: player.id, type: mode, amount: rawToSend }) });
+      const rawToSend =
+        mode === "sell" ? Math.min(amountRaw, holdingRaw) : amountRaw;
+      const result = await api("/trade", {
+        method: "POST",
+        body: JSON.stringify({
+          player_id: player.id,
+          type: mode,
+          amount: rawToSend,
+        }),
+      });
       tgHapticNotif("success");
       onTrade({ mode, amount: amountNum, player, result });
       onClose();
     } catch (e) {
       tgHapticNotif("error");
       setError(e.message ?? "Trade failed. Please try again.");
-    } finally { setBusy(false); }
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-      <div onClick={onClose} style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.75)" }} />
-      <div style={{ position: "relative", zIndex: 1, background: "#111", borderRadius: "20px 20px 0 0", border: "1px solid rgba(255,255,255,0.09)", borderBottom: "none", padding: "0 0 32px", animation: "slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)" }}>
-        <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 0" }}>
-          <div style={{ width: 36, height: 4, borderRadius: 99, background: "rgba(255,255,255,0.12)" }} />
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 1000,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+      }}
+    >
+      <div
+        onClick={onClose}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0,0,0,0.75)",
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          background: "#111",
+          borderRadius: "20px 20px 0 0",
+          border: "1px solid rgba(255,255,255,0.09)",
+          borderBottom: "none",
+          padding: "0 0 32px",
+          animation: "slideUp 0.28s cubic-bezier(0.34,1.56,0.64,1)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "12px 0 0",
+          }}
+        >
+          <div
+            style={{
+              width: 36,
+              height: 4,
+              borderRadius: 99,
+              background: "rgba(255,255,255,0.12)",
+            }}
+          />
         </div>
         {/* Header — name only, no avatar */}
-        <div style={{ padding: "14px 18px 0", display: "flex", alignItems: "center" }}>
+        <div
+          style={{
+            padding: "14px 18px 0",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 16, color: "#fff", letterSpacing: "-0.02em" }}>{player.name}</div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif" }}>{fmtUSD(player.price_apt)} · {fmtNGN(player.price_apt)}</div>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 16,
+                color: "#fff",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {player.name}
+            </div>
+            <div
+              style={{
+                fontSize: 12,
+                color: "rgba(255,255,255,0.35)",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              {fmtUSD(player.price_apt)} · {fmtNGN(player.price_apt)}
+            </div>
           </div>
-          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "rgba(255,255,255,0.4)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <button
+            onClick={onClose}
+            style={{
+              background: "rgba(255,255,255,0.07)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 99,
+              width: 30,
+              height: 30,
+              color: "rgba(255,255,255,0.4)",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
             <i className="ri-close-line" style={{ fontSize: 16 }} />
           </button>
         </div>
-        <div style={{ margin: "16px 18px 0", display: "flex", background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: 3 }}>
+        <div
+          style={{
+            margin: "16px 18px 0",
+            display: "flex",
+            background: "rgba(255,255,255,0.05)",
+            borderRadius: 10,
+            padding: 3,
+          }}
+        >
           {["buy", "sell"].map((m) => (
-            <button key={m} onClick={() => { tgHaptic("impact", "light"); setMode(m); setAmount(""); setError(null); }} style={{ flex: 1, padding: "9px 0", borderRadius: 8, border: "none", cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, transition: "all 0.15s", background: mode === m ? (m === "buy" ? "#00FF87" : "#FF4444") : "transparent", color: mode === m ? (m === "buy" ? "#000" : "#fff") : "rgba(255,255,255,0.35)" }}>
+            <button
+              key={m}
+              onClick={() => {
+                tgHaptic("impact", "light");
+                setMode(m);
+                setAmount("");
+                setError(null);
+              }}
+              style={{
+                flex: 1,
+                padding: "9px 0",
+                borderRadius: 8,
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 13,
+                transition: "all 0.15s",
+                background:
+                  mode === m
+                    ? m === "buy"
+                      ? "#00FF87"
+                      : "#FF4444"
+                    : "transparent",
+                color:
+                  mode === m
+                    ? m === "buy"
+                      ? "#000"
+                      : "#fff"
+                    : "rgba(255,255,255,0.35)",
+              }}
+            >
               {m === "buy" ? "Buy" : "Sell"}
             </button>
           ))}
         </div>
         {buyBlocked && (
-          <div style={{ margin: "12px 18px 0", padding: "11px 13px", background: "rgba(245,200,66,0.07)", borderRadius: 10, border: "1px solid rgba(245,200,66,0.2)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-            <i className="ri-lock-line" style={{ fontSize: 16, color: "#F5C842", flexShrink: 0, marginTop: 1 }} />
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
-              You hold <span style={{ color: "#F5C842", fontWeight: 700 }}>{player.category_blocked_player_name} ({player.category_blocked_player_symbol})</span> in this group. Sell those shares first.
+          <div
+            style={{
+              margin: "12px 18px 0",
+              padding: "11px 13px",
+              background: "rgba(245,200,66,0.07)",
+              borderRadius: 10,
+              border: "1px solid rgba(245,200,66,0.2)",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 9,
+            }}
+          >
+            <i
+              className="ri-lock-line"
+              style={{
+                fontSize: 16,
+                color: "#F5C842",
+                flexShrink: 0,
+                marginTop: 1,
+              }}
+            />
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 12,
+                color: "rgba(255,255,255,0.6)",
+                lineHeight: 1.5,
+              }}
+            >
+              You hold{" "}
+              <span style={{ color: "#F5C842", fontWeight: 700 }}>
+                {player.category_blocked_player_name} (
+                {player.category_blocked_player_symbol})
+              </span>{" "}
+              in this group. Sell those shares first.
             </div>
           </div>
         )}
-        <div style={{ margin: "12px 18px 0", background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: "9px 13px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: 12, fontFamily: "'Space Grotesk', sans-serif", color: "rgba(255,255,255,0.35)" }}>{mode === "buy" ? "Available" : "Your shares"}</span>
-          <span style={{ fontSize: 13, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, color: "#00FF87" }}>{mode === "buy" ? `$${balance.toFixed(2)} vUSD` : `${holdingHuman.toFixed(4)} shares`}</span>
+        <div
+          style={{
+            margin: "12px 18px 0",
+            background: "rgba(255,255,255,0.04)",
+            borderRadius: 10,
+            padding: "9px 13px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span
+            style={{
+              fontSize: 12,
+              fontFamily: "'Space Grotesk', sans-serif",
+              color: "rgba(255,255,255,0.35)",
+            }}
+          >
+            {mode === "buy" ? "Available" : "Your shares"}
+          </span>
+          <span
+            style={{
+              fontSize: 13,
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              color: "#00FF87",
+            }}
+          >
+            {mode === "buy"
+              ? `$${balance.toFixed(2)} vUSD`
+              : `${holdingHuman.toFixed(4)} shares`}
+          </span>
         </div>
-        <div style={{ margin: "10px 18px 0", position: "relative", opacity: buyBlocked ? 0.4 : 1 }}>
-          <div style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "rgba(255,255,255,0.2)" }}>
-            <i className={mode === "buy" ? "ri-coin-line" : "ri-football-line"} style={{ fontSize: 18 }} />
+        <div
+          style={{
+            margin: "10px 18px 0",
+            position: "relative",
+            opacity: buyBlocked ? 0.4 : 1,
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              left: 13,
+              top: "50%",
+              transform: "translateY(-50%)",
+              color: "rgba(255,255,255,0.2)",
+            }}
+          >
+            <i
+              className={mode === "buy" ? "ri-coin-line" : "ri-football-line"}
+              style={{ fontSize: 18 }}
+            />
           </div>
-          <input type="number" inputMode="decimal" value={amount} onChange={(e) => !buyBlocked && setAmount(e.target.value)} disabled={buyBlocked} placeholder={mode === "buy" ? "0.00" : "0.0000"} style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: `1px solid ${canTrade ? "rgba(0,255,135,0.25)" : "rgba(255,255,255,0.08)"}`, borderRadius: 10, padding: "13px 13px 13px 38px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 20, color: "#fff", outline: "none", transition: "border-color 0.15s" }} />
+          <input
+            type="number"
+            inputMode="decimal"
+            value={amount}
+            onChange={(e) => !buyBlocked && setAmount(e.target.value)}
+            disabled={buyBlocked}
+            placeholder={mode === "buy" ? "0.00" : "0.0000"}
+            style={{
+              width: "100%",
+              background: "rgba(255,255,255,0.05)",
+              border: `1px solid ${canTrade ? "rgba(0,255,135,0.25)" : "rgba(255,255,255,0.08)"}`,
+              borderRadius: 10,
+              padding: "13px 13px 13px 38px",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: 20,
+              color: "#fff",
+              outline: "none",
+              transition: "border-color 0.15s",
+            }}
+          />
           {amount && !buyBlocked && (
-            <div style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>
-              {mode === "buy" ? `≈ ${tokensGet.toFixed(4)} shares` : `≈ $${vusdGet.toFixed(2)}`}
+            <div
+              style={{
+                position: "absolute",
+                right: 13,
+                top: "50%",
+                transform: "translateY(-50%)",
+                fontSize: 12,
+                color: "rgba(255,255,255,0.3)",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              {mode === "buy"
+                ? `≈ ${tokensGet.toFixed(4)} shares`
+                : `≈ $${vusdGet.toFixed(2)}`}
             </div>
           )}
         </div>
         {!buyBlocked && (
           <div style={{ margin: "9px 18px 0", display: "flex", gap: 7 }}>
             {presets.map((p) => (
-              <button key={p} onClick={() => handlePreset(p)} style={{ flex: 1, padding: "8px 4px", borderRadius: 9, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, cursor: "pointer" }}>
+              <button
+                key={p}
+                onClick={() => handlePreset(p)}
+                style={{
+                  flex: 1,
+                  padding: "8px 4px",
+                  borderRadius: 9,
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "rgba(255,255,255,0.6)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 12,
+                  cursor: "pointer",
+                }}
+              >
                 {mode === "sell" ? `${p}%` : `$${p}`}
               </button>
             ))}
           </div>
         )}
         {amountNum > 0 && !buyBlocked && (
-          <div style={{ margin: "10px 18px 0", padding: "10px 13px", background: "rgba(255,255,255,0.03)", borderRadius: 10, border: "1px solid rgba(255,255,255,0.07)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif" }}>Fee (1%)</span>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600 }}>-${fee.toFixed(4)}</span>
+          <div
+            style={{
+              margin: "10px 18px 0",
+              padding: "10px 13px",
+              background: "rgba(255,255,255,0.03)",
+              borderRadius: 10,
+              border: "1px solid rgba(255,255,255,0.07)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 5,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.35)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                }}
+              >
+                Fee (1%)
+              </span>
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.6)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 600,
+                }}
+              >
+                -${fee.toFixed(4)}
+              </span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <span style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", fontFamily: "'Space Grotesk', sans-serif" }}>You receive</span>
-              <span style={{ fontSize: 13, color: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700 }}>
-                {mode === "buy" ? `${(tokensGet * 0.99).toFixed(4)} shares` : `$${(vusdGet * 0.99).toFixed(2)}`}
+              <span
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.35)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                }}
+              >
+                You receive
+              </span>
+              <span
+                style={{
+                  fontSize: 13,
+                  color: "#00FF87",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 700,
+                }}
+              >
+                {mode === "buy"
+                  ? `${(tokensGet * 0.99).toFixed(4)} shares`
+                  : `$${(vusdGet * 0.99).toFixed(2)}`}
               </span>
             </div>
           </div>
         )}
         {error && (
-          <div style={{ margin: "9px 18px 0", padding: "9px 13px", background: "rgba(255,68,68,0.08)", borderRadius: 10, border: "1px solid rgba(255,68,68,0.2)", fontSize: 13, color: "#FF4444", fontFamily: "'Space Grotesk', sans-serif", display: "flex", alignItems: "center", gap: 7 }}>
-            <i className="ri-error-warning-line" style={{ fontSize: 16, flexShrink: 0 }} /> {error}
+          <div
+            style={{
+              margin: "9px 18px 0",
+              padding: "9px 13px",
+              background: "rgba(255,68,68,0.08)",
+              borderRadius: 10,
+              border: "1px solid rgba(255,68,68,0.2)",
+              fontSize: 13,
+              color: "#FF4444",
+              fontFamily: "'Space Grotesk', sans-serif",
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+            }}
+          >
+            <i
+              className="ri-error-warning-line"
+              style={{ fontSize: 16, flexShrink: 0 }}
+            />{" "}
+            {error}
           </div>
         )}
         <div style={{ margin: "14px 18px 0" }}>
-          <button onClick={handleTrade} disabled={!canTrade || busy} style={{ width: "100%", padding: "15px 0", borderRadius: 12, border: "none", cursor: canTrade && !busy ? "pointer" : "not-allowed", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, letterSpacing: "-0.01em", transition: "all 0.15s", background: busy ? "rgba(255,255,255,0.06)" : !canTrade ? "rgba(255,255,255,0.05)" : mode === "buy" ? "#00FF87" : "#FF4444", color: busy || !canTrade ? "rgba(255,255,255,0.2)" : mode === "buy" ? "#000" : "#fff", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-            {busy ? (<><i className="ri-loader-4-line" style={{ fontSize: 16 }} /> Processing…</>) : buyBlocked ? (<><i className="ri-lock-line" style={{ fontSize: 16 }} /> Sell {player.category_blocked_player_symbol} first</>) : canTrade ? (<><i className={mode === "buy" ? "ri-arrow-up-circle-line" : "ri-arrow-down-circle-line"} style={{ fontSize: 16 }} /> {mode === "buy" ? "Buy" : "Sell"} {player.symbol}</>) : (<><i className="ri-hand-coin-line" style={{ fontSize: 16 }} /> {mode === "buy" ? "Enter amount" : holdingHuman === 0 ? "No shares to sell" : "Enter amount"}</>)}
+          <button
+            onClick={handleTrade}
+            disabled={!canTrade || busy}
+            style={{
+              width: "100%",
+              padding: "15px 0",
+              borderRadius: 12,
+              border: "none",
+              cursor: canTrade && !busy ? "pointer" : "not-allowed",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 800,
+              fontSize: 15,
+              letterSpacing: "-0.01em",
+              transition: "all 0.15s",
+              background: busy
+                ? "rgba(255,255,255,0.06)"
+                : !canTrade
+                  ? "rgba(255,255,255,0.05)"
+                  : mode === "buy"
+                    ? "#00FF87"
+                    : "#FF4444",
+              color:
+                busy || !canTrade
+                  ? "rgba(255,255,255,0.2)"
+                  : mode === "buy"
+                    ? "#000"
+                    : "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+            }}
+          >
+            {busy ? (
+              <>
+                <i className="ri-loader-4-line" style={{ fontSize: 16 }} />{" "}
+                Processing…
+              </>
+            ) : buyBlocked ? (
+              <>
+                <i className="ri-lock-line" style={{ fontSize: 16 }} /> Sell{" "}
+                {player.category_blocked_player_symbol} first
+              </>
+            ) : canTrade ? (
+              <>
+                <i
+                  className={
+                    mode === "buy"
+                      ? "ri-arrow-up-circle-line"
+                      : "ri-arrow-down-circle-line"
+                  }
+                  style={{ fontSize: 16 }}
+                />{" "}
+                {mode === "buy" ? "Buy" : "Sell"} {player.symbol}
+              </>
+            ) : (
+              <>
+                <i className="ri-hand-coin-line" style={{ fontSize: 16 }} />{" "}
+                {mode === "buy"
+                  ? "Enter amount"
+                  : holdingHuman === 0
+                    ? "No shares to sell"
+                    : "Enter amount"}
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -369,24 +1021,74 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
 /* ─── Stat row — Bamboo-style ─── */
 function StatRow({ label, value, valueColor, badge, info, noBorder }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 22, paddingBottom: 22, borderBottom: noBorder ? "none" : "1px solid rgba(255,255,255,0.07)" }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingTop: 22,
+        paddingBottom: 22,
+        borderBottom: noBorder ? "none" : "1px solid rgba(255,255,255,0.07)",
+      }}
+    >
       <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-        <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 13, color: "rgba(255,255,255,0.45)", letterSpacing: "0.08em", textTransform: "uppercase" }}>
+        <span
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: 13,
+            color: "rgba(255,255,255,0.45)",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
           {label}
         </span>
         {info && (
-          <div style={{ width: 16, height: 16, borderRadius: 99, background: "rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <i className="ri-information-line" style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }} />
+          <div
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 99,
+              background: "rgba(255,255,255,0.1)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <i
+              className="ri-information-line"
+              style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}
+            />
           </div>
         )}
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         {badge && (
-          <span style={{ background: badge.bg, color: badge.color, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 900, fontSize: 10, padding: "3px 6px", borderRadius: 4, letterSpacing: "0.06em" }}>
+          <span
+            style={{
+              background: badge.bg,
+              color: badge.color,
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 900,
+              fontSize: 10,
+              padding: "3px 6px",
+              borderRadius: 4,
+              letterSpacing: "0.06em",
+            }}
+          >
             {badge.label}
           </span>
         )}
-        <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: valueColor ?? "#fff", letterSpacing: "-0.01em" }}>
+        <span
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: 15,
+            color: valueColor ?? "#fff",
+            letterSpacing: "-0.01em",
+          }}
+        >
           {value}
         </span>
       </div>
@@ -400,134 +1102,299 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
   const [tradeMode, setTradeMode] = useState("buy");
   const [activeRange, setActiveRange] = useState("TODAY");
   const [showMore, setShowMore] = useState(false);
-  const [chartData] = useState(() => generateSparkline(player.price_apt, player.price_change_24h, 60));
+  const [chartData] = useState(() =>
+    generateSparkline(player.price_apt, player.price_change_24h, 60)
+  );
 
   const positive = player.price_change_24h >= 0;
   const accentColor = positive ? "#00FF87" : "#FF4444";
 
   const holdingHuman = holding ? holding.token_amount / PRECISION : 0;
   const holdingValue = holdingHuman * player.price_apt;
-  const pnl = holding ? holdingHuman * (player.price_apt - holding.avg_buy_apt) : 0;
-  const pnlPct = holding?.avg_buy_apt > 0
-    ? ((player.price_apt - holding.avg_buy_apt) / holding.avg_buy_apt) * 100
+  const pnl = holding
+    ? holdingHuman * (player.price_apt - holding.avg_buy_apt)
     : 0;
+  const pnlPct =
+    holding?.avg_buy_apt > 0
+      ? ((player.price_apt - holding.avg_buy_apt) / holding.avg_buy_apt) * 100
+      : 0;
 
   useEffect(() => {
     tgShowBackBtn(onBack);
     return () => tgHideBackBtn();
   }, [onBack]);
 
-  const openTrade = (mode) => { tgHaptic("impact", "medium"); setTradeMode(mode); setShowTrade(true); };
+  const openTrade = (mode) => {
+    tgHaptic("impact", "medium");
+    setTradeMode(mode);
+    setShowTrade(true);
+  };
 
   const RANGES = ["TODAY", "1W", "1M", "3M", "1Y", "5Y"];
 
   /* Full-bleed chart */
-  const W = 400, H = 180;
-  const min = Math.min(...chartData), max = Math.max(...chartData), rng = max - min || 1;
+  const W = 400,
+    H = 180;
+  const min = Math.min(...chartData),
+    max = Math.max(...chartData),
+    rng = max - min || 1;
   const toY = (v) => H - 12 - ((v - min) / rng) * (H - 24);
-  const pts = chartData.map((v, i) => `${(i / (chartData.length - 1)) * W},${toY(v)}`).join(" ");
+  const pts = chartData
+    .map((v, i) => `${(i / (chartData.length - 1)) * W},${toY(v)}`)
+    .join(" ");
   const fillPts = `0,${H} 0,${toY(chartData[0])} ${pts} ${W},${toY(chartData[chartData.length - 1])} ${W},${H}`;
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden", background: "#0A0A0A" }}>
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        background: "#0A0A0A",
+      }}
+    >
       <div style={{ flex: 1, overflowY: "auto" }}>
-
         {/* Top bar: × left, LIVE pill right */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "52px 20px 0" }}>
-          <button onClick={() => { tgHaptic("impact", "light"); onBack(); }} style={{ background: "none", border: "none", cursor: "pointer", color: accentColor, padding: 0, lineHeight: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "52px 20px 0",
+          }}
+        >
+          <button
+            onClick={() => {
+              tgHaptic("impact", "light");
+              onBack();
+            }}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: accentColor,
+              padding: 0,
+              lineHeight: 1,
+            }}
+          >
             <i className="ri-close-line" style={{ fontSize: 26 }} />
           </button>
-          <div style={{ border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.3)" : "rgba(255,68,68,0.3)"}`, borderRadius: 99, padding: "4px 11px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11, color: player.tradeable ? "#00FF87" : "#FF4444", display: "flex", alignItems: "center", gap: 5, letterSpacing: "0.04em" }}>
-            <i className={player.tradeable ? "ri-radio-button-line" : "ri-pause-circle-line"} style={{ fontSize: 10 }} />
+          <div
+            style={{
+              border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.3)" : "rgba(255,68,68,0.3)"}`,
+              borderRadius: 99,
+              padding: "4px 11px",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              color: player.tradeable ? "#00FF87" : "#FF4444",
+              display: "flex",
+              alignItems: "center",
+              gap: 5,
+              letterSpacing: "0.04em",
+            }}
+          >
+            <i
+              className={
+                player.tradeable
+                  ? "ri-radio-button-line"
+                  : "ri-pause-circle-line"
+              }
+              style={{ fontSize: 10 }}
+            />
             {player.tradeable ? "LIVE" : "PAUSED"}
           </div>
         </div>
 
         {/* Centered title */}
         <div style={{ textAlign: "center", padding: "16px 24px 0" }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff", letterSpacing: "-0.02em" }}>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 800,
+              fontSize: 19,
+              color: "#fff",
+              letterSpacing: "-0.02em",
+            }}
+          >
             Player Breakdown
           </div>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.3)", marginTop: 3 }}>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 12,
+              color: "rgba(255,255,255,0.3)",
+              marginTop: 3,
+            }}
+          >
             {player.name}&nbsp;·&nbsp;{player.symbol}&nbsp;·&nbsp;{player.team}
           </div>
         </div>
 
         {/* Big accent price */}
         <div style={{ textAlign: "center", padding: "18px 24px 0" }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 900, fontSize: 46, color: accentColor, letterSpacing: "-0.04em", lineHeight: 1 }}>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 900,
+              fontSize: 46,
+              color: accentColor,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
+          >
             {fmtUSD(player.price_apt)}
           </div>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", textTransform: "uppercase", marginTop: 7 }}>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 600,
+              fontSize: 11,
+              color: "rgba(255,255,255,0.3)",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              marginTop: 7,
+            }}
+          >
             Share Price
           </div>
         </div>
 
         {/* Full-bleed chart */}
         <div style={{ marginTop: 20, lineHeight: 0 }}>
-          <svg width="100%" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ display: "block" }}>
+          <svg
+            width="100%"
+            viewBox={`0 0 ${W} ${H}`}
+            preserveAspectRatio="none"
+            style={{ display: "block" }}
+          >
             <defs>
               <linearGradient id="pdFill" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={accentColor} stopOpacity="0.22" />
-                <stop offset="100%" stopColor={accentColor} stopOpacity="0.00" />
+                <stop
+                  offset="100%"
+                  stopColor={accentColor}
+                  stopOpacity="0.00"
+                />
               </linearGradient>
             </defs>
             <polygon points={fillPts} fill="url(#pdFill)" />
-            <polyline points={pts} fill="none" stroke={accentColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline
+              points={pts}
+              fill="none"
+              stroke={accentColor}
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
 
         {/* Time range tabs */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around", padding: "14px 8px 14px", borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+            padding: "14px 8px 14px",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
           {RANGES.map((r) => (
-            <button key={r} onClick={() => { tgHaptic("impact", "light"); setActiveRange(r); }} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "'Space Grotesk', sans-serif", fontWeight: activeRange === r ? 800 : 500, fontSize: 13, color: activeRange === r ? accentColor : "rgba(255,255,255,0.28)", padding: "4px 8px" }}>
+            <button
+              key={r}
+              onClick={() => {
+                tgHaptic("impact", "light");
+                setActiveRange(r);
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: activeRange === r ? 800 : 500,
+                fontSize: 13,
+                color:
+                  activeRange === r ? accentColor : "rgba(255,255,255,0.28)",
+                padding: "4px 8px",
+              }}
+            >
               {r}
             </button>
           ))}
         </div>
 
         {/* Stat rows */}
+        {/* Stat rows */}
         <div style={{ padding: "0 20px" }}>
+          <StatRow label="24h Volume" value={fmtVol(player.volume_apt)} />
           <StatRow
-            label="Portfolio Return"
-            info
-            value={holdingHuman > 0 ? `${pnlPct >= 0 ? "+" : ""}${pnlPct.toFixed(2)}% (${pnl >= 0 ? "+" : ""}${fmtUSD(pnl)})` : `${positive ? "+" : ""}${fmtChange(player.price_change_24h)}`}
-            valueColor={positive ? "#00FF87" : "#FF4444"}
-            badge={holdingHuman > 0
-              ? { label: pnl >= 0 ? "UP" : "DN", bg: pnl >= 0 ? "#00FF87" : "#FF4444", color: pnl >= 0 ? "#000" : "#fff" }
-              : { label: positive ? "UP" : "DN", bg: positive ? "#00FF87" : "#FF4444", color: positive ? "#000" : "#fff" }
+            label="Form Rating"
+            value={player.rps != null ? `${player.rps}/100` : "—"}
+            valueColor={
+              player.rps >= 85
+                ? "#00FF87"
+                : player.rps >= 70
+                  ? "#F5C842"
+                  : "#888"
             }
           />
-          <StatRow label="Buying Power" info value={fmtUSD(balance)} />
-          <StatRow label="Withdrawable Cash" info value={holdingHuman > 0 ? fmtUSD(holdingValue) : fmtUSD(balance)} />
-
-          {/* More Details toggle */}
-          <div onClick={() => { tgHaptic("impact", "light"); setShowMore((v) => !v); }} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 20, paddingBottom: 20, cursor: "pointer", borderBottom: showMore ? "none" : "1px solid rgba(255,255,255,0.07)" }}>
-            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 16, color: "#fff" }}>More Details</span>
-            <i className={showMore ? "ri-arrow-up-s-line" : "ri-arrow-down-s-line"} style={{ fontSize: 22, color: accentColor }} />
-          </div>
-
-          {showMore && (
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-              <StatRow label="24h Change"  value={fmtChange(player.price_change_24h)} valueColor={positive ? "#00FF87" : "#FF4444"} />
-              <StatRow label="24h Volume"  value={fmtVol(player.volume_apt)} />
-              <StatRow label="Form Rating" value={player.rps != null ? `${player.rps}/100` : "—"} valueColor={player.rps >= 85 ? "#00FF87" : player.rps >= 70 ? "#F5C842" : "#888"} />
-              <StatRow label="League"      value={player.league ?? "—"} />
-              {holdingHuman > 0 && <>
-                <StatRow label="Shares Held"   value={holdingHuman.toFixed(4)} />
-                <StatRow label="Avg Buy Price"  value={fmtUSD(holding.avg_buy_apt)} />
-                <StatRow label="Position Value" value={fmtUSD(holdingValue)} valueColor="#00FF87" noBorder />
-              </>}
-            </div>
+          <StatRow label="League" value={player.league ?? "—"} />
+          {holdingHuman > 0 && (
+            <>
+              <StatRow label="Shares Held" value={holdingHuman.toFixed(4)} />
+              <StatRow
+                label="Avg Buy Price"
+                value={fmtUSD(holding.avg_buy_apt)}
+              />
+              <StatRow
+                label="Position Value"
+                value={fmtUSD(holdingValue)}
+                valueColor="#00FF87"
+                noBorder
+              />
+            </>
           )}
         </div>
 
         {/* Category blocked warning */}
         {player.category_blocked && (
-          <div style={{ margin: "16px 20px 0", padding: "12px 14px", borderRadius: 12, background: "rgba(245,200,66,0.07)", border: "1px solid rgba(245,200,66,0.2)", display: "flex", alignItems: "flex-start", gap: 9 }}>
-            <i className="ri-error-warning-line" style={{ fontSize: 16, color: "#F5C842", flexShrink: 0, marginTop: 1 }} />
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>
-              You already hold <span style={{ color: "#F5C842", fontWeight: 700 }}>{player.category_blocked_player_name} ({player.category_blocked_player_symbol})</span> shares in this group. Sell them first.
+          <div
+            style={{
+              margin: "16px 20px 0",
+              padding: "12px 14px",
+              borderRadius: 12,
+              background: "rgba(245,200,66,0.07)",
+              border: "1px solid rgba(245,200,66,0.2)",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 9,
+            }}
+          >
+            <i
+              className="ri-error-warning-line"
+              style={{
+                fontSize: 16,
+                color: "#F5C842",
+                flexShrink: 0,
+                marginTop: 1,
+              }}
+            />
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 12,
+                color: "rgba(255,255,255,0.6)",
+                lineHeight: 1.5,
+              }}
+            >
+              You already hold{" "}
+              <span style={{ color: "#F5C842", fontWeight: 700 }}>
+                {player.category_blocked_player_name} (
+                {player.category_blocked_player_symbol})
+              </span>{" "}
+              shares in this group. Sell them first.
             </div>
           </div>
         )}
@@ -536,47 +1403,145 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
         <div style={{ padding: "20px 20px 0" }}>
           {player.tradeable && !player.category_blocked ? (
             <div style={{ display: "flex", gap: 10 }}>
-              <button onClick={() => openTrade("buy")} style={{ flex: 1, padding: "17px 0", borderRadius: 14, border: "none", background: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#000", cursor: "pointer", letterSpacing: "-0.01em" }}>
+              <button
+                onClick={() => openTrade("buy")}
+                style={{
+                  flex: 1,
+                  padding: "17px 0",
+                  borderRadius: 14,
+                  border: "none",
+                  background: "#00FF87",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 800,
+                  fontSize: 15,
+                  color: "#000",
+                  cursor: "pointer",
+                  letterSpacing: "-0.01em",
+                }}
+              >
                 {holdingHuman > 0 ? "Buy More Shares" : "Buy Shares"}
               </button>
               {holdingHuman > 0 && (
-                <button onClick={() => openTrade("sell")} style={{ flex: 1, padding: "17px 0", borderRadius: 14, border: "1px solid rgba(255,68,68,0.3)", background: "rgba(255,68,68,0.07)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#FF4444", cursor: "pointer", letterSpacing: "-0.01em" }}>
+                <button
+                  onClick={() => openTrade("sell")}
+                  style={{
+                    flex: 1,
+                    padding: "17px 0",
+                    borderRadius: 14,
+                    border: "1px solid rgba(255,68,68,0.3)",
+                    background: "rgba(255,68,68,0.07)",
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 15,
+                    color: "#FF4444",
+                    cursor: "pointer",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
                   Sell Shares
                 </button>
               )}
             </div>
           ) : player.category_blocked ? (
-            <button style={{ width: "100%", padding: "17px 0", borderRadius: 14, border: "1px solid rgba(245,200,66,0.25)", background: "rgba(245,200,66,0.06)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#F5C842", cursor: "default", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-lock-line" style={{ fontSize: 15 }} /> Sell {player.category_blocked_player_symbol} to unlock
+            <button
+              style={{
+                width: "100%",
+                padding: "17px 0",
+                borderRadius: 14,
+                border: "1px solid rgba(245,200,66,0.25)",
+                background: "rgba(245,200,66,0.06)",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                color: "#F5C842",
+                cursor: "default",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 7,
+              }}
+            >
+              <i className="ri-lock-line" style={{ fontSize: 15 }} /> Sell{" "}
+              {player.category_blocked_player_symbol} to unlock
             </button>
           ) : (
-            <button style={{ width: "100%", padding: "17px 0", borderRadius: 14, border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.03)", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,0.2)", cursor: "default", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-pause-circle-line" style={{ fontSize: 15 }} /> Not yet tradeable
+            <button
+              style={{
+                width: "100%",
+                padding: "17px 0",
+                borderRadius: 14,
+                border: "1px solid rgba(255,255,255,0.07)",
+                background: "rgba(255,255,255,0.03)",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                color: "rgba(255,255,255,0.2)",
+                cursor: "default",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 7,
+              }}
+            >
+              <i className="ri-pause-circle-line" style={{ fontSize: 15 }} />{" "}
+              Not yet tradeable
             </button>
           )}
         </div>
 
         {/* Description */}
-        <div style={{ margin: "18px 20px 60px", fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.25)", lineHeight: 1.75 }}>
-          The breakdown above shows you at one glance how your position value computes. Your position value is the current share price multiplied by the number of shares you hold, plus your available buying power.
+        <div
+          style={{
+            margin: "18px 20px 60px",
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontSize: 12,
+            color: "rgba(255,255,255,0.25)",
+            lineHeight: 1.75,
+          }}
+        >
+          The breakdown above shows you at one glance how your position value
+          computes. Your position value is the current share price multiplied by
+          the number of shares you hold, plus your available buying power.
         </div>
       </div>
 
       {showTrade && (
-        <TradeSheet player={player} holding={holding} balance={balance} onClose={() => setShowTrade(false)} onTrade={onTrade} />
+        <TradeSheet
+          player={player}
+          holding={holding}
+          balance={balance}
+          onClose={() => setShowTrade(false)}
+          onTrade={onTrade}
+        />
       )}
     </div>
   );
 }
 
 /* ─── HOME TAB ─── */
-function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading }) {
+function HomeTab({
+  players,
+  portfolio,
+  balance,
+  onSelect,
+  onGoMarket,
+  loading,
+}) {
   const myShares = portfolio.filter((p) => p.token_amount > 0);
   const playerMap = Object.fromEntries(players.map((p) => [Number(p.id), p]));
 
   /* Mirror PortfolioTab's calculation exactly so both tabs agree */
-  const totalStockValue = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * (playerMap[Number(pos.player_id)]?.price_apt ?? pos.avg_buy_apt), 0);
-  const totalCost = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt, 0);
+  const totalStockValue = portfolio.reduce(
+    (s, pos) =>
+      s +
+      (pos.token_amount / PRECISION) *
+        (playerMap[Number(pos.player_id)]?.price_apt ?? pos.avg_buy_apt),
+    0
+  );
+  const totalCost = portfolio.reduce(
+    (s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt,
+    0
+  );
   const totalValue = totalStockValue + balance;
   const totalPnl = totalStockValue - totalCost;
   const totalPnlPct = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0;
@@ -584,10 +1549,34 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
 
   return (
     <div style={{ height: "100%", overflowY: "auto" }}>
-      <div style={{ background: "linear-gradient(160deg, #0f2e1e 0%, #0A0A0A 60%)", padding: "56px 20px 28px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -60, left: "50%", transform: "translateX(-50%)", width: 300, height: 200, background: "radial-gradient(ellipse, rgba(0,255,135,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ display: "flex", alignItems: "center", marginBottom: 22 }}>
-          <i className="ri-flashlight-line" style={{ fontSize: 22, color: "#fff" }} />
+      <div
+        style={{
+          background: "linear-gradient(160deg, #0f2e1e 0%, #0A0A0A 60%)",
+          padding: "56px 20px 28px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: -60,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: 300,
+            height: 200,
+            background:
+              "radial-gradient(ellipse, rgba(0,255,135,0.12) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: 22 }}
+        >
+          <i
+            className="ri-flashlight-line"
+            style={{ fontSize: 22, color: "#fff" }}
+          />
         </div>
         {loading ? (
           <>
@@ -598,23 +1587,130 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
           </>
         ) : (
           <>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 8, display: "flex", alignItems: "flex-start" }}>
-              <span style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", marginTop: 6 }}>$</span>
-              <span style={{ fontSize: 52, color: "#fff" }}>{Math.floor(totalValue).toLocaleString()}</span>
-              <span style={{ fontSize: 22, color: "rgba(255,255,255,0.7)", marginTop: 6 }}>.{(totalValue % 1).toFixed(2).slice(2)}</span>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                lineHeight: 1,
+                marginBottom: 8,
+                display: "flex",
+                alignItems: "flex-start",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 20,
+                  color: "rgba(255,255,255,0.7)",
+                  marginTop: 6,
+                }}
+              >
+                $
+              </span>
+              <span style={{ fontSize: 52, color: "#fff" }}>
+                {Math.floor(totalValue).toLocaleString()}
+              </span>
+              <span
+                style={{
+                  fontSize: 22,
+                  color: "rgba(255,255,255,0.7)",
+                  marginTop: 6,
+                }}
+              >
+                .{(totalValue % 1).toFixed(2).slice(2)}
+              </span>
             </div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 14, fontWeight: 700, color: positiveDay ? "#00FF87" : "#FF4444", marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}>
-              <span>{positiveDay ? "+" : ""}{fmtUSD(totalPnl)} ({positiveDay ? "+" : ""}{totalPnlPct.toFixed(2)}%)</span>
-              <span style={{ fontWeight: 400, color: "rgba(255,255,255,0.4)", fontSize: 12 }}>TODAY</span>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 14,
+                fontWeight: 700,
+                color: positiveDay ? "#00FF87" : "#FF4444",
+                marginBottom: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              <span>
+                {positiveDay ? "+" : ""}
+                {fmtUSD(totalPnl)} ({positiveDay ? "+" : ""}
+                {totalPnlPct.toFixed(2)}%)
+              </span>
+              <span
+                style={{
+                  fontWeight: 400,
+                  color: "rgba(255,255,255,0.4)",
+                  fontSize: 12,
+                }}
+              >
+                TODAY
+              </span>
             </div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", letterSpacing: "0.08em", marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
-              PORTFOLIO VALUE <i className="ri-information-line" style={{ fontSize: 13, color: "rgba(255,255,255,0.25)" }} />
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 12,
+                color: "rgba(255,255,255,0.35)",
+                letterSpacing: "0.08em",
+                marginBottom: 4,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              PORTFOLIO VALUE{" "}
+              <i
+                className="ri-information-line"
+                style={{ fontSize: 13, color: "rgba(255,255,255,0.25)" }}
+              />
             </div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff", marginBottom: 22 }}>
-              {fmtUSD(balance)} <span style={{ fontWeight: 400, fontSize: 12, color: "rgba(255,255,255,0.35)", letterSpacing: "0.06em" }}>AVAILABLE BALANCE</span>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 14,
+                color: "#fff",
+                marginBottom: 22,
+              }}
+            >
+              {fmtUSD(balance)}{" "}
+              <span
+                style={{
+                  fontWeight: 400,
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.35)",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                AVAILABLE BALANCE
+              </span>
             </div>
-            <button onClick={() => { tgHaptic("impact", "medium"); onGoMarket(); }} style={{ width: "100%", padding: "14px 0", borderRadius: 12, border: "none", background: "#00FF87", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 15, color: "#000", cursor: "pointer", letterSpacing: "-0.01em", display: "flex", alignItems: "center", justifyContent: "center", gap: 7 }}>
-              <i className="ri-search-line" style={{ fontSize: 16 }} /> Buy Shares
+            <button
+              onClick={() => {
+                tgHaptic("impact", "medium");
+                onGoMarket();
+              }}
+              style={{
+                width: "100%",
+                padding: "14px 0",
+                borderRadius: 12,
+                border: "none",
+                background: "#00FF87",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 800,
+                fontSize: 15,
+                color: "#000",
+                cursor: "pointer",
+                letterSpacing: "-0.01em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 7,
+              }}
+            >
+              <i className="ri-search-line" style={{ fontSize: 16 }} /> Buy
+              Shares
             </button>
           </>
         )}
@@ -624,28 +1720,113 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
         {loading ? (
           <div style={{ padding: "20px 20px 0" }}>
             <Skel w={120} h={17} style={{ marginBottom: 14 }} />
-            {Array.from({ length: 4 }).map((_, i) => <PlayerCardSkeleton key={i} />)}
+            {Array.from({ length: 4 }).map((_, i) => (
+              <PlayerCardSkeleton key={i} />
+            ))}
           </div>
         ) : myShares.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "52px 32px", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 64, height: 64, borderRadius: 20, background: "rgba(0,255,135,0.06)", border: "1px solid rgba(0,255,135,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <i className="ri-football-line" style={{ fontSize: 28, color: "rgba(0,255,135,0.4)" }} />
+          <div
+            style={{
+              textAlign: "center",
+              padding: "52px 32px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
+            <div
+              style={{
+                width: 64,
+                height: 64,
+                borderRadius: 20,
+                background: "rgba(0,255,135,0.06)",
+                border: "1px solid rgba(0,255,135,0.12)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <i
+                className="ri-football-line"
+                style={{ fontSize: 28, color: "rgba(0,255,135,0.4)" }}
+              />
             </div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 16, color: "rgba(255,255,255,0.5)", letterSpacing: "-0.02em" }}>No shares yet</div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1.5, maxWidth: 220 }}>
-              Tap <strong style={{ color: "rgba(255,255,255,0.4)" }}>Buy Shares</strong> to browse players and make your first trade.
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 800,
+                fontSize: 16,
+                color: "rgba(255,255,255,0.5)",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              No shares yet
+            </div>
+            <div
+              style={{
+                fontSize: 13,
+                color: "rgba(255,255,255,0.25)",
+                fontFamily: "'Space Grotesk', sans-serif",
+                lineHeight: 1.5,
+                maxWidth: 220,
+              }}
+            >
+              Tap{" "}
+              <strong style={{ color: "rgba(255,255,255,0.4)" }}>
+                Buy Shares
+              </strong>{" "}
+              to browse players and make your first trade.
             </div>
           </div>
         ) : (
           <>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 10px" }}>
-              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>My Shares</div>
-              <span onClick={() => { tgHaptic("impact", "light"); onGoMarket(); }} style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: "#00FF87", cursor: "pointer" }}>+ Add More</span>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "20px 20px 10px",
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 800,
+                  fontSize: 17,
+                  color: "#fff",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                My Shares
+              </div>
+              <span
+                onClick={() => {
+                  tgHaptic("impact", "light");
+                  onGoMarket();
+                }}
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 13,
+                  color: "#00FF87",
+                  cursor: "pointer",
+                }}
+              >
+                + Add More
+              </span>
             </div>
             {myShares.map((pos) => {
               const p = playerMap[Number(pos.player_id)];
               if (!p) return null;
-              return <PlayerRow key={pos.player_id} player={p} onClick={onSelect} holding={pos} />;
+              return (
+                <PlayerRow
+                  key={pos.player_id}
+                  player={p}
+                  onClick={onSelect}
+                  holding={pos}
+                />
+              );
             })}
           </>
         )}
@@ -664,7 +1845,9 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   const [activeCategory, setActiveCategory] = useState(null);
   const [search, setSearch] = useState("");
 
-  const holdingMap = Object.fromEntries(portfolio.map((p) => [Number(p.player_id), p]));
+  const holdingMap = Object.fromEntries(
+    portfolio.map((p) => [Number(p.player_id), p])
+  );
 
   /* ── Derive leagues ── */
   const leagueMap = {};
@@ -684,7 +1867,9 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   if (activeLeague) {
     const catMap = {};
     for (const p of activeLeague.players) {
-      const key = p.category_name ?? (p.category_id != null ? `Group ${p.category_id}` : "All Players");
+      const key =
+        p.category_name ??
+        (p.category_id != null ? `Group ${p.category_id}` : "All Players");
       if (!catMap[key]) catMap[key] = { name: key, players: [] };
       catMap[key].players.push(p);
     }
@@ -699,14 +1884,38 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   const categoryPlayers = activeCategory
     ? activeCategory.players.filter((p) => {
         const q = search.toLowerCase();
-        return !q || p.name.toLowerCase().includes(q) || p.symbol.toLowerCase().includes(q) || p.team?.toLowerCase().includes(q);
+        return (
+          !q ||
+          p.name.toLowerCase().includes(q) ||
+          p.symbol.toLowerCase().includes(q) ||
+          p.team?.toLowerCase().includes(q)
+        );
       })
     : [];
 
-  const openLeague = (l) => { tgHaptic("impact", "light"); setActiveLeague(l); setView("categories"); };
-  const openCategory = (c) => { tgHaptic("impact", "light"); setActiveCategory(c); setView("players"); };
-  const backToLeagues = () => { tgHaptic("impact", "light"); setView("leagues"); setActiveLeague(null); setActiveCategory(null); setSearch(""); };
-  const backToCategories = () => { tgHaptic("impact", "light"); setView("categories"); setActiveCategory(null); setSearch(""); };
+  const openLeague = (l) => {
+    tgHaptic("impact", "light");
+    setActiveLeague(l);
+    setView("categories");
+  };
+  const openCategory = (c) => {
+    tgHaptic("impact", "light");
+    setActiveCategory(c);
+    setView("players");
+  };
+  const backToLeagues = () => {
+    tgHaptic("impact", "light");
+    setView("leagues");
+    setActiveLeague(null);
+    setActiveCategory(null);
+    setSearch("");
+  };
+  const backToCategories = () => {
+    tgHaptic("impact", "light");
+    setView("categories");
+    setActiveCategory(null);
+    setSearch("");
+  };
 
   /* ── Shared grid card styles ── */
   const gridCard = (onClick, accentColor = "#00FF87") => ({
@@ -726,9 +1935,28 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
 
   /* ── Skeleton grid ── */
   const GridSkeleton = () => (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 20px 100px" }}>
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 10,
+        padding: "0 20px 100px",
+      }}
+    >
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} style={{ aspectRatio: "1/1", borderRadius: 16, background: "#111", border: "1px solid rgba(255,255,255,0.07)", padding: "14px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+        <div
+          key={i}
+          style={{
+            aspectRatio: "1/1",
+            borderRadius: 16,
+            background: "#111",
+            border: "1px solid rgba(255,255,255,0.07)",
+            padding: "14px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
             <Skel w="70%" h={18} r={5} />
             <Skel w="45%" h={13} r={4} />
@@ -744,12 +1972,34 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
     return (
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         {/* Header */}
-        <div style={{ padding: "56px 20px 20px", background: "#0A0A0A", flexShrink: 0 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1 }}>
-            Leagues
+        <div
+          style={{
+            padding: "56px 20px 20px",
+            background: "#0A0A0A",
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 800,
+              fontSize: 24,
+              color: "#fff",
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
+          >
+            Competition
           </div>
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 5 }}>
-            Pick a league to trade player shares
+          <div
+            style={{
+              fontSize: 12,
+              color: "rgba(255,255,255,0.3)",
+              fontFamily: "'Space Grotesk', sans-serif",
+              marginTop: 5,
+            }}
+          >
+            Pick a competition to trade player shares
           </div>
         </div>
 
@@ -757,57 +2007,122 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
           {loading ? (
             <GridSkeleton />
           ) : leagues.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+            <div
+              style={{
+                textAlign: "center",
+                padding: "60px 20px",
+                color: "rgba(255,255,255,0.25)",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 14,
+              }}
+            >
               No leagues live yet — check back soon!
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 20px 100px" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+                padding: "0 20px 100px",
+              }}
+            >
               {leagues.map((l, idx) => {
                 /* Subtle accent colours that rotate — keeps the grid visually alive */
-                const accents = ["#00FF87", "#4ECDC4", "#F5C842", "#00B4D8", "#A8DADC", "#00FF87"];
+                const accents = [
+                  "#00FF87",
+                  "#4ECDC4",
+                  "#F5C842",
+                  "#00B4D8",
+                  "#A8DADC",
+                  "#00FF87",
+                ];
                 const accent = accents[idx % accents.length];
                 return (
                   <div
                     key={l.name}
                     onClick={() => openLeague(l)}
                     style={gridCard(openLeague, accent)}
-                    onTouchStart={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
-                    onTouchEnd={(e) => (e.currentTarget.style.background = "#111")}
+                    onTouchStart={(e) =>
+                      (e.currentTarget.style.background =
+                        "rgba(255,255,255,0.06)")
+                    }
+                    onTouchEnd={(e) =>
+                      (e.currentTarget.style.background = "#111")
+                    }
                   >
                     {/* Subtle corner glow */}
-                    <div style={{
-                      position: "absolute", top: -30, right: -30, width: 90, height: 90,
-                      borderRadius: "50%", background: `${accent}12`, pointerEvents: "none",
-                    }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: -30,
+                        right: -30,
+                        width: 90,
+                        height: 90,
+                        borderRadius: "50%",
+                        background: `${accent}12`,
+                        pointerEvents: "none",
+                      }}
+                    />
 
                     {/* Name block */}
                     <div>
-                      <div style={{
-                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800,
-                        fontSize: 17, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.15,
-                        marginBottom: 4,
-                      }}>
+                      <div
+                        style={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontWeight: 800,
+                          fontSize: 17,
+                          color: "#fff",
+                          letterSpacing: "-0.03em",
+                          lineHeight: 1.15,
+                          marginBottom: 4,
+                        }}
+                      >
                         {l.name}
                       </div>
-                      <div style={{
-                        fontFamily: "'Space Grotesk', sans-serif", fontSize: 11,
-                        color: "rgba(255,255,255,0.3)", fontWeight: 500,
-                      }}>
+                      <div
+                        style={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontSize: 11,
+                          color: "rgba(255,255,255,0.3)",
+                          fontWeight: 500,
+                        }}
+                      >
                         {l.playerCount} player{l.playerCount !== 1 ? "s" : ""}
                       </div>
                     </div>
 
                     {/* Bottom live pill */}
-                    <div style={{
-                      display: "inline-flex", alignItems: "center", gap: 5, alignSelf: "flex-start",
-                      background: `${accent}14`, border: `1px solid ${accent}30`,
-                      borderRadius: 99, padding: "5px 10px",
-                    }}>
-                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }} />
-                      <span style={{
-                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11,
-                        color: accent, letterSpacing: "0.04em",
-                      }}>
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        alignSelf: "flex-start",
+                        background: `${accent}14`,
+                        border: `1px solid ${accent}30`,
+                        borderRadius: 99,
+                        padding: "5px 10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 5,
+                          height: 5,
+                          borderRadius: "50%",
+                          background: accent,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontWeight: 700,
+                          fontSize: 11,
+                          color: accent,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
                         {l.liveCount} LIVE
                       </span>
                     </div>
@@ -826,26 +2141,60 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
     return (
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
         {/* Header */}
-        <div style={{ padding: "56px 20px 20px", background: "#0A0A0A", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+        <div
+          style={{
+            padding: "56px 20px 20px",
+            background: "#0A0A0A",
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              marginBottom: 10,
+            }}
+          >
             <button
               onClick={backToLeagues}
               style={{
-                background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer",
-                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 99,
+                width: 30,
+                height: 30,
+                color: "#fff",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
               }}
             >
               <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
             </button>
             <div>
-              <div style={{
-                fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22,
-                color: "#fff", letterSpacing: "-0.04em", lineHeight: 1,
-              }}>
+              <div
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 800,
+                  fontSize: 22,
+                  color: "#fff",
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1,
+                }}
+              >
                 {activeLeague?.name}
               </div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 3 }}>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.3)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  marginTop: 3,
+                }}
+              >
                 Choose a position group
               </div>
             </div>
@@ -854,56 +2203,121 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
 
         <div style={{ flex: 1, overflowY: "auto" }}>
           {categories.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "60px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+            <div
+              style={{
+                textAlign: "center",
+                padding: "60px 20px",
+                color: "rgba(255,255,255,0.25)",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: 14,
+              }}
+            >
               No groups set up yet — check back soon!
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 20px 100px" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 10,
+                padding: "0 20px 100px",
+              }}
+            >
               {categories.map((c, idx) => {
-                const accents = ["#00FF87", "#4ECDC4", "#F5C842", "#00B4D8", "#A8DADC", "#00FF87"];
+                const accents = [
+                  "#00FF87",
+                  "#4ECDC4",
+                  "#F5C842",
+                  "#00B4D8",
+                  "#A8DADC",
+                  "#00FF87",
+                ];
                 const accent = accents[idx % accents.length];
                 return (
                   <div
                     key={c.name}
                     onClick={() => openCategory(c)}
                     style={gridCard(openCategory, accent)}
-                    onTouchStart={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
-                    onTouchEnd={(e) => (e.currentTarget.style.background = "#111")}
+                    onTouchStart={(e) =>
+                      (e.currentTarget.style.background =
+                        "rgba(255,255,255,0.06)")
+                    }
+                    onTouchEnd={(e) =>
+                      (e.currentTarget.style.background = "#111")
+                    }
                   >
                     {/* Corner glow */}
-                    <div style={{
-                      position: "absolute", top: -30, right: -30, width: 90, height: 90,
-                      borderRadius: "50%", background: `${accent}12`, pointerEvents: "none",
-                    }} />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: -30,
+                        right: -30,
+                        width: 90,
+                        height: 90,
+                        borderRadius: "50%",
+                        background: `${accent}12`,
+                        pointerEvents: "none",
+                      }}
+                    />
 
                     {/* Name block */}
                     <div>
-                      <div style={{
-                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800,
-                        fontSize: 17, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.15,
-                        marginBottom: 4,
-                      }}>
+                      <div
+                        style={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontWeight: 800,
+                          fontSize: 17,
+                          color: "#fff",
+                          letterSpacing: "-0.03em",
+                          lineHeight: 1.15,
+                          marginBottom: 4,
+                        }}
+                      >
                         {c.name}
                       </div>
-                      <div style={{
-                        fontFamily: "'Space Grotesk', sans-serif", fontSize: 11,
-                        color: "rgba(255,255,255,0.3)", fontWeight: 500,
-                      }}>
+                      <div
+                        style={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontSize: 11,
+                          color: "rgba(255,255,255,0.3)",
+                          fontWeight: 500,
+                        }}
+                      >
                         {c.playerCount} player{c.playerCount !== 1 ? "s" : ""}
                       </div>
                     </div>
 
                     {/* Bottom live pill */}
-                    <div style={{
-                      display: "inline-flex", alignItems: "center", gap: 5, alignSelf: "flex-start",
-                      background: `${accent}14`, border: `1px solid ${accent}30`,
-                      borderRadius: 99, padding: "5px 10px",
-                    }}>
-                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }} />
-                      <span style={{
-                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11,
-                        color: accent, letterSpacing: "0.04em",
-                      }}>
+                    <div
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        alignSelf: "flex-start",
+                        background: `${accent}14`,
+                        border: `1px solid ${accent}30`,
+                        borderRadius: 99,
+                        padding: "5px 10px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 5,
+                          height: 5,
+                          borderRadius: "50%",
+                          background: accent,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <span
+                        style={{
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontWeight: 700,
+                          fontSize: 11,
+                          color: accent,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
                         {c.liveCount} LIVE
                       </span>
                     </div>
@@ -920,49 +2334,113 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   /* ── PLAYERS VIEW (within category) — unchanged ── */
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-      <div style={{ padding: "56px 20px 12px", background: "#0A0A0A", flexShrink: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+      <div
+        style={{
+          padding: "56px 20px 12px",
+          background: "#0A0A0A",
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 4,
+          }}
+        >
           <button
             onClick={backToCategories}
             style={{
-              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 99,
+              width: 30,
+              height: 30,
+              color: "#fff",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
             }}
           >
             <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
           </button>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 800,
+                fontSize: 17,
+                color: "#fff",
+                letterSpacing: "-0.02em",
+              }}
+            >
               {activeCategory?.name}
             </div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.3)",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
               {activeLeague?.name}
             </div>
           </div>
         </div>
         <div style={{ position: "relative", marginTop: 12 }}>
-          <i className="ri-search-line" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "rgba(255,255,255,0.25)" }} />
+          <i
+            className="ri-search-line"
+            style={{
+              position: "absolute",
+              left: 12,
+              top: "50%",
+              transform: "translateY(-50%)",
+              fontSize: 15,
+              color: "rgba(255,255,255,0.25)",
+            }}
+          />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search players, teams…"
             style={{
-              width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: 13, color: "#fff", outline: "none",
+              width: "100%",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 10,
+              padding: "10px 12px 10px 36px",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 13,
+              color: "#fff",
+              outline: "none",
             }}
           />
         </div>
       </div>
       <div style={{ flex: 1, overflowY: "auto", paddingBottom: 100 }}>
         {categoryPlayers.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "40px 20px",
+              color: "rgba(255,255,255,0.25)",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 14,
+            }}
+          >
             No players found
           </div>
         ) : (
           categoryPlayers.map((p) => (
-            <PlayerRow key={p.id} player={p} onClick={onSelect} holding={holdingMap[Number(p.id)]} />
+            <PlayerRow
+              key={p.id}
+              player={p}
+              onClick={onSelect}
+              holding={holdingMap[Number(p.id)]}
+            />
           ))
         )}
       </div>
@@ -973,8 +2451,17 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
 /* ─── PORTFOLIO TAB — no avatars ─── */
 function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
   const playerMap = Object.fromEntries(players.map((p) => [Number(p.id), p]));
-  const totalValue = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * (playerMap[Number(pos.player_id)]?.price_apt ?? pos.avg_buy_apt), 0);
-  const totalCost = portfolio.reduce((s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt, 0);
+  const totalValue = portfolio.reduce(
+    (s, pos) =>
+      s +
+      (pos.token_amount / PRECISION) *
+        (playerMap[Number(pos.player_id)]?.price_apt ?? pos.avg_buy_apt),
+    0
+  );
+  const totalCost = portfolio.reduce(
+    (s, pos) => s + (pos.token_amount / PRECISION) * pos.avg_buy_apt,
+    0
+  );
   const totalPnl = totalValue - totalCost;
   const totalPct = totalCost > 0 ? (totalPnl / totalCost) * 100 : 0;
 
@@ -985,7 +2472,9 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
         <div style={{ padding: "18px 18px 0" }}>
           <Skel w={80} h={12} style={{ marginBottom: 12 }} />
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            {[1, 2].map((i) => <PortfolioCardSkeleton key={i} />)}
+            {[1, 2].map((i) => (
+              <PortfolioCardSkeleton key={i} />
+            ))}
           </div>
         </div>
       </div>
@@ -994,31 +2483,145 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "0 0 100px" }}>
-      <div style={{ margin: "18px 18px 0", padding: "22px", borderRadius: 16, background: "#111", border: "1px solid rgba(255,255,255,0.08)" }}>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.08em" }}>Total Portfolio Value</div>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 34, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1, marginBottom: 4 }}>{fmtUSD(totalValue + balance)}</div>
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", marginBottom: 18 }}>{fmtNGN(totalValue + balance)}</div>
+      <div
+        style={{
+          margin: "18px 18px 0",
+          padding: "22px",
+          borderRadius: 16,
+          background: "#111",
+          border: "1px solid rgba(255,255,255,0.08)",
+        }}
+      >
+        <div
+          style={{
+            fontSize: 11,
+            color: "rgba(255,255,255,0.3)",
+            fontFamily: "'Space Grotesk', sans-serif",
+            marginBottom: 4,
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+          }}
+        >
+          Total Portfolio Value
+        </div>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 800,
+            fontSize: 34,
+            color: "#fff",
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+            marginBottom: 4,
+          }}
+        >
+          {fmtUSD(totalValue + balance)}
+        </div>
+        <div
+          style={{
+            fontSize: 12,
+            color: "rgba(255,255,255,0.25)",
+            fontFamily: "'Space Grotesk', sans-serif",
+            marginBottom: 18,
+          }}
+        >
+          {fmtNGN(totalValue + balance)}
+        </div>
         <div style={{ display: "flex", gap: 16 }}>
           <div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>Open P&L</div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: totalPnl >= 0 ? "#00FF87" : "#FF4444" }}>
-              {totalPnl >= 0 ? "+" : ""}{fmtUSD(totalPnl)} ({fmtChange(totalPct)})
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.3)",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              Open P&L
+            </div>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                color: totalPnl >= 0 ? "#00FF87" : "#FF4444",
+              }}
+            >
+              {totalPnl >= 0 ? "+" : ""}
+              {fmtUSD(totalPnl)} ({fmtChange(totalPct)})
             </div>
           </div>
           <div style={{ width: 1, background: "rgba(255,255,255,0.07)" }} />
           <div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>vUSD Balance</div>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff" }}>{fmtUSD(balance)}</div>
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.3)",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              vUSD Balance
+            </div>
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                color: "#fff",
+              }}
+            >
+              {fmtUSD(balance)}
+            </div>
           </div>
         </div>
       </div>
       <div style={{ padding: "18px 18px 0" }}>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 10 }}>Holdings</div>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: 12,
+            color: "rgba(255,255,255,0.35)",
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            marginBottom: 10,
+          }}
+        >
+          Holdings
+        </div>
         {portfolio.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "40px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-            <i className="ri-football-line" style={{ fontSize: 36, color: "rgba(255,255,255,0.15)" }} />
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "rgba(255,255,255,0.3)" }}>No positions yet</div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.18)", fontFamily: "'Space Grotesk', sans-serif" }}>Head to Market to buy your first shares</div>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "40px 20px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <i
+              className="ri-football-line"
+              style={{ fontSize: 36, color: "rgba(255,255,255,0.15)" }}
+            />
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                color: "rgba(255,255,255,0.3)",
+              }}
+            >
+              No positions yet
+            </div>
+            <div
+              style={{
+                fontSize: 13,
+                color: "rgba(255,255,255,0.18)",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              Head to Market to buy your first shares
+            </div>
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
@@ -1031,15 +2634,65 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
               const pnl = value - cost;
               const pct = cost > 0 ? (pnl / cost) * 100 : 0;
               return (
-                <div key={pos.player_id} onClick={() => { tgHaptic("impact", "light"); onSelect(player); }} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "13px 14px", display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+                <div
+                  key={pos.player_id}
+                  onClick={() => {
+                    tgHaptic("impact", "light");
+                    onSelect(player);
+                  }}
+                  style={{
+                    background: "#111",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    borderRadius: 14,
+                    padding: "13px 14px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    cursor: "pointer",
+                  }}
+                >
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{player.name}</div>
-                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>{tokens.toFixed(2)} shares · avg {fmtUSD(pos.avg_buy_apt)}</div>
+                    <div
+                      style={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontWeight: 700,
+                        fontSize: 14,
+                        color: "#fff",
+                      }}
+                    >
+                      {player.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        color: "rgba(255,255,255,0.3)",
+                        fontFamily: "'Space Grotesk', sans-serif",
+                      }}
+                    >
+                      {tokens.toFixed(2)} shares · avg {fmtUSD(pos.avg_buy_apt)}
+                    </div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "#fff" }}>{fmtUSD(value)}</div>
-                    <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 12, color: pnl >= 0 ? "#00FF87" : "#FF4444" }}>
-                      {pnl >= 0 ? "+" : ""}{fmtUSD(pnl)} ({fmtChange(pct)})
+                    <div
+                      style={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontWeight: 700,
+                        fontSize: 14,
+                        color: "#fff",
+                      }}
+                    >
+                      {fmtUSD(value)}
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontWeight: 600,
+                        fontSize: 12,
+                        color: pnl >= 0 ? "#00FF87" : "#FF4444",
+                      }}
+                    >
+                      {pnl >= 0 ? "+" : ""}
+                      {fmtUSD(pnl)} ({fmtChange(pct)})
                     </div>
                   </div>
                 </div>
@@ -1058,7 +2711,13 @@ function LeaderboardTab({ entries, loading }) {
   const podiumColors = ["#F5C842", "#C0C0C0", "#CD7F32"];
   if (loading) {
     return (
-      <div style={{ height: "100%", overflowY: "auto", padding: "18px 18px 100px" }}>
+      <div
+        style={{
+          height: "100%",
+          overflowY: "auto",
+          padding: "18px 18px 100px",
+        }}
+      >
         <div style={{ marginBottom: 18 }}>
           <Skel w={140} h={22} r={6} style={{ marginBottom: 8 }} />
           <Skel w={200} h={12} />
@@ -1068,23 +2727,105 @@ function LeaderboardTab({ entries, loading }) {
     );
   }
   return (
-    <div style={{ height: "100%", overflowY: "auto", padding: "18px 18px 100px" }}>
+    <div
+      style={{ height: "100%", overflowY: "auto", padding: "18px 18px 100px" }}
+    >
       <div style={{ marginBottom: 18 }}>
-        <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", letterSpacing: "-0.04em" }}>Leaderboard</div>
-        <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 2 }}>Season rankings by P&L</div>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 800,
+            fontSize: 22,
+            color: "#fff",
+            letterSpacing: "-0.04em",
+          }}
+        >
+          Leaderboard
+        </div>
+        <div
+          style={{
+            fontSize: 12,
+            color: "rgba(255,255,255,0.3)",
+            fontFamily: "'Space Grotesk', sans-serif",
+            marginTop: 2,
+          }}
+        >
+          Season rankings by P&L
+        </div>
       </div>
       {entries.length > 0 && (
-        <div style={{ display: "flex", alignItems: "flex-end", gap: 9, marginBottom: 20, height: 110 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 9,
+            marginBottom: 20,
+            height: 110,
+          }}
+        >
           {[1, 0, 2].map((i) => {
             const e = entries[i];
             if (!e) return null;
             const h = [86, 110, 70][[1, 0, 2].indexOf(i)];
             return (
-              <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <i className={podiumIcons[i]} style={{ fontSize: 18, color: podiumColors[i], marginBottom: 4 }} />
-                <div style={{ width: "100%", height: h, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "9px 9px 0 0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "6px 4px" }}>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 10, color: "rgba(255,255,255,0.6)", textAlign: "center", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%", padding: "0 6px" }}>{e.username.replace(/_/g, " ")}</div>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 12, color: "#00FF87", marginTop: 4 }}>+{fmtUSD(e.pnl_apt)}</div>
+              <div
+                key={i}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <i
+                  className={podiumIcons[i]}
+                  style={{
+                    fontSize: 18,
+                    color: podiumColors[i],
+                    marginBottom: 4,
+                  }}
+                />
+                <div
+                  style={{
+                    width: "100%",
+                    height: h,
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: "9px 9px 0 0",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: "6px 4px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 10,
+                      color: "rgba(255,255,255,0.6)",
+                      textAlign: "center",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      width: "100%",
+                      padding: "0 6px",
+                    }}
+                  >
+                    {e.username.replace(/_/g, " ")}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontWeight: 800,
+                      fontSize: 12,
+                      color: "#00FF87",
+                      marginTop: 4,
+                    }}
+                  >
+                    +{fmtUSD(e.pnl_apt)}
+                  </div>
                 </div>
               </div>
             );
@@ -1093,17 +2834,93 @@ function LeaderboardTab({ entries, loading }) {
       )}
       <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
         {entries.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No rankings yet</div>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "40px 20px",
+              color: "rgba(255,255,255,0.25)",
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 14,
+            }}
+          >
+            No rankings yet
+          </div>
         ) : (
           entries.map((e, i) => (
-            <div key={i} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "13px 14px", display: "flex", alignItems: "center", gap: 11 }}>
-              <div style={{ width: 30, height: 30, borderRadius: 8, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                {i < 3 ? <i className={podiumIcons[i]} style={{ fontSize: 15, color: podiumColors[i] }} /> : <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 12, color: "rgba(255,255,255,0.35)" }}>#{e.rank}</span>}
+            <div
+              key={i}
+              style={{
+                background: "#111",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 12,
+                padding: "13px 14px",
+                display: "flex",
+                alignItems: "center",
+                gap: 11,
+              }}
+            >
+              <div
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 8,
+                  background: "rgba(255,255,255,0.05)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                {i < 3 ? (
+                  <i
+                    className={podiumIcons[i]}
+                    style={{ fontSize: 15, color: podiumColors[i] }}
+                  />
+                ) : (
+                  <span
+                    style={{
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontWeight: 700,
+                      fontSize: 12,
+                      color: "rgba(255,255,255,0.35)",
+                    }}
+                  >
+                    #{e.rank}
+                  </span>
+                )}
               </div>
-              <div style={{ flex: 1, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: "#fff" }}>@{e.username}</div>
+              <div
+                style={{
+                  flex: 1,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 600,
+                  fontSize: 13,
+                  color: "#fff",
+                }}
+              >
+                @{e.username}
+              </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 14, color: "#00FF87" }}>+{fmtUSD(e.pnl_apt)}</div>
-                <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 11, color: "rgba(255,255,255,0.3)" }}>+{e.pnl_pct.toFixed(1)}%</div>
+                <div
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontWeight: 800,
+                    fontSize: 14,
+                    color: "#00FF87",
+                  }}
+                >
+                  +{fmtUSD(e.pnl_apt)}
+                </div>
+                <div
+                  style={{
+                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontWeight: 600,
+                    fontSize: 11,
+                    color: "rgba(255,255,255,0.3)",
+                  }}
+                >
+                  +{e.pnl_pct.toFixed(1)}%
+                </div>
               </div>
             </div>
           ))
@@ -1116,33 +2933,153 @@ function LeaderboardTab({ entries, loading }) {
 /* ─── TOP UP TAB ─── */
 function TopUpTab() {
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 32px 80px" }}>
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "0 32px 80px",
+      }}
+    >
       <div style={{ position: "relative", marginBottom: 28 }}>
-        <div style={{ width: 96, height: 96, borderRadius: "50%", background: "rgba(0,255,135,0.06)", border: "1px solid rgba(0,255,135,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <div style={{ width: 68, height: 68, borderRadius: "50%", background: "rgba(0,255,135,0.08)", border: "1px solid rgba(0,255,135,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <i className="ri-bank-card-2-line" style={{ fontSize: 30, color: "#00FF87" }} />
+        <div
+          style={{
+            width: 96,
+            height: 96,
+            borderRadius: "50%",
+            background: "rgba(0,255,135,0.06)",
+            border: "1px solid rgba(0,255,135,0.15)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: 68,
+              height: 68,
+              borderRadius: "50%",
+              background: "rgba(0,255,135,0.08)",
+              border: "1px solid rgba(0,255,135,0.2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <i
+              className="ri-bank-card-2-line"
+              style={{ fontSize: 30, color: "#00FF87" }}
+            />
           </div>
         </div>
       </div>
-      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", letterSpacing: "-0.03em", marginBottom: 10, textAlign: "center" }}>Top Up Coming Soon</div>
-      <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.35)", lineHeight: 1.6, textAlign: "center", maxWidth: 260 }}>
-        Depositing vUSD directly from the app is on the way. We'll notify you as soon as it's live.
+      <div
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 800,
+          fontSize: 22,
+          color: "#fff",
+          letterSpacing: "-0.03em",
+          marginBottom: 10,
+          textAlign: "center",
+        }}
+      >
+        Top Up Coming Soon
       </div>
-      <div style={{ marginTop: 32, display: "flex", flexDirection: "column", gap: 9, width: "100%", maxWidth: 320 }}>
+      <div
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontSize: 14,
+          color: "rgba(255,255,255,0.35)",
+          lineHeight: 1.6,
+          textAlign: "center",
+          maxWidth: 260,
+        }}
+      >
+        Depositing vUSD directly from the app is on the way. We'll notify you as
+        soon as it's live.
+      </div>
+      <div
+        style={{
+          marginTop: 32,
+          display: "flex",
+          flexDirection: "column",
+          gap: 9,
+          width: "100%",
+          maxWidth: 320,
+        }}
+      >
         {[
           { icon: "ri-exchange-dollar-line", label: "USDT", network: "TRC20" },
           { icon: "ri-coin-line", label: "USDC", network: "Polygon" },
           { icon: "ri-swap-line", label: "APT", network: "Aptos" },
         ].map((c) => (
-          <div key={c.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: "12px 14px", display: "flex", alignItems: "center", gap: 12, opacity: 0.5 }}>
-            <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <i className={c.icon} style={{ fontSize: 17, color: "rgba(255,255,255,0.4)" }} />
+          <div
+            key={c.label}
+            style={{
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              borderRadius: 12,
+              padding: "12px 14px",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              opacity: 0.5,
+            }}
+          >
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 10,
+                background: "rgba(255,255,255,0.05)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <i
+                className={c.icon}
+                style={{ fontSize: 17, color: "rgba(255,255,255,0.4)" }}
+              />
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 14, color: "rgba(255,255,255,0.5)" }}>{c.label}</div>
-              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.2)", fontFamily: "'Space Grotesk', sans-serif" }}>{c.network}</div>
+              <div
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 700,
+                  fontSize: 14,
+                  color: "rgba(255,255,255,0.5)",
+                }}
+              >
+                {c.label}
+              </div>
+              <div
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.2)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                }}
+              >
+                {c.network}
+              </div>
             </div>
-            <div style={{ fontSize: 11, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, color: "rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.04)", borderRadius: 99, padding: "3px 9px" }}>SOON</div>
+            <div
+              style={{
+                fontSize: 11,
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                color: "rgba(255,255,255,0.2)",
+                background: "rgba(255,255,255,0.04)",
+                borderRadius: 99,
+                padding: "3px 9px",
+              }}
+            >
+              SOON
+            </div>
           </div>
         ))}
       </div>
@@ -1153,19 +3090,85 @@ function TopUpTab() {
 /* ─── 4-TAB BOTTOM NAV ─── */
 function BottomNav({ active, onChange }) {
   const tabs = [
-    { id: "home",        icon: "ri-home-5-line",      activeIcon: "ri-home-5-fill",      label: "Home" },
-    { id: "portfolio",   icon: "ri-briefcase-4-line",  activeIcon: "ri-briefcase-4-fill", label: "Portfolio" },
-    { id: "leaderboard", icon: "ri-trophy-line",       activeIcon: "ri-trophy-fill",      label: "Ranks" },
-    { id: "topup",       icon: "ri-bank-card-2-line",  activeIcon: "ri-bank-card-2-fill", label: "Top Up" },
+    {
+      id: "home",
+      icon: "ri-home-5-line",
+      activeIcon: "ri-home-5-fill",
+      label: "Home",
+    },
+    {
+      id: "portfolio",
+      icon: "ri-briefcase-4-line",
+      activeIcon: "ri-briefcase-4-fill",
+      label: "Portfolio",
+    },
+    {
+      id: "leaderboard",
+      icon: "ri-trophy-line",
+      activeIcon: "ri-trophy-fill",
+      label: "Ranks",
+    },
+    {
+      id: "topup",
+      icon: "ri-bank-card-2-line",
+      activeIcon: "ri-bank-card-2-fill",
+      label: "Top Up",
+    },
   ];
   return (
-    <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "rgba(10,10,10,0.97)", backdropFilter: "blur(20px)", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "8px 6px 26px", zIndex: 500, display: "flex", alignItems: "center" }}>
+    <div
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: "rgba(10,10,10,0.97)",
+        backdropFilter: "blur(20px)",
+        borderTop: "1px solid rgba(255,255,255,0.06)",
+        padding: "8px 6px 26px",
+        zIndex: 500,
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
       {tabs.map((t) => {
         const isActive = active === t.id;
         return (
-          <button key={t.id} onClick={() => { tgHaptic("impact", "light"); onChange(t.id); }} style={{ flex: 1, padding: "7px 4px 4px", border: "none", cursor: "pointer", background: "transparent", display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-            <i className={isActive ? t.activeIcon : t.icon} style={{ fontSize: 22, color: isActive ? "#00FF87" : "rgba(255,255,255,0.3)", transition: "color 0.15s" }} />
-            <span style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: isActive ? 700 : 500, fontSize: 10, color: isActive ? "#00FF87" : "rgba(255,255,255,0.3)", transition: "color 0.15s" }}>
+          <button
+            key={t.id}
+            onClick={() => {
+              tgHaptic("impact", "light");
+              onChange(t.id);
+            }}
+            style={{
+              flex: 1,
+              padding: "7px 4px 4px",
+              border: "none",
+              cursor: "pointer",
+              background: "transparent",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
+            <i
+              className={isActive ? t.activeIcon : t.icon}
+              style={{
+                fontSize: 22,
+                color: isActive ? "#00FF87" : "rgba(255,255,255,0.3)",
+                transition: "color 0.15s",
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: isActive ? 700 : 500,
+                fontSize: 10,
+                color: isActive ? "#00FF87" : "rgba(255,255,255,0.3)",
+                transition: "color 0.15s",
+              }}
+            >
               {t.label}
             </span>
           </button>
@@ -1185,24 +3188,38 @@ export default function App() {
   const [toasts, setToasts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { tgReady(); tgExpand(); tg?.lockOrientation?.(); }, []);
+  useEffect(() => {
+    tgReady();
+    tgExpand();
+    tg?.lockOrientation?.();
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
-        const [playersRes, portfolioRes, balanceRes, lbRes] = await Promise.allSettled([
-          api("/players"), api("/portfolio"), api("/balance"), api("/leaderboard"),
-        ]);
+        const [playersRes, portfolioRes, balanceRes, lbRes] =
+          await Promise.allSettled([
+            api("/players"),
+            api("/portfolio"),
+            api("/balance"),
+            api("/leaderboard"),
+          ]);
         if (cancelled) return;
         if (playersRes.status === "fulfilled") setPlayers(playersRes.value);
-        if (portfolioRes.status === "fulfilled") setPortfolio(portfolioRes.value);
-        if (balanceRes.status === "fulfilled") setBalance(balanceRes.value?.balance_vusd ?? 0);
+        if (portfolioRes.status === "fulfilled")
+          setPortfolio(portfolioRes.value);
+        if (balanceRes.status === "fulfilled")
+          setBalance(balanceRes.value?.balance_vusd ?? 0);
         if (lbRes.status === "fulfilled") setLeaderboard(lbRes.value);
-      } finally { if (!cancelled) setLoading(false); }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
     }
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const addToast = useCallback((msg, type = "ok") => {
@@ -1211,30 +3228,54 @@ export default function App() {
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3500);
   }, []);
 
-  const handleTrade = useCallback(({ mode, amount, player, result }) => {
-    if (mode === "buy") {
-      const fee = amount * 0.01;
-      const tokens = Math.floor(((amount - fee) / player.price_apt) * PRECISION);
-      setBalance((b) => b - amount);
-      setPortfolio((p) => {
-        const existing = p.find((x) => x.player_id === player.id);
-        if (existing) return p.map((x) => x.player_id === player.id ? { ...x, token_amount: x.token_amount + tokens } : x);
-        return [...p, { player_id: player.id, player_name: player.name, player_symbol: player.symbol, token_amount: tokens, avg_buy_apt: player.price_apt, current_price: player.price_apt }];
-      });
-      addToast(`Bought ${(tokens / PRECISION).toFixed(2)} ${player.symbol} shares`);
-    } else {
-      const vusd = amount * player.price_apt * 0.99;
-      setBalance((b) => b + vusd);
-      setPortfolio((p) =>
-        p.map((x) => {
-          if (x.player_id !== player.id) return x;
-          const remaining = x.token_amount - Math.floor(amount * PRECISION);
-          return remaining <= 0 ? null : { ...x, token_amount: remaining };
-        }).filter(Boolean)
-      );
-      addToast(`Sold ${Number(amount).toFixed(2)} ${player.symbol} shares`);
-    }
-  }, [addToast]);
+  const handleTrade = useCallback(
+    ({ mode, amount, player, result }) => {
+      if (mode === "buy") {
+        const fee = amount * 0.01;
+        const tokens = Math.floor(
+          ((amount - fee) / player.price_apt) * PRECISION
+        );
+        setBalance((b) => b - amount);
+        setPortfolio((p) => {
+          const existing = p.find((x) => x.player_id === player.id);
+          if (existing)
+            return p.map((x) =>
+              x.player_id === player.id
+                ? { ...x, token_amount: x.token_amount + tokens }
+                : x
+            );
+          return [
+            ...p,
+            {
+              player_id: player.id,
+              player_name: player.name,
+              player_symbol: player.symbol,
+              token_amount: tokens,
+              avg_buy_apt: player.price_apt,
+              current_price: player.price_apt,
+            },
+          ];
+        });
+        addToast(
+          `Bought ${(tokens / PRECISION).toFixed(2)} ${player.symbol} shares`
+        );
+      } else {
+        const vusd = amount * player.price_apt * 0.99;
+        setBalance((b) => b + vusd);
+        setPortfolio((p) =>
+          p
+            .map((x) => {
+              if (x.player_id !== player.id) return x;
+              const remaining = x.token_amount - Math.floor(amount * PRECISION);
+              return remaining <= 0 ? null : { ...x, token_amount: remaining };
+            })
+            .filter(Boolean)
+        );
+        addToast(`Sold ${Number(amount).toFixed(2)} ${player.symbol} shares`);
+      }
+    },
+    [addToast]
+  );
 
   const holdingMap = Object.fromEntries(portfolio.map((p) => [p.player_id, p]));
 
@@ -1254,10 +3295,23 @@ export default function App() {
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.7; } }
       `}</style>
-      <div style={{ height: "100vh", display: "flex", flexDirection: "column", background: "#0A0A0A", maxWidth: 480, margin: "0 auto", position: "relative", overflow: "hidden" }}>
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          background: "#0A0A0A",
+          maxWidth: 480,
+          margin: "0 auto",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
         <div style={{ flex: 1, overflow: "hidden", position: "relative" }}>
           {selectedPlayer ? (
-            loading ? <PlayerDetailSkeleton /> : (
+            loading ? (
+              <PlayerDetailSkeleton />
+            ) : (
               <PlayerDetail
                 player={selectedPlayer}
                 holding={holdingMap[Number(selectedPlayer.id)]}
@@ -1268,10 +3322,36 @@ export default function App() {
             )
           ) : (
             <>
-              {tab === "home" && <HomeTab players={players} portfolio={portfolio} balance={balance} onSelect={setSelectedPlayer} onGoMarket={() => setTab("market")} loading={loading} />}
-              {tab === "market" && <MarketTab players={players} portfolio={portfolio} onSelect={setSelectedPlayer} loading={loading} />}
-              {tab === "portfolio" && <PortfolioTab players={players} portfolio={portfolio} balance={balance} onSelect={setSelectedPlayer} loading={loading} />}
-              {tab === "leaderboard" && <LeaderboardTab entries={leaderboard} loading={loading} />}
+              {tab === "home" && (
+                <HomeTab
+                  players={players}
+                  portfolio={portfolio}
+                  balance={balance}
+                  onSelect={setSelectedPlayer}
+                  onGoMarket={() => setTab("market")}
+                  loading={loading}
+                />
+              )}
+              {tab === "market" && (
+                <MarketTab
+                  players={players}
+                  portfolio={portfolio}
+                  onSelect={setSelectedPlayer}
+                  loading={loading}
+                />
+              )}
+              {tab === "portfolio" && (
+                <PortfolioTab
+                  players={players}
+                  portfolio={portfolio}
+                  balance={balance}
+                  onSelect={setSelectedPlayer}
+                  loading={loading}
+                />
+              )}
+              {tab === "leaderboard" && (
+                <LeaderboardTab entries={leaderboard} loading={loading} />
+              )}
               {tab === "topup" && <TopUpTab />}
             </>
           )}
@@ -1279,13 +3359,56 @@ export default function App() {
         {!selectedPlayer && (
           <BottomNav
             active={tab === "market" ? "home" : tab}
-            onChange={(t) => { if (t === "home" && tab === "market") { setTab("home"); return; } setTab(t); }}
+            onChange={(t) => {
+              if (t === "home" && tab === "market") {
+                setTab("home");
+                return;
+              }
+              setTab(t);
+            }}
           />
         )}
-        <div style={{ position: "fixed", top: 16, left: 18, right: 18, zIndex: 9999, display: "flex", flexDirection: "column", gap: 7, pointerEvents: "none" }}>
+        <div
+          style={{
+            position: "fixed",
+            top: 16,
+            left: 18,
+            right: 18,
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            gap: 7,
+            pointerEvents: "none",
+          }}
+        >
           {toasts.map((t) => (
-            <div key={t.id} style={{ background: t.type === "error" ? "rgba(255,68,68,0.1)" : "rgba(255,255,255,0.07)", border: `1px solid ${t.type === "error" ? "rgba(255,68,68,0.2)" : "rgba(255,255,255,0.1)"}`, borderRadius: 10, padding: "11px 14px", fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: 13, color: t.type === "error" ? "#FF4444" : "#fff", animation: "fadeIn 0.2s ease", display: "flex", alignItems: "center", gap: 8 }}>
-              <i className={t.type === "error" ? "ri-error-warning-line" : "ri-check-line"} style={{ fontSize: 15 }} /> {t.msg}
+            <div
+              key={t.id}
+              style={{
+                background:
+                  t.type === "error"
+                    ? "rgba(255,68,68,0.1)"
+                    : "rgba(255,255,255,0.07)",
+                border: `1px solid ${t.type === "error" ? "rgba(255,68,68,0.2)" : "rgba(255,255,255,0.1)"}`,
+                borderRadius: 10,
+                padding: "11px 14px",
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 600,
+                fontSize: 13,
+                color: t.type === "error" ? "#FF4444" : "#fff",
+                animation: "fadeIn 0.2s ease",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <i
+                className={
+                  t.type === "error" ? "ri-error-warning-line" : "ri-check-line"
+                }
+                style={{ fontSize: 15 }}
+              />{" "}
+              {t.msg}
             </div>
           ))}
         </div>
