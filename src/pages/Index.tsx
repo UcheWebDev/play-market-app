@@ -655,19 +655,18 @@ function HomeTab({ players, portfolio, balance, onSelect, onGoMarket, loading })
 }
 
 /* ─── MARKET TAB: Leagues → Categories → Players drill-down ───
-   Mirrors the bot's handleNavBrowseLeagues → handleOnChainLeague →
-   handleOnChainCategoryPage flow from callbacks.ts / screens.ts.
-   Built client-side from the players list (league + category fields),
-   so no extra endpoints are required. ─── */
+   2-column square grid aesthetic. No icons, no liquidity stats.
+   Bold name as hero, thin accent pill at bottom of each card.
+   ─── */
 function MarketTab({ players, portfolio, onSelect, loading }) {
-  const [view, setView] = useState("leagues");        // "leagues" | "categories" | "players"
+  const [view, setView] = useState("leagues");
   const [activeLeague, setActiveLeague] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [search, setSearch] = useState("");
 
   const holdingMap = Object.fromEntries(portfolio.map((p) => [Number(p.player_id), p]));
 
-  /* ── Derive leagues from players ── */
+  /* ── Derive leagues ── */
   const leagueMap = {};
   for (const p of players) {
     const key = p.league ?? "Other";
@@ -680,11 +679,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
     liveCount: l.players.filter((p) => p.tradeable).length,
   }));
 
-  /* ── Derive categories within the active league ──
-     Backend now returns `category_name` per player (alongside the existing
-     numeric `category_id`). Group by name when present; fall back to a
-     per-id label so the screen still works mid-rollout, and finally to a
-     single bucket for players with no category at all. ── */
+  /* ── Derive categories ── */
   let categories = [];
   if (activeLeague) {
     const catMap = {};
@@ -696,11 +691,11 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
     categories = Object.values(catMap).map((c) => ({
       ...c,
       playerCount: c.players.length,
-      liquidity: c.players.reduce((s, p) => s + (p.volume_apt ?? 0), 0),
+      liveCount: c.players.filter((p) => p.tradeable).length,
     }));
   }
 
-  /* ── Players within active category, filtered by search ── */
+  /* ── Filtered players ── */
   const categoryPlayers = activeCategory
     ? activeCategory.players.filter((p) => {
         const q = search.toLowerCase();
@@ -713,48 +708,113 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   const backToLeagues = () => { tgHaptic("impact", "light"); setView("leagues"); setActiveLeague(null); setActiveCategory(null); setSearch(""); };
   const backToCategories = () => { tgHaptic("impact", "light"); setView("categories"); setActiveCategory(null); setSearch(""); };
 
+  /* ── Shared grid card styles ── */
+  const gridCard = (onClick, accentColor = "#00FF87") => ({
+    position: "relative",
+    aspectRatio: "1 / 1",
+    background: "#111",
+    border: "1px solid rgba(255,255,255,0.07)",
+    borderRadius: 16,
+    cursor: "pointer",
+    overflow: "hidden",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    padding: "14px 14px 12px",
+    WebkitTapHighlightColor: "transparent",
+  });
+
+  /* ── Skeleton grid ── */
+  const GridSkeleton = () => (
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 20px 100px" }}>
+      {Array.from({ length: 6 }).map((_, i) => (
+        <div key={i} style={{ aspectRatio: "1/1", borderRadius: 16, background: "#111", border: "1px solid rgba(255,255,255,0.07)", padding: "14px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+            <Skel w="70%" h={18} r={5} />
+            <Skel w="45%" h={13} r={4} />
+          </div>
+          <Skel w="55%" h={22} r={99} />
+        </div>
+      ))}
+    </div>
+  );
+
   /* ── LEAGUES VIEW ── */
   if (view === "leagues") {
     return (
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        <div style={{ padding: "56px 20px 16px", background: "#0A0A0A", flexShrink: 0 }}>
-          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22, color: "#fff", letterSpacing: "-0.03em" }}>Browse Leagues</div>
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 4 }}>Choose a league to see player groups inside it</div>
+        {/* Header */}
+        <div style={{ padding: "56px 20px 20px", background: "#0A0A0A", flexShrink: 0 }}>
+          <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 24, color: "#fff", letterSpacing: "-0.04em", lineHeight: 1 }}>
+            Leagues
+          </div>
+          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 5 }}>
+            Pick a league to trade player shares
+          </div>
         </div>
-        <div style={{ flex: 1, overflowY: "auto", padding: "0 20px 100px" }}>
+
+        <div style={{ flex: 1, overflowY: "auto" }}>
           {loading ? (
-            Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px", marginBottom: 9, display: "flex", alignItems: "center", gap: 12 }}>
-                <Skel w={44} h={44} r={12} />
-                <div style={{ flex: 1 }}>
-                  <Skel w="50%" h={14} style={{ marginBottom: 6 }} />
-                  <Skel w="35%" h={11} />
-                </div>
-              </div>
-            ))
+            <GridSkeleton />
           ) : leagues.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No leagues live yet — check back soon!</div>
+            <div style={{ textAlign: "center", padding: "60px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+              No leagues live yet — check back soon!
+            </div>
           ) : (
-            leagues.map((l) => (
-              <div
-                key={l.name}
-                onClick={() => openLeague(l)}
-                style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px", marginBottom: 9, display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}
-              >
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(0,255,135,0.07)", border: "1px solid rgba(0,255,135,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <i className="ri-trophy-line" style={{ fontSize: 20, color: "#00FF87" }} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.01em" }}>{l.name}</div>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2, display: "flex", alignItems: "center", gap: 6 }}>
-                    {l.playerCount} player{l.playerCount !== 1 ? "s" : ""}
-                    <span style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
-                    <i className="ri-radio-button-line" style={{ fontSize: 10, color: "#00FF87" }} /> {l.liveCount} live
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 20px 100px" }}>
+              {leagues.map((l, idx) => {
+                /* Subtle accent colours that rotate — keeps the grid visually alive */
+                const accents = ["#00FF87", "#4ECDC4", "#F5C842", "#00B4D8", "#A8DADC", "#00FF87"];
+                const accent = accents[idx % accents.length];
+                return (
+                  <div
+                    key={l.name}
+                    onClick={() => openLeague(l)}
+                    style={gridCard(openLeague, accent)}
+                    onTouchStart={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
+                    onTouchEnd={(e) => (e.currentTarget.style.background = "#111")}
+                  >
+                    {/* Subtle corner glow */}
+                    <div style={{
+                      position: "absolute", top: -30, right: -30, width: 90, height: 90,
+                      borderRadius: "50%", background: `${accent}12`, pointerEvents: "none",
+                    }} />
+
+                    {/* Name block */}
+                    <div>
+                      <div style={{
+                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800,
+                        fontSize: 17, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.15,
+                        marginBottom: 4,
+                      }}>
+                        {l.name}
+                      </div>
+                      <div style={{
+                        fontFamily: "'Space Grotesk', sans-serif", fontSize: 11,
+                        color: "rgba(255,255,255,0.3)", fontWeight: 500,
+                      }}>
+                        {l.playerCount} player{l.playerCount !== 1 ? "s" : ""}
+                      </div>
+                    </div>
+
+                    {/* Bottom live pill */}
+                    <div style={{
+                      display: "inline-flex", alignItems: "center", gap: 5, alignSelf: "flex-start",
+                      background: `${accent}14`, border: `1px solid ${accent}30`,
+                      borderRadius: 99, padding: "5px 10px",
+                    }}>
+                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }} />
+                      <span style={{
+                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11,
+                        color: accent, letterSpacing: "0.04em",
+                      }}>
+                        {l.liveCount} LIVE
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <i className="ri-arrow-right-s-line" style={{ fontSize: 20, color: "rgba(255,255,255,0.2)" }} />
-              </div>
-            ))
+                );
+              })}
+            </div>
           )}
         </div>
       </div>
@@ -765,66 +825,145 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
   if (view === "categories") {
     return (
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        <div style={{ padding: "56px 20px 16px", background: "#0A0A0A", flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-            <button onClick={backToLeagues} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        {/* Header */}
+        <div style={{ padding: "56px 20px 20px", background: "#0A0A0A", flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+            <button
+              onClick={backToLeagues}
+              style={{
+                background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)",
+                borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+              }}
+            >
               <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
             </button>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 19, color: "#fff", letterSpacing: "-0.02em" }}>{activeLeague?.name}</div>
-          </div>
-          <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginLeft: 40 }}>Choose a group to see players and prices</div>
-        </div>
-        <div style={{ flex: 1, overflowY: "auto", padding: "8px 20px 100px" }}>
-          {categories.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No groups set up yet — check back soon!</div>
-          ) : (
-            categories.map((c) => (
-              <div
-                key={c.name}
-                onClick={() => openCategory(c)}
-                style={{ background: "#111", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14, padding: "16px", marginBottom: 9, display: "flex", alignItems: "center", gap: 14, cursor: "pointer" }}
-              >
-                <div style={{ width: 44, height: 44, borderRadius: 12, background: "rgba(255,255,255,0.05)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <i className="ri-folder-2-line" style={{ fontSize: 19, color: "rgba(255,255,255,0.5)" }} />
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 15, color: "#fff", letterSpacing: "-0.01em" }}>{c.name}</div>
-                  <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 2 }}>
-                    {c.playerCount} player{c.playerCount !== 1 ? "s" : ""} · {fmtVol(c.liquidity)} in the market
-                  </div>
-                </div>
-                <i className="ri-arrow-right-s-line" style={{ fontSize: 20, color: "rgba(255,255,255,0.2)" }} />
+            <div>
+              <div style={{
+                fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 22,
+                color: "#fff", letterSpacing: "-0.04em", lineHeight: 1,
+              }}>
+                {activeLeague?.name}
               </div>
-            ))
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif", marginTop: 3 }}>
+                Choose a position group
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, overflowY: "auto" }}>
+          {categories.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "60px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+              No groups set up yet — check back soon!
+            </div>
+          ) : (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 20px 100px" }}>
+              {categories.map((c, idx) => {
+                const accents = ["#00FF87", "#4ECDC4", "#F5C842", "#00B4D8", "#A8DADC", "#00FF87"];
+                const accent = accents[idx % accents.length];
+                return (
+                  <div
+                    key={c.name}
+                    onClick={() => openCategory(c)}
+                    style={gridCard(openCategory, accent)}
+                    onTouchStart={(e) => (e.currentTarget.style.background = "rgba(255,255,255,0.06)")}
+                    onTouchEnd={(e) => (e.currentTarget.style.background = "#111")}
+                  >
+                    {/* Corner glow */}
+                    <div style={{
+                      position: "absolute", top: -30, right: -30, width: 90, height: 90,
+                      borderRadius: "50%", background: `${accent}12`, pointerEvents: "none",
+                    }} />
+
+                    {/* Name block */}
+                    <div>
+                      <div style={{
+                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800,
+                        fontSize: 17, color: "#fff", letterSpacing: "-0.03em", lineHeight: 1.15,
+                        marginBottom: 4,
+                      }}>
+                        {c.name}
+                      </div>
+                      <div style={{
+                        fontFamily: "'Space Grotesk', sans-serif", fontSize: 11,
+                        color: "rgba(255,255,255,0.3)", fontWeight: 500,
+                      }}>
+                        {c.playerCount} player{c.playerCount !== 1 ? "s" : ""}
+                      </div>
+                    </div>
+
+                    {/* Bottom live pill */}
+                    <div style={{
+                      display: "inline-flex", alignItems: "center", gap: 5, alignSelf: "flex-start",
+                      background: `${accent}14`, border: `1px solid ${accent}30`,
+                      borderRadius: 99, padding: "5px 10px",
+                    }}>
+                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: accent, flexShrink: 0 }} />
+                      <span style={{
+                        fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: 11,
+                        color: accent, letterSpacing: "0.04em",
+                      }}>
+                        {c.liveCount} LIVE
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       </div>
     );
   }
 
-  /* ── PLAYERS VIEW (within category) ── */
+  /* ── PLAYERS VIEW (within category) — unchanged ── */
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <div style={{ padding: "56px 20px 12px", background: "#0A0A0A", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <button onClick={backToCategories} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <button
+            onClick={backToCategories}
+            style={{
+              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 99, width: 30, height: 30, color: "#fff", cursor: "pointer",
+              display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+            }}
+          >
             <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
           </button>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>{activeCategory?.name}</div>
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>{activeLeague?.name}</div>
+            <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 800, fontSize: 17, color: "#fff", letterSpacing: "-0.02em" }}>
+              {activeCategory?.name}
+            </div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", fontFamily: "'Space Grotesk', sans-serif" }}>
+              {activeLeague?.name}
+            </div>
           </div>
         </div>
         <div style={{ position: "relative", marginTop: 12 }}>
           <i className="ri-search-line" style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 15, color: "rgba(255,255,255,0.25)" }} />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search players, teams…" style={{ width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif", fontSize: 13, color: "#fff", outline: "none" }} />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search players, teams…"
+            style={{
+              width: "100%", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)",
+              borderRadius: 10, padding: "10px 12px 10px 36px", fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 13, color: "#fff", outline: "none",
+            }}
+          />
         </div>
       </div>
       <div style={{ flex: 1, overflowY: "auto", paddingBottom: 100 }}>
         {categoryPlayers.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>No players found</div>
+          <div style={{ textAlign: "center", padding: "40px 20px", color: "rgba(255,255,255,0.25)", fontFamily: "'Space Grotesk', sans-serif", fontSize: 14 }}>
+            No players found
+          </div>
         ) : (
-          categoryPlayers.map((p) => <PlayerRow key={p.id} player={p} onClick={onSelect} holding={holdingMap[Number(p.id)]} />)
+          categoryPlayers.map((p) => (
+            <PlayerRow key={p.id} player={p} onClick={onSelect} holding={holdingMap[Number(p.id)]} />
+          ))
         )}
       </div>
     </div>
