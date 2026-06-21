@@ -59,6 +59,33 @@ function generateSparkline(basePrice, change, points = 20) {
   return data;
 }
 
+/* League colour system — maps real-world brand colours */
+const LEAGUE_META = {
+  "Premier League": { color: "#7566D6", country: "England", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+  "La Liga": { color: "#EE4B28", country: "Spain", flag: "🇪🇸" },
+  "Champions League": { color: "#1A5CC8", country: "Europe", flag: "🇪🇺" },
+  Bundesliga: { color: "#D10000", country: "Germany", flag: "🇩🇪" },
+  "Serie A": { color: "#1E6BB8", country: "Italy", flag: "🇮🇹" },
+  "Ligue 1": { color: "#009E3A", country: "France", flag: "🇫🇷" },
+  Eredivisie: { color: "#E8720B", country: "Netherlands", flag: "🇳🇱" },
+  AFCON: { color: "#D4AF37", country: "Africa", flag: "🌍" },
+};
+
+const FALLBACK_LEAGUE = { color: "#00FF87", country: "World", flag: "🌐" };
+
+const leagueMeta = (name) => LEAGUE_META[name] ?? { ...FALLBACK_LEAGUE };
+
+/* Category position icons (Remix Icons) */
+const CAT_ICON = {
+  Goalkeepers: "ri-shield-star-line",
+  Defenders: "ri-shield-line",
+  Midfielders: "ri-compass-3-line",
+  Forwards: "ri-sword-line",
+  Strikers: "ri-sword-line",
+  Wingers: "ri-flashlight-line",
+};
+const catIcon = (name) => CAT_ICON[name] ?? "ri-group-line";
+
 /* ─── Skeleton primitives ─── */
 function Skel({ w, h, r = 8, style = {} }) {
   return (
@@ -1838,6 +1865,7 @@ function HomeTab({
    2-column square grid aesthetic. No icons, no liquidity stats.
    Bold name as hero, thin accent pill at bottom of each card.
    ─── */
+
 function MarketTab({ players, portfolio, onSelect, loading }) {
   const [view, setView] = useState("leagues");
   const [activeLeague, setActiveLeague] = useState(null);
@@ -1872,11 +1900,17 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
       if (!catMap[key]) catMap[key] = { name: key, players: [] };
       catMap[key].players.push(p);
     }
-    categories = Object.values(catMap).map((c) => ({
-      ...c,
-      playerCount: c.players.length,
-      liveCount: c.players.filter((p) => p.tradeable).length,
-    }));
+    categories = Object.values(catMap).map((c) => {
+      const blocked = c.players.find(
+        (p) => holdingMap[Number(p.id)]?.token_amount > 0
+      );
+      return {
+        ...c,
+        playerCount: c.players.length,
+        liveCount: c.players.filter((p) => p.tradeable).length,
+        heldPlayer: blocked ?? null,
+      };
+    });
   }
 
   /* ── Filtered players ── */
@@ -1916,95 +1950,154 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
     setSearch("");
   };
 
-  /* ── Shared grid card styles ── */
-  const gridCard = (onClick, accentColor = "#00FF87") => ({
-    position: "relative",
-    aspectRatio: "1 / 1",
-    background: "#111",
-    border: "1px solid rgba(255,255,255,0.07)",
-    borderRadius: 16,
-    cursor: "pointer",
-    overflow: "hidden",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: "14px 14px 12px",
-    WebkitTapHighlightColor: "transparent",
-  });
-
-  /* ── Skeleton grid ── */
-  const GridSkeleton = () => (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 10,
-        padding: "0 20px 100px",
-      }}
-    >
-      {Array.from({ length: 6 }).map((_, i) => (
+  /* ── Skeleton ── */
+  const ListSkeleton = ({ rows = 6 }) => (
+    <div style={{ padding: "8px 0" }}>
+      {Array.from({ length: rows }).map((_, i) => (
         <div
           key={i}
           style={{
-            aspectRatio: "1/1",
-            borderRadius: 16,
-            background: "#111",
-            border: "1px solid rgba(255,255,255,0.07)",
-            padding: "14px",
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
+            alignItems: "center",
+            gap: 14,
+            padding: "14px 20px",
+            borderBottom: "1px solid rgba(255,255,255,0.05)",
+            opacity: 1 - i * 0.12,
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-            <Skel w="70%" h={18} r={5} />
-            <Skel w="45%" h={13} r={4} />
+          <Skel w={44} h={44} r={11} />
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
+            }}
+          >
+            <Skel w="55%" h={14} />
+            <Skel w="35%" h={11} />
           </div>
-          <Skel w="55%" h={22} r={99} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              gap: 5,
+            }}
+          >
+            <Skel w={60} h={22} r={99} />
+            <Skel w={14} h={14} r={4} />
+          </div>
         </div>
       ))}
     </div>
   );
 
-  /* ── LEAGUES VIEW ── */
+  /* ── Shared sub-header ── */
+  const SubHeader = ({ onBack, title, sub }) => (
+    <div
+      style={{
+        padding: "52px 20px 16px",
+        background: "#0A0A0A",
+        flexShrink: 0,
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        <button
+          onClick={onBack}
+          style={{
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.08)",
+            borderRadius: 10,
+            width: 34,
+            height: 34,
+            color: "rgba(255,255,255,0.6)",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}
+        >
+          <i className="ri-arrow-left-s-line" style={{ fontSize: 18 }} />
+        </button>
+        <div style={{ minWidth: 0 }}>
+          <div
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 800,
+              fontSize: 18,
+              color: "#fff",
+              letterSpacing: "-0.03em",
+              lineHeight: 1.15,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {title}
+          </div>
+          {sub && (
+            <div
+              style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,0.3)",
+                fontFamily: "'Space Grotesk', sans-serif",
+                marginTop: 2,
+              }}
+            >
+              {sub}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  /* ────────────────────────────────────────────
+     VIEW: LEAGUES
+  ──────────────────────────────────────────── */
   if (view === "leagues") {
     return (
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        {/* Header */}
         <div
           style={{
-            padding: "56px 20px 20px",
+            padding: "52px 20px 16px",
             background: "#0A0A0A",
             flexShrink: 0,
+            borderBottom: "1px solid rgba(255,255,255,0.06)",
           }}
         >
           <div
             style={{
               fontFamily: "'Space Grotesk', sans-serif",
               fontWeight: 800,
-              fontSize: 24,
+              fontSize: 22,
               color: "#fff",
               letterSpacing: "-0.04em",
               lineHeight: 1,
             }}
           >
-            Competition
+            Market
           </div>
           <div
             style={{
               fontSize: 12,
               color: "rgba(255,255,255,0.3)",
               fontFamily: "'Space Grotesk', sans-serif",
-              marginTop: 5,
+              marginTop: 4,
             }}
           >
-            Pick a competition to trade player shares
+            {loading
+              ? "Loading competitions…"
+              : `${leagues.length} competition${leagues.length !== 1 ? "s" : ""} available`}
           </div>
         </div>
 
-        <div style={{ flex: 1, overflowY: "auto" }}>
+        <div style={{ flex: 1, overflowY: "auto", paddingBottom: 100 }}>
           {loading ? (
-            <GridSkeleton />
+            <ListSkeleton rows={6} />
           ) : leagues.length === 0 ? (
             <div
               style={{
@@ -2015,192 +2108,40 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                 fontSize: 14,
               }}
             >
-              No leagues live yet — check back soon!
+              No competitions live yet
             </div>
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10,
-                padding: "0 20px 100px",
-              }}
-            >
-              {leagues.map((l, idx) => {
-                /* Subtle accent colours that rotate — keeps the grid visually alive */
-                const accents = [
-                  "#00FF87",
-                  "#4ECDC4",
-                  "#F5C842",
-                  "#00B4D8",
-                  "#A8DADC",
-                  "#00FF87",
-                ];
-                const accent = accents[idx % accents.length];
-                return (
-                  <div
-                    key={l.name}
-                    onClick={() => openLeague(l)}
-                    style={gridCard(openLeague, accent)}
-                    onTouchStart={(e) =>
-                      (e.currentTarget.style.background =
-                        "rgba(255,255,255,0.06)")
-                    }
-                    onTouchEnd={(e) =>
-                      (e.currentTarget.style.background = "#111")
-                    }
-                  >
-                    {/* Subtle corner glow */}
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: -30,
-                        right: -30,
-                        width: 90,
-                        height: 90,
-                        borderRadius: "50%",
-                        background: `${accent}12`,
-                        pointerEvents: "none",
-                      }}
-                    />
-
-                    {/* Name block */}
-                    <div>
-                      <div
-                        style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontWeight: 800,
-                          fontSize: 17,
-                          color: "#fff",
-                          letterSpacing: "-0.03em",
-                          lineHeight: 1.15,
-                          marginBottom: 4,
-                        }}
-                      >
-                        {l.name}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontSize: 11,
-                          color: "rgba(255,255,255,0.3)",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {l.playerCount} player{l.playerCount !== 1 ? "s" : ""}
-                      </div>
-                    </div>
-
-                    {/* Bottom live pill */}
-                    <div
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 5,
-                        alignSelf: "flex-start",
-                        background: `${accent}14`,
-                        border: `1px solid ${accent}30`,
-                        borderRadius: 99,
-                        padding: "5px 10px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: 5,
-                          height: 5,
-                          borderRadius: "50%",
-                          background: accent,
-                          flexShrink: 0,
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontWeight: 700,
-                          fontSize: 11,
-                          color: accent,
-                          letterSpacing: "0.04em",
-                        }}
-                      >
-                        {l.liveCount} LIVE
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            leagues.map((l) => {
+              const meta = leagueMeta(l.name);
+              return (
+                <LeagueRow
+                  key={l.name}
+                  league={l}
+                  meta={meta}
+                  onClick={() => openLeague(l)}
+                />
+              );
+            })
           )}
         </div>
       </div>
     );
   }
 
-  /* ── CATEGORIES VIEW ── */
+  /* ────────────────────────────────────────────
+     VIEW: CATEGORIES
+  ──────────────────────────────────────────── */
   if (view === "categories") {
+    const meta = leagueMeta(activeLeague?.name);
     return (
       <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-        {/* Header */}
-        <div
-          style={{
-            padding: "56px 20px 20px",
-            background: "#0A0A0A",
-            flexShrink: 0,
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              marginBottom: 10,
-            }}
-          >
-            <button
-              onClick={backToLeagues}
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 99,
-                width: 30,
-                height: 30,
-                color: "#fff",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-              }}
-            >
-              <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
-            </button>
-            <div>
-              <div
-                style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontWeight: 800,
-                  fontSize: 22,
-                  color: "#fff",
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1,
-                }}
-              >
-                {activeLeague?.name}
-              </div>
-              <div
-                style={{
-                  fontSize: 12,
-                  color: "rgba(255,255,255,0.3)",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  marginTop: 3,
-                }}
-              >
-                Choose a position group
-              </div>
-            </div>
-          </div>
-        </div>
+        <SubHeader
+          onBack={backToLeagues}
+          title={activeLeague?.name}
+          sub={`${meta.country} · ${activeLeague?.playerCount} players`}
+        />
 
-        <div style={{ flex: 1, overflowY: "auto" }}>
+        <div style={{ flex: 1, overflowY: "auto", paddingBottom: 100 }}>
           {categories.length === 0 ? (
             <div
               style={{
@@ -2211,185 +2152,60 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                 fontSize: 14,
               }}
             >
-              No groups set up yet — check back soon!
+              No position groups set up yet
             </div>
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 10,
-                padding: "0 20px 100px",
-              }}
-            >
-              {categories.map((c, idx) => {
-                const accents = [
-                  "#00FF87",
-                  "#4ECDC4",
-                  "#F5C842",
-                  "#00B4D8",
-                  "#A8DADC",
-                  "#00FF87",
-                ];
-                const accent = accents[idx % accents.length];
-                return (
-                  <div
-                    key={c.name}
-                    onClick={() => openCategory(c)}
-                    style={gridCard(openCategory, accent)}
-                    onTouchStart={(e) =>
-                      (e.currentTarget.style.background =
-                        "rgba(255,255,255,0.06)")
-                    }
-                    onTouchEnd={(e) =>
-                      (e.currentTarget.style.background = "#111")
-                    }
-                  >
-                    {/* Corner glow */}
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: -30,
-                        right: -30,
-                        width: 90,
-                        height: 90,
-                        borderRadius: "50%",
-                        background: `${accent}12`,
-                        pointerEvents: "none",
-                      }}
-                    />
-
-                    {/* Name block */}
-                    <div>
-                      <div
-                        style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontWeight: 800,
-                          fontSize: 17,
-                          color: "#fff",
-                          letterSpacing: "-0.03em",
-                          lineHeight: 1.15,
-                          marginBottom: 4,
-                        }}
-                      >
-                        {c.name}
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontSize: 11,
-                          color: "rgba(255,255,255,0.3)",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {c.playerCount} player{c.playerCount !== 1 ? "s" : ""}
-                      </div>
-                    </div>
-
-                    {/* Bottom live pill */}
-                    <div
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 5,
-                        alignSelf: "flex-start",
-                        background: `${accent}14`,
-                        border: `1px solid ${accent}30`,
-                        borderRadius: 99,
-                        padding: "5px 10px",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: 5,
-                          height: 5,
-                          borderRadius: "50%",
-                          background: accent,
-                          flexShrink: 0,
-                        }}
-                      />
-                      <span
-                        style={{
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontWeight: 700,
-                          fontSize: 11,
-                          color: accent,
-                          letterSpacing: "0.04em",
-                        }}
-                      >
-                        {c.liveCount} LIVE
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            <>
+              <div
+                style={{
+                  padding: "12px 20px 6px",
+                  fontSize: 11,
+                  color: "rgba(255,255,255,0.25)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  fontWeight: 600,
+                }}
+              >
+                Position groups
+              </div>
+              {categories.map((c) => (
+                <CategoryRow
+                  key={c.name}
+                  category={c}
+                  leagueColor={meta.color}
+                  onClick={() => openCategory(c)}
+                />
+              ))}
+            </>
           )}
         </div>
       </div>
     );
   }
 
-  /* ── PLAYERS VIEW (within category) — unchanged ── */
+  /* ────────────────────────────────────────────
+     VIEW: PLAYERS
+  ──────────────────────────────────────────── */
+  const liveInCat = categoryPlayers.filter((p) => p.tradeable).length;
+
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <SubHeader
+        onBack={backToCategories}
+        title={activeCategory?.name}
+        sub={activeLeague?.name}
+      />
+
+      {/* Search + meta bar */}
       <div
         style={{
-          padding: "56px 20px 12px",
+          padding: "10px 20px 0",
           background: "#0A0A0A",
           flexShrink: 0,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            marginBottom: 4,
-          }}
-        >
-          <button
-            onClick={backToCategories}
-            style={{
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: 99,
-              width: 30,
-              height: 30,
-              color: "#fff",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <i className="ri-arrow-left-line" style={{ fontSize: 16 }} />
-          </button>
-          <div style={{ minWidth: 0 }}>
-            <div
-              style={{
-                fontFamily: "'Space Grotesk', sans-serif",
-                fontWeight: 800,
-                fontSize: 17,
-                color: "#fff",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {activeCategory?.name}
-            </div>
-            <div
-              style={{
-                fontSize: 11,
-                color: "rgba(255,255,255,0.3)",
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
-              {activeLeague?.name}
-            </div>
-          </div>
-        </div>
-        <div style={{ position: "relative", marginTop: 12 }}>
+        <div style={{ position: "relative" }}>
           <i
             className="ri-search-line"
             style={{
@@ -2399,12 +2215,13 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
               transform: "translateY(-50%)",
               fontSize: 15,
               color: "rgba(255,255,255,0.25)",
+              pointerEvents: "none",
             }}
           />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search players, teams…"
+            placeholder="Name, team, symbol…"
             style={{
               width: "100%",
               background: "rgba(255,255,255,0.05)",
@@ -2417,20 +2234,98 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
               outline: "none",
             }}
           />
+          {search && (
+            <button
+              onClick={() => setSearch("")}
+              style={{
+                position: "absolute",
+                right: 10,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                color: "rgba(255,255,255,0.3)",
+                cursor: "pointer",
+                padding: 0,
+                lineHeight: 1,
+              }}
+            >
+              <i className="ri-close-circle-fill" style={{ fontSize: 16 }} />
+            </button>
+          )}
+        </div>
+        {/* stat pills */}
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            padding: "10px 0 12px",
+            alignItems: "center",
+          }}
+        >
+          <StatPill
+            icon="ri-group-line"
+            label={`${activeCategory?.playerCount} players`}
+          />
+          <StatPill
+            icon="ri-radio-button-line"
+            label={`${liveInCat} live`}
+            accent="#00FF87"
+          />
+          {search && (
+            <StatPill
+              icon="ri-filter-3-line"
+              label={`${categoryPlayers.length} result${categoryPlayers.length !== 1 ? "s" : ""}`}
+              accent="#4ECDC4"
+            />
+          )}
         </div>
       </div>
-      <div style={{ flex: 1, overflowY: "auto", paddingBottom: 100 }}>
+
+      <div
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          paddingBottom: 100,
+          borderTop: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
         {categoryPlayers.length === 0 ? (
           <div
             style={{
               textAlign: "center",
-              padding: "40px 20px",
-              color: "rgba(255,255,255,0.25)",
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: 14,
+              padding: "52px 24px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 10,
             }}
           >
-            No players found
+            <i
+              className="ri-search-2-line"
+              style={{ fontSize: 32, color: "rgba(255,255,255,0.15)" }}
+            />
+            <div
+              style={{
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                color: "rgba(255,255,255,0.3)",
+              }}
+            >
+              No players found
+            </div>
+            {search && (
+              <div
+                style={{
+                  fontSize: 12,
+                  color: "rgba(255,255,255,0.2)",
+                  fontFamily: "'Space Grotesk', sans-serif",
+                }}
+              >
+                Try a different name or team
+              </div>
+            )}
           </div>
         ) : (
           categoryPlayers.map((p) => (
@@ -2443,6 +2338,346 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
           ))
         )}
       </div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LEAGUE ROW
+   Full-width row: coloured left rail, flag emoji, name/country,
+   player count, live pill, chevron.
+────────────────────────────────────────────────────────────── */
+function LeagueRow({ league, meta, onClick }) {
+  const [pressed, setPressed] = useState(false);
+
+  return (
+    <div
+      onClick={onClick}
+      onTouchStart={() => setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 0,
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        cursor: "pointer",
+        background: pressed ? "rgba(255,255,255,0.03)" : "transparent",
+        transition: "background 0.1s",
+        WebkitTapHighlightColor: "transparent",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Left colour rail */}
+      <div
+        style={{
+          width: 3,
+          alignSelf: "stretch",
+          background: meta.color,
+          flexShrink: 0,
+          opacity: 0.8,
+        }}
+      />
+
+      {/* Flag emoji */}
+      <div
+        style={{
+          width: 44,
+          height: 44,
+          borderRadius: 11,
+          background: `${meta.color}12`,
+          border: `1px solid ${meta.color}22`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          margin: "14px 14px 14px 16px",
+          fontSize: 24,
+          lineHeight: 1,
+        }}
+      >
+        {meta.flag}
+      </div>
+
+      {/* Text block */}
+      <div style={{ flex: 1, minWidth: 0, paddingRight: 4 }}>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: 15,
+            color: "#fff",
+            letterSpacing: "-0.02em",
+            lineHeight: 1.2,
+            marginBottom: 3,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {league.name}
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 12,
+              color: "rgba(255,255,255,0.3)",
+            }}
+          >
+            {meta.country}
+          </span>
+          <span style={{ color: "rgba(255,255,255,0.12)", fontSize: 10 }}>
+            ·
+          </span>
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 12,
+              color: "rgba(255,255,255,0.3)",
+            }}
+          >
+            {league.playerCount} player{league.playerCount !== 1 ? "s" : ""}
+          </span>
+        </div>
+      </div>
+
+      {/* Right side: live pill + chevron */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: 6,
+          padding: "14px 16px",
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 5,
+            background:
+              league.liveCount > 0
+                ? "rgba(0,255,135,0.08)"
+                : "rgba(255,255,255,0.04)",
+            border: `1px solid ${
+              league.liveCount > 0
+                ? "rgba(0,255,135,0.2)"
+                : "rgba(255,255,255,0.08)"
+            }`,
+            borderRadius: 99,
+            padding: "4px 9px",
+          }}
+        >
+          <div
+            style={{
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              background:
+                league.liveCount > 0 ? "#00FF87" : "rgba(255,255,255,0.2)",
+              flexShrink: 0,
+            }}
+          />
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              color: league.liveCount > 0 ? "#00FF87" : "rgba(255,255,255,0.3)",
+              letterSpacing: "0.04em",
+            }}
+          >
+            {league.liveCount} LIVE
+          </span>
+        </div>
+        <i
+          className="ri-arrow-right-s-line"
+          style={{ fontSize: 16, color: "rgba(255,255,255,0.2)" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   CATEGORY ROW
+────────────────────────────────────────────────────────────── */
+function CategoryRow({ category, leagueColor, onClick }) {
+  const [pressed, setPressed] = useState(false);
+
+  return (
+    <div
+      onClick={onClick}
+      onTouchStart={() => setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
+      onMouseDown={() => setPressed(true)}
+      onMouseUp={() => setPressed(false)}
+      onMouseLeave={() => setPressed(false)}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 14,
+        padding: "13px 16px 13px 20px",
+        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        cursor: "pointer",
+        background: pressed
+          ? "rgba(255,255,255,0.03)"
+          : category.heldPlayer
+            ? "rgba(0,255,135,0.02)"
+            : "transparent",
+        transition: "background 0.1s",
+        WebkitTapHighlightColor: "transparent",
+      }}
+    >
+      {/* Position icon */}
+      <div
+        style={{
+          width: 38,
+          height: 38,
+          borderRadius: 10,
+          background: `${leagueColor}14`,
+          border: `1px solid ${leagueColor}28`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
+        <i
+          className={catIcon(category.name)}
+          style={{ fontSize: 16, color: leagueColor }}
+        />
+      </div>
+
+      {/* Text */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            fontFamily: "'Space Grotesk', sans-serif",
+            fontWeight: 700,
+            fontSize: 14,
+            color: "#fff",
+            letterSpacing: "-0.01em",
+            marginBottom: 3,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {category.name}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 7,
+            flexWrap: "wrap",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: 11,
+              color: "rgba(255,255,255,0.3)",
+            }}
+          >
+            {category.playerCount} player{category.playerCount !== 1 ? "s" : ""}
+          </span>
+          {category.heldPlayer && (
+            <>
+              <span style={{ color: "rgba(255,255,255,0.12)", fontSize: 10 }}>
+                ·
+              </span>
+              <span
+                style={{
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontSize: 11,
+                  color: "#00FF87",
+                  fontWeight: 600,
+                }}
+              >
+                Holding {category.heldPlayer.symbol}
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Right: live count + chevron */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: 5,
+          flexShrink: 0,
+        }}
+      >
+        {category.liveCount > 0 && (
+          <span
+            style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontWeight: 700,
+              fontSize: 11,
+              color: "#00FF87",
+              background: "rgba(0,255,135,0.08)",
+              border: "1px solid rgba(0,255,135,0.18)",
+              borderRadius: 99,
+              padding: "3px 8px",
+              letterSpacing: "0.04em",
+            }}
+          >
+            {category.liveCount} live
+          </span>
+        )}
+        <i
+          className="ri-arrow-right-s-line"
+          style={{ fontSize: 16, color: "rgba(255,255,255,0.2)" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────
+   STAT PILL
+────────────────────────────────────────────────────────────── */
+function StatPill({ icon, label, accent }) {
+  return (
+    <div
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 5,
+        background: accent ? `${accent}10` : "rgba(255,255,255,0.05)",
+        border: `1px solid ${accent ? `${accent}25` : "rgba(255,255,255,0.08)"}`,
+        borderRadius: 99,
+        padding: "4px 10px",
+      }}
+    >
+      <i
+        className={icon}
+        style={{
+          fontSize: 12,
+          color: accent ?? "rgba(255,255,255,0.35)",
+        }}
+      />
+      <span
+        style={{
+          fontFamily: "'Space Grotesk', sans-serif",
+          fontWeight: 600,
+          fontSize: 11,
+          color: accent ?? "rgba(255,255,255,0.4)",
+        }}
+      >
+        {label}
+      </span>
     </div>
   );
 }
