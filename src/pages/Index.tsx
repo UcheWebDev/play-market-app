@@ -399,7 +399,7 @@ function FormBadge({ rps }) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontFamily: "'Space Grotesk', sans-serif",
+        fontFamily: "'Geist', sans-serif",
         fontWeight: 800,
         fontSize: 10,
         color: c,
@@ -454,7 +454,7 @@ function PlayerRow({ player, onClick, holding }) {
         >
           <span
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 700,
               fontSize: 14,
               color: "#fff",
@@ -470,7 +470,7 @@ function PlayerRow({ player, onClick, holding }) {
         </div>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontSize: 12,
             color: "rgba(255,255,255,0.35)",
           }}
@@ -502,7 +502,7 @@ function PlayerRow({ player, onClick, holding }) {
         />
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 700,
             fontSize: 14,
             color: "#fff",
@@ -512,7 +512,7 @@ function PlayerRow({ player, onClick, holding }) {
         </div>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 600,
             fontSize: 11,
             color: positive ? "#00FF87" : "#FF4444",
@@ -647,7 +647,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
           <div style={{ flex: 1 }}>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 16,
                 color: "#fff",
@@ -660,7 +660,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
               style={{
                 fontSize: 12,
                 color: "rgba(255,255,255,0.35)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
               }}
             >
               {fmtUSD(player.price_apt)} · {fmtNGN(player.price_apt)}
@@ -709,7 +709,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                 borderRadius: 8,
                 border: "none",
                 cursor: "pointer",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 13,
                 transition: "all 0.15s",
@@ -755,7 +755,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
             />
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontSize: 12,
                 color: "rgba(255,255,255,0.6)",
                 lineHeight: 1.5,
@@ -784,7 +784,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
           <span
             style={{
               fontSize: 12,
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               color: "rgba(255,255,255,0.35)",
             }}
           >
@@ -793,7 +793,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
           <span
             style={{
               fontSize: 13,
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 700,
               color: "#00FF87",
             }}
@@ -837,7 +837,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
               border: `1px solid ${canTrade ? "rgba(0,255,135,0.25)" : "rgba(255,255,255,0.08)"}`,
               borderRadius: 10,
               padding: "13px 13px 13px 38px",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 700,
               fontSize: 20,
               color: "#fff",
@@ -854,7 +854,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                 transform: "translateY(-50%)",
                 fontSize: 12,
                 color: "rgba(255,255,255,0.3)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
               }}
             >
               {mode === "buy"
@@ -876,7 +876,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                   background: "rgba(255,255,255,0.05)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   color: "rgba(255,255,255,0.6)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 600,
                   fontSize: 12,
                   cursor: "pointer",
@@ -908,7 +908,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.35)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                 }}
               >
                 Fee (1%)
@@ -917,7 +917,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.6)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 600,
                 }}
               >
@@ -929,7 +929,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.35)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                 }}
               >
                 You receive
@@ -938,7 +938,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
                 style={{
                   fontSize: 13,
                   color: "#00FF87",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 700,
                 }}
               >
@@ -959,7 +959,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
               border: "1px solid rgba(255,68,68,0.2)",
               fontSize: 13,
               color: "#FF4444",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               display: "flex",
               alignItems: "center",
               gap: 7,
@@ -982,7 +982,7 @@ function TradeSheet({ player, holding, balance, onClose, onTrade }) {
               borderRadius: 12,
               border: "none",
               cursor: canTrade && !busy ? "pointer" : "not-allowed",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 800,
               fontSize: 15,
               letterSpacing: "-0.01em",
@@ -1061,7 +1061,7 @@ function StatRow({ label, value, valueColor, badge, info, noBorder }) {
       <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
         <span
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 700,
             fontSize: 13,
             color: "rgba(255,255,255,0.45)",
@@ -1096,7 +1096,7 @@ function StatRow({ label, value, valueColor, badge, info, noBorder }) {
             style={{
               background: badge.bg,
               color: badge.color,
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 900,
               fontSize: 10,
               padding: "3px 6px",
@@ -1109,7 +1109,7 @@ function StatRow({ label, value, valueColor, badge, info, noBorder }) {
         )}
         <span
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 700,
             fontSize: 15,
             color: valueColor ?? "#fff",
@@ -1212,7 +1212,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
               border: `1px solid ${player.tradeable ? "rgba(0,255,135,0.3)" : "rgba(255,68,68,0.3)"}`,
               borderRadius: 99,
               padding: "4px 11px",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               color: player.tradeable ? "#00FF87" : "#FF4444",
@@ -1238,7 +1238,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
         <div style={{ textAlign: "center", padding: "16px 24px 0" }}>
           <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 800,
               fontSize: 19,
               color: "#fff",
@@ -1249,7 +1249,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
           </div>
           <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontSize: 12,
               color: "rgba(255,255,255,0.3)",
               marginTop: 3,
@@ -1263,7 +1263,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
         <div style={{ textAlign: "center", padding: "18px 24px 0" }}>
           <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 900,
               fontSize: 46,
               color: accentColor,
@@ -1275,7 +1275,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
           </div>
           <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 600,
               fontSize: 11,
               color: "rgba(255,255,255,0.3)",
@@ -1339,7 +1339,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
                 background: "none",
                 border: "none",
                 cursor: "pointer",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: activeRange === r ? 800 : 500,
                 fontSize: 13,
                 color:
@@ -1409,7 +1409,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
             />
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontSize: 12,
                 color: "rgba(255,255,255,0.6)",
                 lineHeight: 1.5,
@@ -1437,7 +1437,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
                   borderRadius: 14,
                   border: "none",
                   background: "#00FF87",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 800,
                   fontSize: 15,
                   color: "#000",
@@ -1456,7 +1456,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
                     borderRadius: 14,
                     border: "1px solid rgba(255,68,68,0.3)",
                     background: "rgba(255,68,68,0.07)",
-                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontFamily: "'Geist', sans-serif",
                     fontWeight: 800,
                     fontSize: 15,
                     color: "#FF4444",
@@ -1476,7 +1476,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
                 borderRadius: 14,
                 border: "1px solid rgba(245,200,66,0.25)",
                 background: "rgba(245,200,66,0.06)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 14,
                 color: "#F5C842",
@@ -1498,7 +1498,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
                 borderRadius: 14,
                 border: "1px solid rgba(255,255,255,0.07)",
                 background: "rgba(255,255,255,0.03)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 14,
                 color: "rgba(255,255,255,0.2)",
@@ -1519,7 +1519,7 @@ function PlayerDetail({ player, holding, balance, onBack, onTrade }) {
         <div
           style={{
             margin: "18px 20px 60px",
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontSize: 12,
             color: "rgba(255,255,255,0.25)",
             lineHeight: 1.75,
@@ -1615,7 +1615,7 @@ function HomeTab({
           <>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 800,
                 letterSpacing: "-0.04em",
                 lineHeight: 1,
@@ -1648,7 +1648,7 @@ function HomeTab({
             </div>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontSize: 14,
                 fontWeight: 700,
                 color: positiveDay ? "#00FF87" : "#FF4444",
@@ -1675,7 +1675,7 @@ function HomeTab({
             </div>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontSize: 12,
                 color: "rgba(255,255,255,0.35)",
                 letterSpacing: "0.08em",
@@ -1693,7 +1693,7 @@ function HomeTab({
             </div>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 14,
                 color: "#fff",
@@ -1723,7 +1723,7 @@ function HomeTab({
                 borderRadius: 12,
                 border: "none",
                 background: "#00FF87",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 800,
                 fontSize: 15,
                 color: "#000",
@@ -1780,7 +1780,7 @@ function HomeTab({
             </div>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 800,
                 fontSize: 16,
                 color: "rgba(255,255,255,0.5)",
@@ -1793,7 +1793,7 @@ function HomeTab({
               style={{
                 fontSize: 13,
                 color: "rgba(255,255,255,0.25)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 lineHeight: 1.5,
                 maxWidth: 220,
               }}
@@ -1817,7 +1817,7 @@ function HomeTab({
             >
               <div
                 style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 800,
                   fontSize: 17,
                   color: "#fff",
@@ -1832,7 +1832,7 @@ function HomeTab({
                   onGoMarket();
                 }}
                 style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 600,
                   fontSize: 13,
                   color: "#00FF87",
@@ -2025,7 +2025,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
         <div style={{ minWidth: 0 }}>
           <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 800,
               fontSize: 18,
               color: "#fff",
@@ -2043,7 +2043,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
               style={{
                 fontSize: 11,
                 color: "rgba(255,255,255,0.3)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 marginTop: 2,
               }}
             >
@@ -2071,7 +2071,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
         >
           <div
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 800,
               fontSize: 22,
               color: "#fff",
@@ -2085,7 +2085,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
             style={{
               fontSize: 12,
               color: "rgba(255,255,255,0.3)",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               marginTop: 4,
             }}
           >
@@ -2104,7 +2104,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                 textAlign: "center",
                 padding: "60px 20px",
                 color: "rgba(255,255,255,0.25)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontSize: 14,
               }}
             >
@@ -2148,7 +2148,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                 textAlign: "center",
                 padding: "60px 20px",
                 color: "rgba(255,255,255,0.25)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontSize: 14,
               }}
             >
@@ -2161,7 +2161,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                   padding: "12px 20px 6px",
                   fontSize: 11,
                   color: "rgba(255,255,255,0.25)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   fontWeight: 600,
@@ -2228,7 +2228,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
               border: "1px solid rgba(255,255,255,0.08)",
               borderRadius: 10,
               padding: "10px 12px 10px 36px",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontSize: 13,
               color: "#fff",
               outline: "none",
@@ -2307,7 +2307,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
             />
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 15,
                 color: "rgba(255,255,255,0.3)",
@@ -2320,7 +2320,7 @@ function MarketTab({ players, portfolio, onSelect, loading }) {
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.2)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                 }}
               >
                 Try a different name or team
@@ -2406,7 +2406,7 @@ function LeagueRow({ league, meta, onClick }) {
       <div style={{ flex: 1, minWidth: 0, paddingRight: 4 }}>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 700,
             fontSize: 15,
             color: "#fff",
@@ -2423,7 +2423,7 @@ function LeagueRow({ league, meta, onClick }) {
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontSize: 12,
               color: "rgba(255,255,255,0.3)",
             }}
@@ -2435,7 +2435,7 @@ function LeagueRow({ league, meta, onClick }) {
           </span>
           <span
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontSize: 12,
               color: "rgba(255,255,255,0.3)",
             }}
@@ -2486,7 +2486,7 @@ function LeagueRow({ league, meta, onClick }) {
           />
           <span
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               color: league.liveCount > 0 ? "#00FF87" : "rgba(255,255,255,0.3)",
@@ -2559,7 +2559,7 @@ function CategoryRow({ category, leagueColor, onClick }) {
       <div style={{ flex: 1, minWidth: 0 }}>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 700,
             fontSize: 14,
             color: "#fff",
@@ -2582,7 +2582,7 @@ function CategoryRow({ category, leagueColor, onClick }) {
         >
           <span
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontSize: 11,
               color: "rgba(255,255,255,0.3)",
             }}
@@ -2596,7 +2596,7 @@ function CategoryRow({ category, leagueColor, onClick }) {
               </span>
               <span
                 style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontSize: 11,
                   color: "#00FF87",
                   fontWeight: 600,
@@ -2622,7 +2622,7 @@ function CategoryRow({ category, leagueColor, onClick }) {
         {category.liveCount > 0 && (
           <span
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontWeight: 700,
               fontSize: 11,
               color: "#00FF87",
@@ -2670,7 +2670,7 @@ function StatPill({ icon, label, accent }) {
       />
       <span
         style={{
-          fontFamily: "'Space Grotesk', sans-serif",
+          fontFamily: "'Geist', sans-serif",
           fontWeight: 600,
           fontSize: 11,
           color: accent ?? "rgba(255,255,255,0.4)",
@@ -2730,7 +2730,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
           style={{
             fontSize: 11,
             color: "rgba(255,255,255,0.3)",
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             marginBottom: 4,
             textTransform: "uppercase",
             letterSpacing: "0.08em",
@@ -2740,7 +2740,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
         </div>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 800,
             fontSize: 34,
             color: "#fff",
@@ -2755,7 +2755,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
           style={{
             fontSize: 12,
             color: "rgba(255,255,255,0.25)",
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             marginBottom: 18,
           }}
         >
@@ -2767,14 +2767,14 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
               style={{
                 fontSize: 11,
                 color: "rgba(255,255,255,0.3)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
               }}
             >
               Open P&L
             </div>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 15,
                 color: totalPnl >= 0 ? "#00FF87" : "#FF4444",
@@ -2790,14 +2790,14 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
               style={{
                 fontSize: 11,
                 color: "rgba(255,255,255,0.3)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
               }}
             >
               vUSD Balance
             </div>
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 15,
                 color: "#fff",
@@ -2811,7 +2811,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
       <div style={{ padding: "18px 18px 0" }}>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 700,
             fontSize: 12,
             color: "rgba(255,255,255,0.35)",
@@ -2839,7 +2839,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
             />
             <div
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 fontSize: 15,
                 color: "rgba(255,255,255,0.3)",
@@ -2851,7 +2851,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
               style={{
                 fontSize: 13,
                 color: "rgba(255,255,255,0.18)",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
               }}
             >
               Head to Market to buy your first shares
@@ -2888,7 +2888,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
                   <div style={{ flex: 1 }}>
                     <div
                       style={{
-                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontFamily: "'Geist', sans-serif",
                         fontWeight: 700,
                         fontSize: 14,
                         color: "#fff",
@@ -2900,7 +2900,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
                       style={{
                         fontSize: 12,
                         color: "rgba(255,255,255,0.3)",
-                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontFamily: "'Geist', sans-serif",
                       }}
                     >
                       {tokens.toFixed(2)} shares · avg {fmtUSD(pos.avg_buy_apt)}
@@ -2909,7 +2909,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
                   <div style={{ textAlign: "right" }}>
                     <div
                       style={{
-                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontFamily: "'Geist', sans-serif",
                         fontWeight: 700,
                         fontSize: 14,
                         color: "#fff",
@@ -2919,7 +2919,7 @@ function PortfolioTab({ portfolio, players, balance, onSelect, loading }) {
                     </div>
                     <div
                       style={{
-                        fontFamily: "'Space Grotesk', sans-serif",
+                        fontFamily: "'Geist', sans-serif",
                         fontWeight: 600,
                         fontSize: 12,
                         color: pnl >= 0 ? "#00FF87" : "#FF4444",
@@ -2967,7 +2967,7 @@ function LeaderboardTab({ entries, loading }) {
       <div style={{ marginBottom: 18 }}>
         <div
           style={{
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             fontWeight: 800,
             fontSize: 22,
             color: "#fff",
@@ -2980,7 +2980,7 @@ function LeaderboardTab({ entries, loading }) {
           style={{
             fontSize: 12,
             color: "rgba(255,255,255,0.3)",
-            fontFamily: "'Space Grotesk', sans-serif",
+            fontFamily: "'Geist', sans-serif",
             marginTop: 2,
           }}
         >
@@ -3035,7 +3035,7 @@ function LeaderboardTab({ entries, loading }) {
                 >
                   <div
                     style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontFamily: "'Geist', sans-serif",
                       fontWeight: 700,
                       fontSize: 10,
                       color: "rgba(255,255,255,0.6)",
@@ -3051,7 +3051,7 @@ function LeaderboardTab({ entries, loading }) {
                   </div>
                   <div
                     style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontFamily: "'Geist', sans-serif",
                       fontWeight: 800,
                       fontSize: 12,
                       color: "#00FF87",
@@ -3073,7 +3073,7 @@ function LeaderboardTab({ entries, loading }) {
               textAlign: "center",
               padding: "40px 20px",
               color: "rgba(255,255,255,0.25)",
-              fontFamily: "'Space Grotesk', sans-serif",
+              fontFamily: "'Geist', sans-serif",
               fontSize: 14,
             }}
           >
@@ -3113,7 +3113,7 @@ function LeaderboardTab({ entries, loading }) {
                 ) : (
                   <span
                     style={{
-                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontFamily: "'Geist', sans-serif",
                       fontWeight: 700,
                       fontSize: 12,
                       color: "rgba(255,255,255,0.35)",
@@ -3126,7 +3126,7 @@ function LeaderboardTab({ entries, loading }) {
               <div
                 style={{
                   flex: 1,
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 600,
                   fontSize: 13,
                   color: "#fff",
@@ -3137,7 +3137,7 @@ function LeaderboardTab({ entries, loading }) {
               <div style={{ textAlign: "right" }}>
                 <div
                   style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontFamily: "'Geist', sans-serif",
                     fontWeight: 800,
                     fontSize: 14,
                     color: "#00FF87",
@@ -3147,7 +3147,7 @@ function LeaderboardTab({ entries, loading }) {
                 </div>
                 <div
                   style={{
-                    fontFamily: "'Space Grotesk', sans-serif",
+                    fontFamily: "'Geist', sans-serif",
                     fontWeight: 600,
                     fontSize: 11,
                     color: "rgba(255,255,255,0.3)",
@@ -3211,7 +3211,7 @@ function TopUpTab() {
       </div>
       <div
         style={{
-          fontFamily: "'Space Grotesk', sans-serif",
+          fontFamily: "'Geist', sans-serif",
           fontWeight: 800,
           fontSize: 22,
           color: "#fff",
@@ -3224,7 +3224,7 @@ function TopUpTab() {
       </div>
       <div
         style={{
-          fontFamily: "'Space Grotesk', sans-serif",
+          fontFamily: "'Geist', sans-serif",
           fontSize: 14,
           color: "rgba(255,255,255,0.35)",
           lineHeight: 1.6,
@@ -3283,7 +3283,7 @@ function TopUpTab() {
             <div style={{ flex: 1 }}>
               <div
                 style={{
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                   fontWeight: 700,
                   fontSize: 14,
                   color: "rgba(255,255,255,0.5)",
@@ -3295,7 +3295,7 @@ function TopUpTab() {
                 style={{
                   fontSize: 12,
                   color: "rgba(255,255,255,0.2)",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontFamily: "'Geist', sans-serif",
                 }}
               >
                 {c.network}
@@ -3304,7 +3304,7 @@ function TopUpTab() {
             <div
               style={{
                 fontSize: 11,
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 700,
                 color: "rgba(255,255,255,0.2)",
                 background: "rgba(255,255,255,0.04)",
@@ -3396,7 +3396,7 @@ function BottomNav({ active, onChange }) {
             />
             <span
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: isActive ? 700 : 500,
                 fontSize: 10,
                 color: isActive ? "#00FF87" : "rgba(255,255,255,0.3)",
@@ -3516,14 +3516,14 @@ export default function App() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap');
         @import url('https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css');
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: #0A0A0A; color: #fff; overflow: hidden; }
-        input { color: #fff; font-family: 'Space Grotesk', sans-serif; }
+        input { color: #fff; font-family: 'Geist', sans-serif; }
         input::placeholder { color: rgba(255,255,255,0.2); }
         input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; }
-        button { font-family: 'Space Grotesk', sans-serif; }
+        button { font-family: 'Geist', sans-serif; }
         ::-webkit-scrollbar { display: none; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
@@ -3626,7 +3626,7 @@ export default function App() {
                 border: `1px solid ${t.type === "error" ? "rgba(255,68,68,0.2)" : "rgba(255,255,255,0.1)"}`,
                 borderRadius: 10,
                 padding: "11px 14px",
-                fontFamily: "'Space Grotesk', sans-serif",
+                fontFamily: "'Geist', sans-serif",
                 fontWeight: 600,
                 fontSize: 13,
                 color: t.type === "error" ? "#FF4444" : "#fff",
